@@ -3,7 +3,6 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { authjsHandler, authjsSessionMiddleware } from "./server/authjs-handler";
 
-import { createTodoHandler } from "./server/create-todo-handler";
 import { vikeHandler } from "./server/vike-handler";
 import { createHandler, createMiddleware } from "@universal-middleware/express";
 import { dbMiddleware } from "./server/db-middleware";
@@ -45,8 +44,6 @@ async function startServer() {
    * @link {@see https://authjs.dev/getting-started/installation}
    **/
   app.all("/api/auth/*", createHandler(authjsHandler)());
-
-  app.post("/api/todo/create", createHandler(createTodoHandler)());
 
   /**
    * Vike route

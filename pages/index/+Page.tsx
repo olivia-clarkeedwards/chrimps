@@ -1,17 +1,12 @@
+import "./style.css";
+import "./tailwind.css";
 import React from "react";
-import { Counter } from "./Counter.js";
 
 export default function Page() {
   return (
-    <>
-      <h1 className="font-bold text-3xl pb-4">My Vike app</h1>
-      This page is:
-      <ul>
-        <li>Rendered to HTML.</li>
-        <li>
-          Interactive. <Counter />
-        </li>
-      </ul>
-    </>
+    <div className="flex lg:flex-row flex-col">
+      <div className="basis-3/5">Game</div>
+      <div className="basis-2/5">Combat</div>
+    </div>
   );
 }
