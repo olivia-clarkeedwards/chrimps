@@ -6,5 +6,5 @@ export interface BaseEnemy {
 export interface Enemy extends BaseEnemy {
   healthMulti: number;
   monsterHealth: number;
-  monsterImage: string;
+  image: string;
 }

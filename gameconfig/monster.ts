@@ -2,10 +2,10 @@ import { BaseEnemy, Enemy } from "../models/monsters";
 import { BaseStage } from "../models/stages";
 import { stage } from "./stage";
 
-export class BaseMonster implements BaseEnemy {
+class BaseMonster implements BaseEnemy {
   monsterLevel = 0;
   get health(): number {
-    return Math.floor(Math.pow(1.2, this.monsterLevel) + 9);
+    return Math.pow(1.2, this.monsterLevel) + 9;
   }
 
   constructor(stage: BaseStage) {
@@ -13,35 +13,32 @@ export class BaseMonster implements BaseEnemy {
   }
 }
 
-export class Monster extends BaseMonster implements Enemy {
-  healthMulti = 0;
-  monsterImage = "../assets/logo.svg";
+class Monster extends BaseMonster implements Enemy {
+  healthMulti = 1;
+  image = "../assets/logo.svg";
   get monsterHealth(): number {
-    return this.health * this.healthMulti;
+    return Math.floor(this.health * this.healthMulti);
   }
 
-  constructor(stage: BaseStage, healthMulti: number) {
+  constructor(stage: BaseStage, healthMulti: number, imagePath: string) {
     super(stage);
     this.healthMulti = healthMulti;
+    this.image = imagePath;
   }
 
   static spawnSlime(): Monster {
-    return new Monster(stage, 1);
+    return new Monster(stage, 1, "/ph-slime.png");
   }
   static spawnWorm(): Monster {
-    return new Monster(stage, 1.05);
+    return new Monster(stage, 1.05, "/ph-worm.png");
   }
   static spawnCacodemon(): Monster {
-    return new Monster(stage, 1.1);
+    return new Monster(stage, 1.1, "/ph-cacodemon.png");
   }
   static spawnYeti(): Monster {
-    return new Monster(stage, 1.2);
+    return new Monster(stage, 1.2, "/ph-yeti.png");
   }
 }
 
-export const spawnSlime = Monster.spawnSlime();
-// const cacodemon = new Monster(stage, 1.1);
-// const yeti = new Monster(stage, 1.2);
-// const worm = new Monster(stage, 1.05);
-
-console.log(spawnSlime.monsterHealth);
+export const monsters = [Monster.spawnSlime, Monster.spawnWorm, Monster.spawnCacodemon, Monster.spawnYeti];
+export const getRandomMonster = monsters[Math.floor(Math.random() * monsters.length)];
