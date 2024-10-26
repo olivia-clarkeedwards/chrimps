@@ -1,4 +1,9 @@
-export interface Monster {
+export interface BaseMonster {
   monsterLevel: number;
-  monsterHealth: () => number;
+  baseHealth: () => number;
+}
+
+export interface Monster {
+  healthMulti: number;
+  monsterHealth: number;
 }
