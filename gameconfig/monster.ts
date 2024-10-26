@@ -1,34 +1,47 @@
-import { BaseMonster, Monster } from "../models/monsters";
+import { BaseEnemy, Enemy } from "../models/monsters";
+import { BaseStage } from "../models/stages";
+import { stage } from "./stage";
 
-const monster: BaseMonster = {
-  monsterLevel: 1,
-  baseHealth: () => Math.floor(Math.pow(1.2, monster.monsterLevel) + 9),
-};
+export class BaseMonster implements BaseEnemy {
+  monsterLevel = 0;
+  get health(): number {
+    return Math.floor(Math.pow(1.2, this.monsterLevel) + 9);
+  }
 
-export const slime: Monster = {
-  healthMulti: 1,
-  get monsterHealth() {
-    return monster.baseHealth() * this.healthMulti;
-  },
-};
+  constructor(stage: BaseStage) {
+    this.monsterLevel = stage.stageNumber;
+  }
+}
 
-export const cacodemon: Monster = {
-  healthMulti: 1.1,
-  get monsterHealth() {
-    return monster.baseHealth() * this.healthMulti;
-  },
-};
+export class Monster extends BaseMonster implements Enemy {
+  healthMulti = 0;
+  monsterImage = "../assets/logo.svg";
+  get monsterHealth(): number {
+    return this.health * this.healthMulti;
+  }
 
-export const yeti: Monster = {
-  healthMulti: 1.2,
-  get monsterHealth() {
-    return monster.baseHealth() * this.healthMulti;
-  },
-};
+  constructor(stage: BaseStage, healthMulti: number) {
+    super(stage);
+    this.healthMulti = healthMulti;
+  }
 
-export const worm: Monster = {
-  healthMulti: 1.05,
-  get monsterHealth() {
-    return monster.baseHealth() * this.healthMulti;
-  },
-};
+  static spawnSlime(): Monster {
+    return new Monster(stage, 1);
+  }
+  static spawnWorm(): Monster {
+    return new Monster(stage, 1.05);
+  }
+  static spawnCacodemon(): Monster {
+    return new Monster(stage, 1.1);
+  }
+  static spawnYeti(): Monster {
+    return new Monster(stage, 1.2);
+  }
+}
+
+export const spawnSlime = Monster.spawnSlime();
+// const cacodemon = new Monster(stage, 1.1);
+// const yeti = new Monster(stage, 1.2);
+// const worm = new Monster(stage, 1.05);
+
+console.log(spawnSlime.monsterHealth);

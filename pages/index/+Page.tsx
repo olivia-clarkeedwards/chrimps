@@ -6,11 +6,13 @@ import Combat from "./combat";
 
 export default function Page() {
   return (
-    <div className="flex h-screen">
-      <div className="flex w-screen self-center min-h-[66svh] lg:flex-row flex-col">
-        <Game />
-        <Combat />
+    <React.StrictMode>
+      <div className="flex h-screen">
+        <div className="flex w-screen self-center min-h-[66svh] lg:flex-row flex-col">
+          <Game />
+          <Combat />
+        </div>
       </div>
-    </div>
+    </React.StrictMode>
   );
 }

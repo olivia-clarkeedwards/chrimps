@@ -1,9 +1,10 @@
-export interface BaseMonster {
+export interface BaseEnemy {
   monsterLevel: number;
-  baseHealth: () => number;
+  health: number;
 }
 
-export interface Monster {
+export interface Enemy extends BaseEnemy {
   healthMulti: number;
   monsterHealth: number;
+  monsterImage: string;
 }
