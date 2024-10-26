@@ -3,16 +3,20 @@ import "./tailwind.css";
 import React from "react";
 import Game from "./game";
 import Combat from "./combat";
+import { store } from "../../redux/store";
+import { Provider } from "react-redux";
 
 export default function Page() {
   return (
     <React.StrictMode>
-      <div className="flex h-screen">
-        <div className="flex w-screen self-center min-h-[66svh] lg:flex-row flex-col">
-          <Game />
-          <Combat />
+      <Provider store={store}>
+        <div className="flex h-screen">
+          <div className="flex w-screen self-center min-h-[66svh] lg:flex-row flex-col">
+            <Game />
+            <Combat />
+          </div>
         </div>
-      </div>
+      </Provider>
     </React.StrictMode>
   );
 }
