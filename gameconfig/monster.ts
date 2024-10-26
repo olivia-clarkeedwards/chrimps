@@ -41,4 +41,7 @@ class Monster extends BaseMonster implements Enemy {
 }
 
 export const monsters = [Monster.spawnSlime, Monster.spawnWorm, Monster.spawnCacodemon, Monster.spawnYeti];
-export const getRandomMonster = monsters[Math.floor(Math.random() * monsters.length)];
+
+export function getRandomMonster(): Monster {
+  return monsters[Math.floor(Math.random() * monsters.length)]();
+}

@@ -7,6 +7,7 @@ export default function Combat() {
   }
 
   const randomMonster = getRandomMonster();
+
   return (
     <div className="flex justify-center basis-2/5 relative min-h-[66svh] bg-slate-500">
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" onClick={clickHandler}>
