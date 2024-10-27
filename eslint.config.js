@@ -8,6 +8,9 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
+    plugins: {
+      "react-compiler": reactCompiler,
+    },
     ignores: [
       "dist/*",
       // Temporary compiled files
@@ -32,6 +35,7 @@ export default tseslint.config(
   },
   {
     rules: {
+      "react-compiler/react-compiler": "error",
       "@typescript-eslint/no-unused-vars": [
         1,
         {

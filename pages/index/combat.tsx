@@ -30,7 +30,7 @@ export default function Combat() {
 
   function checkGameCondition() {
     if (monsterHealth < 1) {
-      // This needs to be if click will kill monster
+      // This needs to be if click will kill monster, perhaps via a usestate?
       const monsta = getRandomMonster({ stageNumber: 2 }) as Enemy;
       dispatch(spawnMonster({ ...monsta }));
     }
