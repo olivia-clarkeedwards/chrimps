@@ -16,7 +16,7 @@ export default function Combat() {
   const clicks = useAppSelector(selectClicks);
   const monsterName = useAppSelector(selectMonsterName);
   const monsterLevel = useAppSelector(selectMonsterLevel);
-  const monsterHealth = useAppSelector(selectMonsterHealth); // Test if this is causing the entire component to rerender
+  const monsterHealth = useAppSelector(selectMonsterHealth); // Test if this is causing the entire component to rerender, possibly move to child component
   const monsterImage = useAppSelector(selectMonsterImage);
   const dispatch = useAppDispatch();
   const clickDamage = 1; // Replace with click damage from player state
