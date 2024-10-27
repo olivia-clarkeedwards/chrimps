@@ -16,7 +16,7 @@ export default function Combat() {
   const clicks = useAppSelector(selectClicks);
   const monsterName = useAppSelector(selectMonsterName);
   const monsterLevel = useAppSelector(selectMonsterLevel);
-  const monsterHealth = useAppSelector(selectMonsterHealth);
+  const monsterHealth = useAppSelector(selectMonsterHealth); // Test if this is causing the entire component to rerender
   const monsterImage = useAppSelector(selectMonsterImage);
   const dispatch = useAppDispatch();
   const clickDamage = 1; // Replace with click damage from player state
@@ -25,15 +25,16 @@ export default function Combat() {
     dispatch(incrementClickCount());
     dispatch(takeClickDamage(clickDamage));
     dispatch(increaseTotalClickDamage(clickDamage));
-    checkGameCondition();
+    checkGameCondition(clickDamage);
   }
 
-  function checkGameCondition() {
-    if (monsterHealth < 1) {
-      // This needs to be if click will kill monster, perhaps via a usestate?
-      const monsta = getRandomMonster({ stageNumber: 2 }) as Enemy;
-      dispatch(spawnMonster({ ...monsta }));
-    }
+  function checkGameCondition(incomingDamage: number) {
+    if (monsterHealth - incomingDamage < 1) spawnNewMonster();
+  }
+
+  function spawnNewMonster() {
+    const monsta = getRandomMonster({ stageNumber: 2 }) as Enemy;
+    dispatch(spawnMonster({ ...monsta }));
   }
 
   return (
