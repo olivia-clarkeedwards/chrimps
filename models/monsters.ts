@@ -1,10 +1,11 @@
 export interface BaseEnemy {
-  monsterLevel: number;
-  health: number;
+  level: number;
+  baseHealth: number;
 }
 
 export interface Enemy extends BaseEnemy {
+  name: string;
   healthMulti: number;
-  monsterHealth: number;
+  health: number;
   image: string;
 }

@@ -1,16 +1,39 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { incrementClicks, selectClicks } from "../../redux/statsSlice";
+import { increaseTotalClickDamage, incrementClickCount, selectClicks } from "../../redux/statsSlice";
+import {
+  selectMonsterHealth,
+  selectMonsterImage,
+  selectMonsterLevel,
+  selectMonsterName,
+  spawnMonster,
+  takeClickDamage,
+} from "../../redux/monsterSlice";
 import { getRandomMonster } from "../../gameconfig/monster";
+import { Enemy } from "../../models/monsters";
 
 export default function Combat() {
   const clicks = useAppSelector(selectClicks);
+  const monsterName = useAppSelector(selectMonsterName);
+  const monsterLevel = useAppSelector(selectMonsterLevel);
+  const monsterHealth = useAppSelector(selectMonsterHealth);
+  const monsterImage = useAppSelector(selectMonsterImage);
   const dispatch = useAppDispatch();
-
-  const randomMonster = getRandomMonster();
+  const clickDamage = 1; // Replace with click damage from player state
 
   function clickHandler() {
-    dispatch(incrementClicks());
+    dispatch(incrementClickCount());
+    dispatch(takeClickDamage(clickDamage));
+    dispatch(increaseTotalClickDamage(clickDamage));
+    checkGameCondition();
+  }
+
+  function checkGameCondition() {
+    if (monsterHealth < 1) {
+      // This needs to be if click will kill monster
+      const monsta = getRandomMonster({ stageNumber: 2 }) as Enemy;
+      dispatch(spawnMonster({ ...monsta }));
+    }
   }
 
   return (
@@ -19,10 +42,10 @@ export default function Combat() {
         className="absolute h-[80%] w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         onClick={clickHandler}
       >
-        <img className="h-full w-full object-contain" src={randomMonster.image} />
+        <img className="h-full w-full object-contain" src={monsterImage} />
       </div>
       <div className="absolute top-3/4 left-1/2 transform -translate-x-1/2 -translate-y-[-4.5rem]">
-        health: {randomMonster.monsterHealth} clicks: {clicks}
+        Level {monsterLevel} {monsterName} health: {monsterHealth} clicks: {clicks}
       </div>
     </div>
   );
