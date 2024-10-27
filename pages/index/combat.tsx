@@ -1,16 +1,16 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { incrementClicks, increaseTotalClickDamage, statsSlice } from "../../redux/statsSlice";
+import { incrementClicks, selectClicks } from "../../redux/statsSlice";
 import { getRandomMonster } from "../../gameconfig/monster";
 
 export default function Combat() {
-  const clicks = useAppSelector((state) => state.stats.clicks);
+  const clicks = useAppSelector(selectClicks);
   const dispatch = useAppDispatch();
 
   const randomMonster = getRandomMonster();
 
-  function clickHandler(e: React.MouseEvent<HTMLDivElement>) {
-    dispatch(statsSlice.actions.incrementClicks());
+  function clickHandler() {
+    dispatch(incrementClicks());
   }
 
   return (
@@ -22,7 +22,7 @@ export default function Combat() {
         <img className="h-full w-full object-contain" src={randomMonster.image} />
       </div>
       <div className="absolute top-3/4 left-1/2 transform -translate-x-1/2 -translate-y-[-4.5rem]">
-        {randomMonster.monsterHealth} {clicks}
+        health: {randomMonster.monsterHealth} clicks: {clicks}
       </div>
     </div>
   );

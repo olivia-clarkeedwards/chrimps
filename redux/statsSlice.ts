@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
+import { Root } from "react-dom/client";
 
 interface statsState {
   clicks: number;
@@ -27,6 +28,7 @@ export const statsSlice = createSlice({
 
 export const { incrementClicks, increaseTotalClickDamage } = statsSlice.actions;
 
-export const selectCount = (state: RootState) => state.stats.clicks;
+export const selectClicks = (state: RootState) => state.stats.clicks;
+export const selecttotalClickDamage = (state: RootState) => state.stats.totalClickDamage;
 
 export default statsSlice.reducer;
