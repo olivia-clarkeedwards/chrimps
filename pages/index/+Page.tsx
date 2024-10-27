@@ -1,8 +1,8 @@
 import "./style.css";
 import "./tailwind.css";
 import React from "react";
-import Game from "./game";
-import Combat from "./combat";
+import Game from "./components/game/gameIndex";
+import Combat from "./components/combat/combatIndex";
 import { store } from "../../redux/store";
 import { Provider } from "react-redux";
 
