@@ -3,32 +3,37 @@ import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import {
   increaseTotalClickDamage,
   incrementClickCount,
+  incrementHighestZoneEver,
   incrementKillCount,
-  incrementZonesCompleted,
+  incrementTotalZonesCompleted,
   selectClickCount,
+  selectHighestZoneEver,
   selectKillCount,
-  selectZonesCompleted,
+  selectTotalZonesCompleted,
 } from "../../../../redux/statsSlice";
 import {
+  spawnMonster,
+  takeClickDamage,
   selectMonsterImage,
   selectMonsterLevel,
   selectMonsterName,
-  spawnMonster,
-  takeClickDamage,
   selectMonsterAlive,
 } from "../../../../redux/monsterSlice";
-import { increaseClickDamage, selectClickDamage } from "../../../../redux/playerSlice";
+import { incrementZoneNumber, selectZoneNumber } from "../../../../redux/zoneSlice";
+import { selectClickDamage } from "../../../../redux/playerSlice";
 import { getRandomMonster } from "../../../../gameconfig/monster";
 import { Enemy } from "../../../../models/monsters";
 import Healthbar from "./healthbar";
 
 export default function Combat() {
   const clickDamage = useAppSelector(selectClickDamage);
+  const zone = useAppSelector(selectZoneNumber);
 
   // Move this garbage to an achievements page
   const clickCount = useAppSelector(selectClickCount);
   const killCount = useAppSelector(selectKillCount);
-  const zonesCompleted = useAppSelector(selectZonesCompleted);
+  const totalZonesCompleted = useAppSelector(selectTotalZonesCompleted);
+  const highestZoneEver = useAppSelector(selectHighestZoneEver);
 
   const monsterName = useAppSelector(selectMonsterName);
   const monsterLevel = useAppSelector(selectMonsterLevel);
@@ -38,16 +43,19 @@ export default function Combat() {
 
   function clickHandler() {
     dispatch(incrementClickCount());
-    dispatch(takeClickDamage(clickDamage));
     dispatch(increaseTotalClickDamage(clickDamage));
+    dispatch(takeClickDamage(clickDamage));
+    // Goto useEffect if monster died
   }
 
   useEffect(() => {
     if (!monsterAlive) {
       dispatch(incrementKillCount());
-      dispatch(incrementZonesCompleted());
-      // Increase stage, increment stages completed stat, conditional HZE dispatch
-      const newMonster = getRandomMonster({ stageNumber: 2 }) as Enemy;
+      dispatch(incrementTotalZonesCompleted());
+      dispatch(incrementZoneNumber());
+      // Zone does not update immediately
+      zone + 1 > highestZoneEver && dispatch(incrementHighestZoneEver());
+      const newMonster = getRandomMonster({ zoneNumber: zone }) as Enemy;
       dispatch(spawnMonster({ ...newMonster, alive: true }));
     }
   }, [monsterAlive]);
@@ -65,8 +73,7 @@ export default function Combat() {
         {monsterName} <Healthbar />
       </div>
       <div>
-        Debug: Mlvl: {monsterLevel}, Clickcount: {clickCount}, Clickdamage: {clickDamage}, Killcount: {killCount}{" "}
-        ZonesCompleted: {zonesCompleted}
+        Debug: Mlvl: {monsterLevel}, Zone: {zone}, Clickdamage: {clickDamage}
       </div>
     </div>
     // Stage visualiser at the bottom

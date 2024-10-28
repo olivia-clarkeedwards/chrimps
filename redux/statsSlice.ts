@@ -6,7 +6,7 @@ interface StatsState {
   clickCount: number;
   totalClickDamage: number;
   killCount: number;
-  zonesCompleted: number;
+  totalZonesCompleted: number;
   highestZoneEver: number;
 }
 
@@ -14,7 +14,7 @@ const initialState: StatsState = {
   clickCount: 0,
   totalClickDamage: 0,
   killCount: 0,
-  zonesCompleted: 0,
+  totalZonesCompleted: 0,
   highestZoneEver: 0,
 };
 
@@ -31,8 +31,8 @@ export const statsSlice = createSlice({
     incrementKillCount: (state) => {
       state.killCount++;
     },
-    incrementZonesCompleted: (state) => {
-      state.zonesCompleted++;
+    incrementTotalZonesCompleted: (state) => {
+      state.totalZonesCompleted++;
     },
     incrementHighestZoneEver: (state) => {
       state.highestZoneEver++;
@@ -44,14 +44,14 @@ export const {
   incrementClickCount,
   increaseTotalClickDamage,
   incrementKillCount,
-  incrementZonesCompleted,
+  incrementTotalZonesCompleted,
   incrementHighestZoneEver,
 } = statsSlice.actions;
 
 export const selectClickCount = (state: RootState) => state.stats.clickCount;
 export const selecttotalClickDamage = (state: RootState) => state.stats.totalClickDamage;
 export const selectKillCount = (state: RootState) => state.stats.killCount;
-export const selectZonesCompleted = (state: RootState) => state.stats.zonesCompleted;
+export const selectTotalZonesCompleted = (state: RootState) => state.stats.totalZonesCompleted;
 export const selectHighestZoneEver = (state: RootState) => state.stats.highestZoneEver;
 
 export default statsSlice.reducer;

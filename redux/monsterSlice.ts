@@ -9,7 +9,7 @@ interface EnemyState extends Enemy {
   alive: boolean;
 }
 
-const initialState = { ...getRandomMonster({ stageNumber: 1 }), alive: true } as EnemyState;
+const initialState = { ...getRandomMonster({ zoneNumber: 1 }), alive: true } as EnemyState;
 
 export const monsterSlice = createSlice({
   name: "monster",

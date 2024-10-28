@@ -9,7 +9,7 @@ export default {
 
   // https://vike.dev/head-tags
   title: "Chrimps",
-  description: "The incremental adventure",
+  description: "The Incremental Adventure",
 
   ssr: false,
   passToClient: ["user"],

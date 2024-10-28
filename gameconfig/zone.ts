@@ -1,5 +1,5 @@
 import { BaseZone } from "../models/zones";
 
-export const stage: BaseZone = {
-  stageNumber: 1,
+export const zone: BaseZone = {
+  zoneNumber: 1,
 };
