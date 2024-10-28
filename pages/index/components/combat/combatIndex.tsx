@@ -5,7 +5,7 @@ import {
   incrementClickCount,
   incrementKillCount,
   incrementZonesCompleted,
-  selectClicks,
+  selectClickCount,
   selectKillCount,
   selectZonesCompleted,
 } from "../../../../redux/statsSlice";
@@ -17,12 +17,16 @@ import {
   takeClickDamage,
   selectMonsterAlive,
 } from "../../../../redux/monsterSlice";
+import { increaseClickDamage, selectClickDamage } from "../../../../redux/playerSlice";
 import { getRandomMonster } from "../../../../gameconfig/monster";
 import { Enemy } from "../../../../models/monsters";
 import Healthbar from "./healthbar";
 
 export default function Combat() {
-  const clicks = useAppSelector(selectClicks);
+  const clickDamage = useAppSelector(selectClickDamage);
+
+  // Move this garbage to an achievements page
+  const clickCount = useAppSelector(selectClickCount);
   const killCount = useAppSelector(selectKillCount);
   const zonesCompleted = useAppSelector(selectZonesCompleted);
 
@@ -31,7 +35,6 @@ export default function Combat() {
   const monsterAlive = useAppSelector(selectMonsterAlive);
   const monsterImage = useAppSelector(selectMonsterImage);
   const dispatch = useAppDispatch();
-  const clickDamage = 1; // Replace with click damage from player state
 
   function clickHandler() {
     dispatch(incrementClickCount());
@@ -62,7 +65,7 @@ export default function Combat() {
         {monsterName} <Healthbar />
       </div>
       <div>
-        Debug: Mlvl: {monsterLevel}, Clickcount: {clicks}, Clickdamage: {clickDamage}, Killcount: {killCount}{" "}
+        Debug: Mlvl: {monsterLevel}, Clickcount: {clickCount}, Clickdamage: {clickDamage}, Killcount: {killCount}{" "}
         ZonesCompleted: {zonesCompleted}
       </div>
     </div>

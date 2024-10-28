@@ -1,6 +1,6 @@
 import { BaseEnemy, Enemy } from "../models/monsters";
-import { BaseStage } from "../models/stages";
-import { stage } from "./stage";
+import { BaseZone } from "../models/zones";
+import { stage } from "./zone";
 
 class BaseMonster implements BaseEnemy {
   level = 0;
@@ -8,7 +8,7 @@ class BaseMonster implements BaseEnemy {
     return Math.pow(1.2, this.level) + 9;
   }
 
-  constructor(stage: BaseStage) {
+  constructor(stage: BaseZone) {
     this.level = stage.stageNumber;
   }
 }
@@ -19,7 +19,7 @@ class Monster extends BaseMonster implements Enemy {
   image;
   health;
 
-  constructor(name: string, stage: BaseStage, healthMulti: number, imagePath: string) {
+  constructor(name: string, stage: BaseZone, healthMulti: number, imagePath: string) {
     super(stage);
     this.name = name;
     this.healthMulti = healthMulti;
@@ -27,28 +27,28 @@ class Monster extends BaseMonster implements Enemy {
     this.health = Math.floor(this.baseHealth * this.healthMulti);
   }
 
-  static spawnSlime(stage: BaseStage): Monster {
+  static spawnSlime(stage: BaseZone): Monster {
     return new Monster("Slime", stage, 1, "/ph-slime.png");
   }
-  static spawnWorm(stage: BaseStage): Monster {
+  static spawnWorm(stage: BaseZone): Monster {
     return new Monster("Worm", stage, 1.05, "/ph-worm.png");
   }
-  static spawnCacodemon(stage: BaseStage): Monster {
+  static spawnCacodemon(stage: BaseZone): Monster {
     return new Monster("Cacodemon", stage, 1.1, "/ph-cacodemon.png");
   }
-  static spawnYeti(stage: BaseStage): Monster {
+  static spawnYeti(stage: BaseZone): Monster {
     return new Monster("Yeti", stage, 1.2, "/ph-yeti.png");
   }
 }
 
 export const monsters = [
-  (stage: BaseStage) => Monster.spawnSlime(stage),
-  (stage: BaseStage) => Monster.spawnWorm(stage),
-  (stage: BaseStage) => Monster.spawnCacodemon(stage),
-  (stage: BaseStage) => Monster.spawnYeti(stage),
+  (stage: BaseZone) => Monster.spawnSlime(stage),
+  (stage: BaseZone) => Monster.spawnWorm(stage),
+  (stage: BaseZone) => Monster.spawnCacodemon(stage),
+  (stage: BaseZone) => Monster.spawnYeti(stage),
 ];
 
-export function getRandomMonster(stage: BaseStage): Monster {
+export function getRandomMonster(stage: BaseZone): Monster {
   const randomIndex = Math.floor(Math.random() * monsters.length);
   return monsters[randomIndex](stage);
 }

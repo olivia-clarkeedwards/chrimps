@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
-interface statsState {
+interface StatsState {
   clickCount: number;
   totalClickDamage: number;
   killCount: number;
@@ -10,7 +10,7 @@ interface statsState {
   highestZoneEver: number;
 }
 
-const initialState: statsState = {
+const initialState: StatsState = {
   clickCount: 0,
   totalClickDamage: 0,
   killCount: 0,
@@ -48,7 +48,7 @@ export const {
   incrementHighestZoneEver,
 } = statsSlice.actions;
 
-export const selectClicks = (state: RootState) => state.stats.clickCount;
+export const selectClickCount = (state: RootState) => state.stats.clickCount;
 export const selecttotalClickDamage = (state: RootState) => state.stats.totalClickDamage;
 export const selectKillCount = (state: RootState) => state.stats.killCount;
 export const selectZonesCompleted = (state: RootState) => state.stats.zonesCompleted;

@@ -1,12 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import statsReducer from "./statsSlice";
 import monsterReducer from "./monsterSlice";
+import zoneReducer from "./zoneSlice";
+import playerReducer from "./playerSlice";
 
 export const store = configureStore({
   reducer: {
-    // stage: stageReducer,
     monster: monsterReducer,
+    player: playerReducer,
     stats: statsReducer,
+    zone: zoneReducer,
   },
 });
 
