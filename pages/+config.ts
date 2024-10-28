@@ -1,5 +1,5 @@
-import vikeReact from "vike-react/config";
-import type { Config } from "vike/types";
+import vikeReact from "vike-react/config"
+import type { Config } from "vike/types"
 
 // Default config (can be overridden by pages)
 // https://vike.dev/config
@@ -14,4 +14,4 @@ export default {
   ssr: false,
   passToClient: ["user"],
   extends: vikeReact,
-} satisfies Config;
+} satisfies Config
