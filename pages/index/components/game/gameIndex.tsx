@@ -1,17 +1,30 @@
 import React from "react"
-import { increaseClickDamage, incrementClickLevel, selectClickLevel, selectGold } from "../../../../redux/playerSlice"
+import {
+  decreaseGold,
+  increaseClickDamage,
+  incrementClickLevel,
+  selectClickLevel,
+  selectGold,
+} from "../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
+import { upgradeCost } from "../../../../gameconfig/upgrades"
 
 export default function Game() {
   const gold = useAppSelector(selectGold)
   const clickLevel = useAppSelector(selectClickLevel)
   const dispatch = useAppDispatch()
+
+  const clickUpgradeCost = upgradeCost.clickCost(clickLevel)
+
   function upgradeHandler(e: React.MouseEvent<HTMLButtonElement>) {
     const upgradeName = e.currentTarget.id
     switch (upgradeName) {
       case "click-damage":
-        dispatch(incrementClickLevel())
-        dispatch(increaseClickDamage(1)) // add upgrade cost interface, config...slice?
+        if (gold >= clickUpgradeCost) {
+          dispatch(incrementClickLevel())
+          dispatch(increaseClickDamage(1))
+          dispatch(decreaseGold(clickUpgradeCost))
+        } // Do I need an upgrade slice?
     }
   }
 
@@ -23,6 +36,7 @@ export default function Game() {
           <div className="text-3xl">{gold}</div>
         </div>
       </div>
+      {/* Upgrades elements need to be pulled out into their own components, this is stanky already */}
       <div className="divide-y-2 divide-slate-500">
         <div className="flex w-full items-start justify-between align-start py-4 px-4">
           <div className="flex flex-col items-center">
@@ -33,7 +47,7 @@ export default function Game() {
             id="click-damage"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
             onClick={upgradeHandler}>
-            Level up
+            Level up {clickUpgradeCost}
           </button>
         </div>
         <div className="flex w-full items-start justify-between align-start py-4 px-4">
