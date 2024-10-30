@@ -1,12 +1,18 @@
 import React from "react"
-import { selectGold } from "../../../../redux/playerSlice"
-import { useAppSelector } from "../../../../redux/hooks"
+import { increaseClickDamage, incrementClickLevel, selectClickLevel, selectGold } from "../../../../redux/playerSlice"
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 
 export default function Game() {
   const gold = useAppSelector(selectGold)
-
+  const clickLevel = useAppSelector(selectClickLevel)
+  const dispatch = useAppDispatch()
   function upgradeHandler(e: React.MouseEvent<HTMLButtonElement>) {
-    console.log(e.currentTarget.id)
+    const upgradeName = e.currentTarget.id
+    switch (upgradeName) {
+      case "click-damage":
+        dispatch(incrementClickLevel())
+        dispatch(increaseClickDamage(1)) // add upgrade cost interface, config...slice?
+    }
   }
 
   return (
@@ -19,7 +25,10 @@ export default function Game() {
       </div>
       <div className="divide-y-2 divide-slate-500">
         <div className="flex w-full items-start justify-between align-start py-4 px-4">
-          <div>Click Damage</div>
+          <div className="flex flex-col items-center">
+            <div>Click Damage</div>
+            <div>{clickLevel}</div>
+          </div>
           <button
             id="click-damage"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"

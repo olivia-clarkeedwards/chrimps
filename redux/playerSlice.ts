@@ -6,11 +6,13 @@ import { Root } from "react-dom/client"
 interface PlayerState {
   clickDamage: number
   gold: number
+  clickLevel: number
 }
 
 const initialState: PlayerState = {
   clickDamage: 1,
   gold: 0,
+  clickLevel: 1,
 }
 
 export const playerSlice = createSlice({
@@ -23,12 +25,16 @@ export const playerSlice = createSlice({
     increaseGold(state, action: PayloadAction<number>) {
       state.gold += action.payload
     },
+    incrementClickLevel: (state) => {
+      state.clickLevel++
+    },
   },
 })
 
-export const { increaseClickDamage, increaseGold } = playerSlice.actions
+export const { increaseClickDamage, increaseGold, incrementClickLevel } = playerSlice.actions
 
 export const selectClickDamage = (state: RootState) => state.player.clickDamage
 export const selectGold = (state: RootState) => state.player.gold
+export const selectClickLevel = (state: RootState) => state.player.clickLevel
 
 export default playerSlice.reducer
