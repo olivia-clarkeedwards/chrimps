@@ -18,16 +18,17 @@ import {
   selectMonsterLevel,
   selectMonsterName,
   selectMonsterAlive,
+  selectMonsterGoldValue,
 } from "../../../../redux/monsterSlice"
 import { incrementZoneNumber, selectZoneNumber } from "../../../../redux/zoneSlice"
-import { selectClickDamage } from "../../../../redux/playerSlice"
+import { increaseGold, selectClickDamage } from "../../../../redux/playerSlice"
 import { getRandomMonster } from "../../../../gameconfig/monster"
 import { Enemy } from "../../../../models/monsters"
 import Healthbar from "./healthbar"
 
 export default function Combat() {
   const clickDamage = useAppSelector(selectClickDamage)
-  const zone = useAppSelector(selectZoneNumber)
+  let zone = useAppSelector(selectZoneNumber)
 
   // Move this garbage to an achievements page
   const clickCount = useAppSelector(selectClickCount)
@@ -37,6 +38,7 @@ export default function Combat() {
 
   const monsterName = useAppSelector(selectMonsterName)
   const monsterLevel = useAppSelector(selectMonsterLevel)
+  const monsterValue = useAppSelector(selectMonsterGoldValue)
   const monsterAlive = useAppSelector(selectMonsterAlive)
   const monsterImage = useAppSelector(selectMonsterImage)
   const dispatch = useAppDispatch()
@@ -50,10 +52,11 @@ export default function Combat() {
   useEffect(() => {
     if (!monsterAlive) {
       dispatch(incrementKillCount())
+      dispatch(increaseGold(monsterValue))
       dispatch(incrementTotalZonesCompleted())
-      dispatch(incrementZoneNumber())
-      // Zone does not update immediately
-      zone + 1 > highestZoneEver && dispatch(incrementHighestZoneEver())
+      dispatch(incrementZoneNumber()) // Zone variable does not update; stale closure
+      zone++
+      zone > highestZoneEver && dispatch(incrementHighestZoneEver())
       const newMonster = getRandomMonster({ zoneNumber: zone }) as Enemy
       dispatch(spawnMonster({ ...newMonster, alive: true }))
     }
@@ -71,7 +74,7 @@ export default function Combat() {
         {monsterName} <Healthbar />
       </div>
       <div>
-        Debug: Mlvl: {monsterLevel}, Zone: {zone}, Clickdamage: {clickDamage}
+        Debug: monsterValue: {monsterValue} Zone: {zone}, Clickdamage: {clickDamage}
       </div>
     </div>
     // Stage visualiser at the bottom

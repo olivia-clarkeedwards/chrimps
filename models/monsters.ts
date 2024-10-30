@@ -7,5 +7,6 @@ export interface Enemy extends BaseEnemy {
   name: string
   healthMulti: number
   health: number
+  goldValue: number
   image: string
 }

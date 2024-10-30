@@ -10,6 +10,7 @@ interface EnemyState extends Enemy {
 }
 
 const initialState = { ...getRandomMonster({ zoneNumber: 1 }), alive: true } as EnemyState
+console.log(initialState.goldValue)
 
 export const monsterSlice = createSlice({
   name: "monster",
@@ -32,6 +33,7 @@ export const { takeClickDamage, spawnMonster, monsterDied } = monsterSlice.actio
 export const selectMonsterName = (state: RootState) => state.monster.name
 export const selectMonsterLevel = (state: RootState) => state.monster.level
 export const selectMonsterHealth = (state: RootState) => state.monster.health
+export const selectMonsterGoldValue = (state: RootState) => state.monster.goldValue
 export const selectMonsterAlive = (state: RootState) => state.monster.alive
 export const selectMonsterImage = (state: RootState) => state.monster.image
 

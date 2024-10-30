@@ -18,6 +18,7 @@ class Monster extends BaseMonster implements Enemy {
   healthMulti
   image
   health
+  goldValue
 
   constructor(name: string, zone: BaseZone, healthMulti: number, imagePath: string) {
     super(zone)
@@ -25,6 +26,7 @@ class Monster extends BaseMonster implements Enemy {
     this.healthMulti = healthMulti
     this.image = imagePath
     this.health = Math.floor(this.baseHealth * this.healthMulti)
+    this.goldValue = Math.floor((this.baseHealth / 10) * (this.healthMulti * 1.5))
   }
 
   static spawnSlime(zone: BaseZone): Monster {
