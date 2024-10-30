@@ -30,16 +30,16 @@ class Monster extends BaseMonster implements Enemy {
   }
 
   static spawnSlime(zone: BaseZone): Monster {
-    return new Monster("Slime", zone, 1, "/ph-slime.png")
+    return new Monster("Slime", zone, 1, "/monsters/ph-slime.png")
   }
   static spawnWorm(zone: BaseZone): Monster {
-    return new Monster("Worm", zone, 1.05, "/ph-worm.png")
+    return new Monster("Worm", zone, 1.05, "/monsters/ph-worm.png")
   }
   static spawnCacodemon(zone: BaseZone): Monster {
-    return new Monster("Cacodemon", zone, 1.1, "/ph-cacodemon.png")
+    return new Monster("Cacodemon", zone, 1.1, "/monsters/ph-cacodemon.png")
   }
   static spawnYeti(zone: BaseZone): Monster {
-    return new Monster("Yeti", zone, 1.2, "/ph-yeti.png")
+    return new Monster("Yeti", zone, 1.2, "/monsters/ph-yeti.png")
   }
 }
 

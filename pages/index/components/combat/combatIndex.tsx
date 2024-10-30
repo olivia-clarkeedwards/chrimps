@@ -13,21 +13,21 @@ import {
 } from "../../../../redux/statsSlice"
 import {
   spawnMonster,
-  takeClickDamage,
   selectMonsterImage,
   selectMonsterLevel,
   selectMonsterName,
   selectMonsterAlive,
   selectMonsterGoldValue,
+  takeClickDamage,
 } from "../../../../redux/monsterSlice"
 import { incrementZoneNumber, selectZoneNumber } from "../../../../redux/zoneSlice"
-import { increaseGold, selectClickDamage } from "../../../../redux/playerSlice"
+import { increaseGold, selectClickBaseDamage } from "../../../../redux/playerSlice"
 import { getRandomMonster } from "../../../../gameconfig/monster"
 import { Enemy } from "../../../../models/monsters"
 import Healthbar from "./healthbar"
 
 export default function Combat() {
-  const clickDamage = useAppSelector(selectClickDamage)
+  const clickBaseDamage = useAppSelector(selectClickBaseDamage)
   let zone = useAppSelector(selectZoneNumber)
 
   // Move this garbage to an achievements page
@@ -45,8 +45,8 @@ export default function Combat() {
 
   function clickHandler() {
     dispatch(incrementClickCount())
-    dispatch(increaseTotalClickDamage(clickDamage))
-    dispatch(takeClickDamage(clickDamage))
+    dispatch(increaseTotalClickDamage(clickBaseDamage))
+    dispatch(takeClickDamage(clickBaseDamage))
     // Goto useEffect if monster died
   }
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function Combat() {
         {monsterName} <Healthbar />
       </div>
       <div>
-        Debug: monsterValue: {monsterValue} Zone: {zone}, Clickdamage: {clickDamage}
+        Debug: monsterValue: {monsterValue} Zone: {zone}, clickBaseDamage: {clickBaseDamage}
       </div>
     </div>
     // Stage visualiser at the bottom
