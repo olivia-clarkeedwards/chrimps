@@ -14,16 +14,16 @@ export default function Game() {
   const clickLevel = useAppSelector(selectClickLevel)
   const dispatch = useAppDispatch()
 
-  const clickUpgradeCost = upgradeCost.clickCost(clickLevel)
+  const clickLevelUpCost = upgradeCost.clickLevelUpCost(clickLevel)
 
   function levelUpHandler(e: React.MouseEvent<HTMLButtonElement>) {
     const upgradeName = e.currentTarget.id
     switch (upgradeName) {
       case "click-level":
-        if (gold >= clickUpgradeCost) {
+        if (gold >= clickLevelUpCost) {
           dispatch(incrementClickLevel())
           dispatch(increaseClickBaseDamage(1))
-          dispatch(decreaseGold(clickUpgradeCost))
+          dispatch(decreaseGold(clickLevelUpCost))
         } else {
           // dispatch stat for secret achievement for trying to purchase it too many times?
         }
@@ -62,7 +62,7 @@ export default function Game() {
             id="click-level"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
             onClick={levelUpHandler}>
-            Level up {clickUpgradeCost}
+            Level up {clickLevelUpCost}
           </button>
         </div>
         <div className="flex w-full items-start justify-between align-start py-4 px-4">
