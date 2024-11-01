@@ -10,7 +10,6 @@ interface EnemyState extends Enemy {
 }
 
 const initialState = { ...getRandomMonster({ zoneNumber: 1 }), alive: true } as EnemyState
-console.log(initialState.goldValue)
 
 export const monsterSlice = createSlice({
   name: "monster",

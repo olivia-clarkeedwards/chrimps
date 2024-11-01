@@ -29,11 +29,10 @@ import { playerCalc } from "../../../../gameconfig/upgrades"
 
 export default function Combat() {
   let zone = useAppSelector(selectZoneNumber)
+  const clickBaseDamage = useAppSelector(selectClickBaseDamage)
+  const clickMulti = useAppSelector(selectClickMulti)
+  const clickDamage = playerCalc.clickDamage(useAppSelector((state) => state.player))
 
-  // Move this garbage to an achievements page
-  const clickCount = useAppSelector(selectClickCount)
-  const killCount = useAppSelector(selectKillCount)
-  const totalZonesCompleted = useAppSelector(selectTotalZonesCompleted)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
   const monsterName = useAppSelector(selectMonsterName)
@@ -44,9 +43,6 @@ export default function Combat() {
   const dispatch = useAppDispatch()
 
   function clickHandler() {
-    const clickBaseDamage = useAppSelector(selectClickBaseDamage)
-    const clickMulti = useAppSelector(selectClickMulti)
-    const clickDamage = playerCalc.clickDamage(useAppSelector((state) => state.player))
     dispatch(incrementClickCount())
     dispatch(increaseTotalClickDamage(clickDamage))
     dispatch(takeClickDamage(clickDamage))

@@ -1,10 +1,10 @@
 // @ts-nocheck
 
-import eslint from "@eslint/js";
-import prettier from "eslint-plugin-prettier/recommended";
-import react from "eslint-plugin-react/configs/recommended.js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import eslint from "@eslint/js"
+import prettier from "eslint-plugin-prettier/recommended"
+import react from "eslint-plugin-react/configs/recommended.js"
+import globals from "globals"
+import tseslint from "typescript-eslint"
 
 export default tseslint.config(
   {
@@ -21,6 +21,7 @@ export default tseslint.config(
       "*.cjs",
       "*.mjs",
     ],
+    extends: ["plugin:react-hooks/recommended"],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
@@ -65,4 +66,4 @@ export default tseslint.config(
   },
 
   prettier,
-);
+)
