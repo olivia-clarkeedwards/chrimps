@@ -3,8 +3,11 @@ import {
   decreaseGold,
   increaseClickBaseDamage,
   incrementClickLevel,
+  incrementClickMulti,
   selectClickLevel,
+  selectClickMulti,
   selectGold,
+  selectClickBaseDamage,
 } from "../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { upgradeCost } from "../../../../gameconfig/upgrades"
@@ -12,9 +15,13 @@ import { upgradeCost } from "../../../../gameconfig/upgrades"
 export default function Game() {
   const gold = useAppSelector(selectGold)
   const clickLevel = useAppSelector(selectClickLevel)
+  const clickBaseDamage = useAppSelector(selectClickBaseDamage)
+  const clickMulti = useAppSelector(selectClickMulti)
+  const clickDamage = clickBaseDamage * clickMulti
   const dispatch = useAppDispatch()
 
   const clickLevelUpCost = upgradeCost.clickLevelUpCost(clickLevel)
+  const clickMultiCost = upgradeCost.clickMultiCost(clickMulti)
 
   function levelUpHandler(e: React.MouseEvent<HTMLButtonElement>) {
     const upgradeName = e.currentTarget.id
@@ -33,8 +40,24 @@ export default function Game() {
     }
   }
 
-  function upgradeHandler(e: React.MouseEvent<HTMLDivElement>) {
-    console.log("upgrade")
+  function upgradeHandler(e: React.MouseEvent<HTMLImageElement>) {
+    const upgradeName = e.currentTarget.id
+    switch (upgradeName) {
+      case "click-multi":
+        if (gold >= clickMultiCost) {
+          dispatch(incrementClickMulti())
+          dispatch(decreaseGold(clickMultiCost))
+        }
+        break
+      default:
+        throw new Error("Unexpected upgrade target")
+    }
+  }
+
+  const displayClickMulti = (clickMulti: number) => {
+    switch (clickMulti) {
+      case 1:
+    }
   }
 
   return (
@@ -48,14 +71,25 @@ export default function Game() {
       {/* Upgrades elements need to be pulled out into their own components, this is stanky already */}
       <div className="divide-y-2 divide-slate-500">
         <div className="flex w-full items-start justify-between align-start py-4 px-4">
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col w-32 items-center">
             <div>Click Damage</div>
-            <div>{clickLevel}</div>
-            {clickLevel > 3 && ( // Add on hover mouse icon, add tooltip, add border styling & disabled state until clickLevel is 10
+            <div className="self-center">{clickDamage}</div>
+            <div className="flex">
+              {clickLevel > 9 && ( // Add on hover mouse icon, add tooltip, add border styling & disabled state until clickLevel is 10
+                <div className="self-start w-8">
+                  <img id="click-multi" src="/icons/click.svg" onClick={upgradeHandler} />
+                </div>
+              )}
               <div className="self-start w-8">
-                <img id="click-upgrade" src="/icons/click.svg" onClick={upgradeHandler} />
+                <img id="click-multi" src="/icons/click.svg" onClick={upgradeHandler} />
               </div>
-            )}
+              <div className="self-start w-8">
+                <img id="click-multi" src="/icons/click.svg" onClick={upgradeHandler} />
+              </div>
+              <div className="self-start w-8">
+                <img id="click-multi" src="/icons/click.svg" onClick={upgradeHandler} />
+              </div>
+            </div>
           </div>
           {/* Add disabled state for these buttons too */}
           <button
@@ -66,7 +100,11 @@ export default function Game() {
           </button>
         </div>
         <div className="flex w-full items-start justify-between align-start py-4 px-4">
-          <div>Placeholder</div>
+          <div className="flex flex-col w-32 items-center">
+            <div>Placeholder</div>
+            <div className="self-center">dmg#</div>
+            <div className="flex">icon</div>
+          </div>
           <button
             id="placeholder"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
@@ -75,7 +113,11 @@ export default function Game() {
           </button>
         </div>
         <div className="flex w-full items-start justify-between align-start py-4 px-4">
-          <div>Placeholder</div>
+          <div className="flex flex-col w-32 items-center">
+            <div>Placeholder</div>
+            <div className="self-center">dmg#</div>
+            <div className="flex">icon</div>
+          </div>
           <button
             id="placeholder"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"

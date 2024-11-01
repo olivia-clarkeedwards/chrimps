@@ -21,13 +21,13 @@ import {
   takeClickDamage,
 } from "../../../../redux/monsterSlice"
 import { incrementZoneNumber, selectZoneNumber } from "../../../../redux/zoneSlice"
-import { increaseGold, selectClickBaseDamage } from "../../../../redux/playerSlice"
+import { increaseGold, selectClickBaseDamage, selectClickMulti } from "../../../../redux/playerSlice"
 import { getRandomMonster } from "../../../../gameconfig/monster"
 import { Enemy } from "../../../../models/monsters"
 import Healthbar from "./healthbar"
+import { playerCalc } from "../../../../gameconfig/upgrades"
 
 export default function Combat() {
-  const clickBaseDamage = useAppSelector(selectClickBaseDamage)
   let zone = useAppSelector(selectZoneNumber)
 
   // Move this garbage to an achievements page
@@ -44,9 +44,12 @@ export default function Combat() {
   const dispatch = useAppDispatch()
 
   function clickHandler() {
+    const clickBaseDamage = useAppSelector(selectClickBaseDamage)
+    const clickMulti = useAppSelector(selectClickMulti)
+    const clickDamage = playerCalc.clickDamage(useAppSelector((state) => state.player))
     dispatch(incrementClickCount())
-    dispatch(increaseTotalClickDamage(clickBaseDamage))
-    dispatch(takeClickDamage(clickBaseDamage))
+    dispatch(increaseTotalClickDamage(clickDamage))
+    dispatch(takeClickDamage(clickDamage))
     // Goto useEffect if monster died
   }
   useEffect(() => {
@@ -54,7 +57,7 @@ export default function Combat() {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
       dispatch(incrementTotalZonesCompleted())
-      dispatch(incrementZoneNumber()) // Zone variable does not update; stale closure
+      dispatch(incrementZoneNumber()) // Zone variable does not update immediately; stale closure
       zone++
       zone > highestZoneEver && dispatch(incrementHighestZoneEver())
       const newMonster = getRandomMonster({ zoneNumber: zone }) as Enemy
@@ -65,16 +68,19 @@ export default function Combat() {
   return (
     // Move healthbar to the top
     <div className="flex justify-center basis-2/5 relative min-h-[66svh] bg-slate-500">
+      <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
+        <div className="">{monsterName}</div>
+        <div className="text-center">
+          <Healthbar />
+        </div>
+      </div>
       <div
         className="absolute h-[80%] w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         onClick={clickHandler}>
         <img className="h-full w-full object-contain" src={monsterImage} />
       </div>
-      <div className="absolute top-3/4 left-1/2 transform -translate-x-1/2 -translate-y-[-4.5rem]">
-        {monsterName} <Healthbar />
-      </div>
-      <div>
-        Debug: monsterValue: {monsterValue} Zone: {zone}, clickBaseDamage: {clickBaseDamage}
+      <div className="absolute bottom-[-4%]">
+        {/* Debug: monsterValue: {monsterValue} Zone: {zone}, clickDamage: {clickDamage} */}
       </div>
     </div>
     // Stage visualiser at the bottom
