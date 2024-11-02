@@ -3,7 +3,7 @@ import { selectGold } from "../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import Upgrades from "./upgrades/upgrades"
 
-export default function Game() {
+export default function Panel() {
   const gold = useAppSelector(selectGold)
   const dispatch = useAppDispatch()
 
