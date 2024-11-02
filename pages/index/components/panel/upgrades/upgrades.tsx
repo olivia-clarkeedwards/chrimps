@@ -58,14 +58,14 @@ export default function Upgrades() {
 
   const displayClickUpgrades = () => {
     const clickUpgrades = [
-      <div className={clsx("w-8", "cursor-pointer", gold < 100 && "opacity-30")}>
+      <div className={clsx("w-8", "cursor-pointer", gold < 100 && "opacity-60", clickMulti > 1 && "opacity-20")}>
         <img id="click-multi" src="/icons/click-1.svg" onClick={upgradeHandler} />
       </div>,
     ]
 
     if (clickMulti >= 2) {
       clickUpgrades.push(
-        <div className={clsx("w-8", "cursor-pointer", gold < 400 && "opacity-30")}>
+        <div className={clsx("w-8", "cursor-pointer", gold < 400 && "opacity-60", clickMulti > 2 && "opacity-20")}>
           <img id="click-multi" src="/icons/click-2.svg" onClick={upgradeHandler} />
         </div>,
       )
@@ -73,7 +73,7 @@ export default function Upgrades() {
 
     if (clickMulti >= 3) {
       clickUpgrades.push(
-        <div className={clsx("w-8", "cursor-pointer", gold < 1000 && "opacity-30")}>
+        <div className={clsx("w-8", "cursor-pointer", gold < 1000 && "opacity-60", clickMulti === 3 && "opacity-20")}>
           <img id="click-multi" src="/icons/click-3.svg" onClick={upgradeHandler} />
         </div>,
       )
