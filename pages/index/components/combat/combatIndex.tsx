@@ -6,10 +6,7 @@ import {
   incrementHighestZoneEver,
   incrementKillCount,
   incrementTotalZonesCompleted,
-  selectClickCount,
   selectHighestZoneEver,
-  selectKillCount,
-  selectTotalZonesCompleted,
 } from "../../../../redux/statsSlice"
 import {
   spawnMonster,
@@ -31,12 +28,11 @@ export default function Combat() {
   let zone = useAppSelector(selectZoneNumber)
   const clickBaseDamage = useAppSelector(selectClickBaseDamage)
   const clickMulti = useAppSelector(selectClickMulti)
-  const clickDamage = playerCalc.clickDamage(useAppSelector((state) => state.player))
+  const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMulti)
 
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
   const monsterName = useAppSelector(selectMonsterName)
-  const monsterLevel = useAppSelector(selectMonsterLevel)
   const monsterValue = useAppSelector(selectMonsterGoldValue)
   const monsterAlive = useAppSelector(selectMonsterAlive)
   const monsterImage = useAppSelector(selectMonsterImage)

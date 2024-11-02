@@ -11,13 +11,16 @@ import {
 } from "../../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks"
 import { playerCalc, upgradeCost } from "../../../../../gameconfig/upgrades"
+import clsx from "clsx/lite"
 
 export default function Upgrades() {
   const dispatch = useAppDispatch()
   const gold = useAppSelector(selectGold)
+  const clickMulti = useAppSelector(selectClickMulti)
   const clickLevel = useAppSelector(selectClickLevel)
   const clickLevelUpCost = upgradeCost.clickLevelUpCost(clickLevel)
-  const clickMulti = useAppSelector(selectClickMulti)
+  const clickBaseDamage = useAppSelector(selectClickBaseDamage)
+  const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMulti)
 
   function levelUpHandler(e: React.MouseEvent<HTMLButtonElement>) {
     const upgradeName = e.currentTarget.id
@@ -37,7 +40,6 @@ export default function Upgrades() {
     }
   }
 
-  const clickDamage = playerCalc.clickDamage(useAppSelector((state) => state.player))
   function upgradeHandler(e: React.MouseEvent<HTMLImageElement>) {
     const upgradeName = e.currentTarget.id
     const clickMultiCost = upgradeCost.clickMultiCost(clickMulti)
@@ -62,7 +64,7 @@ export default function Upgrades() {
           <div className="self-center">{clickDamage}</div>
           <div className="flex">
             {clickLevel > 9 && ( // Add on hover mouse icon, add tooltip, add border styling & disabled state until clickLevel is 10
-              <div className="self-start w-8">
+              <div className={clsx(gold < 200 && "opacity-30")}>
                 <img id="click-multi" src="/icons/click-1.svg" onClick={upgradeHandler} />
               </div>
             )}

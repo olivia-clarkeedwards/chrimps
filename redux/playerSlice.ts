@@ -8,7 +8,7 @@ const initialState: PlayerState = {
   clickBaseDamage: 1,
   clickLevel: 1,
   clickMulti: 1,
-  gold: 90099990,
+  gold: 100,
 }
 
 export const playerSlice = createSlice({

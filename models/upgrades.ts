@@ -6,5 +6,5 @@ export interface UpgradeCost {
 }
 
 export interface PlayerCalc {
-  clickDamage: (PlayerState: PlayerState) => number
+  clickDamage: (clickBaseDamage: number, clickMulti: number) => number
 }
