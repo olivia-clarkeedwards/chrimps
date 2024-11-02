@@ -25,7 +25,7 @@ export const statsSlice = createSlice({
     incrementClickCount: (state) => {
       state.clickCount++
     },
-    increaseTotalClickDamage(state, action: PayloadAction<number>) {
+    increaseTotalClickDamageDealt(state, action: PayloadAction<number>) {
       state.totalClickDamage += action.payload
     },
     incrementKillCount: (state) => {
@@ -42,14 +42,14 @@ export const statsSlice = createSlice({
 
 export const {
   incrementClickCount,
-  increaseTotalClickDamage,
+  increaseTotalClickDamageDealt,
   incrementKillCount,
   incrementTotalZonesCompleted,
   incrementHighestZoneEver,
 } = statsSlice.actions
 
 export const selectClickCount = (state: RootState) => state.stats.clickCount
-export const selecttotalClickDamage = (state: RootState) => state.stats.totalClickDamage
+export const selecttotalClickDamageDealt = (state: RootState) => state.stats.totalClickDamage
 export const selectKillCount = (state: RootState) => state.stats.killCount
 export const selectTotalZonesCompleted = (state: RootState) => state.stats.totalZonesCompleted
 export const selectHighestZoneEver = (state: RootState) => state.stats.highestZoneEver
