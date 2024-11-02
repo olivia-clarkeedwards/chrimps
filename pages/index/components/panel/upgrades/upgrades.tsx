@@ -56,24 +56,42 @@ export default function Upgrades() {
     }
   }
 
+  const displayClickUpgrades = () => {
+    const clickUpgrades = [
+      <div className={clsx("w-8", "cursor-pointer", gold < 100 && "opacity-30")}>
+        <img id="click-multi" src="/icons/click-1.svg" onClick={upgradeHandler} />
+      </div>,
+    ]
+
+    if (clickMulti >= 2) {
+      clickUpgrades.push(
+        <div className={clsx("w-8", "cursor-pointer", gold < 400 && "opacity-30")}>
+          <img id="click-multi" src="/icons/click-2.svg" onClick={upgradeHandler} />
+        </div>,
+      )
+    }
+
+    if (clickMulti >= 3) {
+      clickUpgrades.push(
+        <div className={clsx("w-8", "cursor-pointer", gold < 1000 && "opacity-30")}>
+          <img id="click-multi" src="/icons/click-3.svg" onClick={upgradeHandler} />
+        </div>,
+      )
+    }
+
+    return clickUpgrades
+  }
+
   return (
     <div className="divide-y-2 divide-slate-500">
       <div className="flex w-full items-start justify-between align-start py-4 px-4">
         <div className="flex flex-col w-32 items-center">
           <div>Click Damage</div>
           <div className="self-center">{clickDamage}</div>
-          <div className="flex">
-            {clickLevel > 9 && ( // Add on hover mouse icon, add tooltip, add border styling & disabled state until clickLevel is 10
-              <div className={clsx(gold < 200 && "opacity-30")}>
-                <img id="click-multi" src="/icons/click-1.svg" onClick={upgradeHandler} />
-              </div>
-            )}
-            <div className="self-start w-8">
-              <img id="click-multi" src="/icons/click-2.svg" onClick={upgradeHandler} />
-            </div>
-            <div className="self-start w-8">
-              <img id="click-multi" src="/icons/click-3.svg" onClick={upgradeHandler} />
-            </div>
+          <div className="flex gap-1">
+            {
+              clickLevel > 9 && displayClickUpgrades() // Add tooltip, add border styling
+            }
           </div>
         </div>
         {/* Add disabled state for these buttons too */}
