@@ -15,7 +15,6 @@ export default function Game() {
           <div className="text-3xl">{gold}</div>
         </div>
       </div>
-      {/* Upgrades elements need to be pulled out into their own components, this is stanky already */}
       <Upgrades />
     </div>
   )

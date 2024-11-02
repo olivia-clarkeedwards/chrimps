@@ -54,12 +54,6 @@ export default function Upgrades() {
     }
   }
 
-  const displayClickMulti = (clickMulti: number) => {
-    switch (clickMulti) {
-      case 1:
-    }
-  }
-
   return (
     <div className="divide-y-2 divide-slate-500">
       <div className="flex w-full items-start justify-between align-start py-4 px-4">
@@ -69,17 +63,14 @@ export default function Upgrades() {
           <div className="flex">
             {clickLevel > 9 && ( // Add on hover mouse icon, add tooltip, add border styling & disabled state until clickLevel is 10
               <div className="self-start w-8">
-                <img id="click-multi" src="/icons/click.svg" onClick={upgradeHandler} />
+                <img id="click-multi" src="/icons/click-1.svg" onClick={upgradeHandler} />
               </div>
             )}
             <div className="self-start w-8">
-              <img id="click-multi" src="/icons/click.svg" onClick={upgradeHandler} />
+              <img id="click-multi" src="/icons/click-2.svg" onClick={upgradeHandler} />
             </div>
             <div className="self-start w-8">
-              <img id="click-multi" src="/icons/click.svg" onClick={upgradeHandler} />
-            </div>
-            <div className="self-start w-8">
-              <img id="click-multi" src="/icons/click.svg" onClick={upgradeHandler} />
+              <img id="click-multi" src="/icons/click-3.svg" onClick={upgradeHandler} />
             </div>
           </div>
         </div>
