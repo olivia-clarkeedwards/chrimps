@@ -11,6 +11,7 @@ import {
 } from "../../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks"
 import { playerCalc, upgradeCost } from "../../../../../gameconfig/upgrades"
+import { ClickMultiIcon1 } from "../../../../../public/icons/click-icons"
 import clsx from "clsx/lite"
 
 export default function Upgrades() {
@@ -40,9 +41,9 @@ export default function Upgrades() {
     }
   }
 
-  function upgradeHandler(e: React.MouseEvent<HTMLImageElement>) {
+  function upgradeHandler(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
     const upgradeName = e.currentTarget.id
-    const clickMultiCost = upgradeCost.clickMultiCost(clickMulti)
+    const clickMultiCost = upgradeCost.calcMultiCost(clickMulti)
 
     switch (upgradeName) {
       case "click-multi":
@@ -56,30 +57,35 @@ export default function Upgrades() {
     }
   }
 
-  const displayClickUpgrades = () => {
-    const clickUpgrades = [
-      <div className={clsx("w-8", "cursor-pointer", gold < 100 && "opacity-60", clickMulti > 1 && "opacity-20")}>
-        <img id="click-multi" src="/icons/click-1.svg" onClick={upgradeHandler} />
-      </div>,
-    ]
+  interface UpgradeComponentProps {
+    onClick: (e: React.MouseEvent<HTMLDivElement>) => void
+    Icon: JSX.Element
+    isAffordable: boolean
+    isPurchased: boolean
+  }
 
-    if (clickMulti >= 2) {
-      clickUpgrades.push(
-        <div className={clsx("w-8", "cursor-pointer", gold < 400 && "opacity-60", clickMulti > 2 && "opacity-20")}>
-          <img id="click-multi" src="/icons/click-2.svg" onClick={upgradeHandler} />
-        </div>,
-      )
-    }
+  const DisplayClickUpgrades2 = ({ onClick, Icon, isAffordable, isPurchased }: UpgradeComponentProps) => {
+    return (
+      <div id="click-multi" className="relative cursor-pointer" onClick={onClick}>
+        <div
+          className={clsx(
+            "absolute",
+            "inset-0",
+            "bg-gradient-to-br",
+            "from-amber-600",
+            "to-amber-800",
+            "rounded-lg",
+            isAffordable ? "opacity-100" : "opacity-50",
+          )}
+        />
+        {isPurchased && <div className="absolute inset-[2px] bg-black/60 rounded-md z-10" />}
+        {/* <div className="absolute inset-[2px] bg-gradient-to-br from-slate-700 to-slate-900 rounded-md" /> */}
 
-    if (clickMulti >= 3) {
-      clickUpgrades.push(
-        <div className={clsx("w-8", "cursor-pointer", gold < 1000 && "opacity-60", clickMulti === 3 && "opacity-20")}>
-          <img id="click-multi" src="/icons/click-3.svg" onClick={upgradeHandler} />
-        </div>,
-      )
-    }
-
-    return clickUpgrades
+        <div className="relative z-20 w-8 h-8 flex items-center justify-center p-1.5 text-amber-400 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          {Icon}
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -89,9 +95,15 @@ export default function Upgrades() {
           <div>Click Damage</div>
           <div className="self-center">{clickDamage}</div>
           <div className="flex gap-1">
-            {
+            <DisplayClickUpgrades2
+              onClick={upgradeHandler}
+              Icon={ClickMultiIcon1()}
+              isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
+              isPurchased={false}
+            />
+            {/* {
               clickLevel > 9 && displayClickUpgrades() // Add tooltip, add border styling
-            }
+            } */}
           </div>
         </div>
         {/* Add disabled state for these buttons too */}
