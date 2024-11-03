@@ -2,6 +2,6 @@ export interface PlayerState {
   clickBaseDamage: number
   gold: number
   clickLevel: number
-  clickMultiUpgrades: number
+  clickMultiUpgradeCount: number
   clickMulti: number
 }

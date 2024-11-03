@@ -8,16 +8,18 @@ import {
   selectClickMulti,
   selectGold,
   selectClickBaseDamage,
+  selectClickMultiUpgradeCount,
 } from "../../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks"
 import { playerCalc, upgradeCost } from "../../../../../gameconfig/upgrades"
-import { ClickMultiIcon1 } from "../../../../../public/icons/click-icons"
+import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../../../../public/icons/click-icons"
 import clsx from "clsx/lite"
 
 export default function Upgrades() {
   const dispatch = useAppDispatch()
   const gold = useAppSelector(selectGold)
   const clickMulti = useAppSelector(selectClickMulti)
+  const clickMultiUpgrades = useAppSelector(selectClickMultiUpgradeCount)
   const clickLevel = useAppSelector(selectClickLevel)
   const clickLevelUpCost = upgradeCost.clickLevelUpCost(clickLevel)
   const clickBaseDamage = useAppSelector(selectClickBaseDamage)
@@ -62,11 +64,12 @@ export default function Upgrades() {
     Icon: JSX.Element
     isAffordable: boolean
     isPurchased: boolean
+    hidden: boolean
   }
 
-  const DisplayClickUpgrades2 = ({ onClick, Icon, isAffordable, isPurchased }: UpgradeComponentProps) => {
+  const DisplayClickUpgrades2 = ({ onClick, Icon, hidden, isAffordable, isPurchased }: UpgradeComponentProps) => {
     return (
-      <div id="click-multi" className="relative cursor-pointer" onClick={onClick}>
+      <div id="click-multi" className={clsx("relative", "cursor-pointer", hidden && "hidden")} onClick={onClick}>
         <div
           className={clsx(
             "absolute",
@@ -97,9 +100,24 @@ export default function Upgrades() {
           <div className="flex gap-1">
             <DisplayClickUpgrades2
               onClick={upgradeHandler}
-              Icon={ClickMultiIcon1()}
+              Icon={ClickMultiIcon2()}
+              hidden={false}
               isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
-              isPurchased={false}
+              isPurchased={clickMultiUpgrades > 0}
+            />
+            <DisplayClickUpgrades2
+              onClick={upgradeHandler}
+              Icon={ClickMultiIcon2()}
+              hidden={clickMultiUpgrades < 1}
+              isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
+              isPurchased={clickMultiUpgrades > 1}
+            />
+            <DisplayClickUpgrades2
+              onClick={upgradeHandler}
+              Icon={ClickMultiIcon3()}
+              hidden={clickMultiUpgrades < 2}
+              isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
+              isPurchased={clickMultiUpgrades > 2}
             />
             {/* {
               clickLevel > 9 && displayClickUpgrades() // Add tooltip, add border styling
