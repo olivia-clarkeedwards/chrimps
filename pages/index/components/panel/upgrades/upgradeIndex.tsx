@@ -12,10 +12,10 @@ import {
 } from "../../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks"
 import { playerCalc, upgradeCost } from "../../../../../gameconfig/upgrades"
-import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../../../../public/icons/click-icons"
+import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/click-icons"
 import clsx from "clsx/lite"
 
-export default function Upgrades() {
+export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
   const gold = useAppSelector(selectGold)
   const clickMulti = useAppSelector(selectClickMulti)
@@ -67,9 +67,17 @@ export default function Upgrades() {
     hidden: boolean
   }
 
-  const DisplayClickUpgrades2 = ({ onClick, Icon, hidden, isAffordable, isPurchased }: UpgradeComponentProps) => {
+  const DisplayClickUpgrades = ({ onClick, Icon, hidden, isAffordable, isPurchased }: UpgradeComponentProps) => {
     return (
-      <div id="click-multi" className={clsx("relative", "cursor-pointer", hidden && "hidden")} onClick={onClick}>
+      <div
+        id="click-multi"
+        className={clsx(
+          "relative cursor-pointer ring-2 ring-offset-2 rounded-lg ring-amber-800",
+          hidden && "hidden",
+          isPurchased || !isAffordable ? "ring-offset-yellow-700" : "ring-offset-yellow-300",
+          !isPurchased && !isAffordable && "ring-offset-yellow-600 opacity-60",
+        )}
+        onClick={onClick}>
         <div
           className={clsx(
             "absolute",
@@ -78,15 +86,11 @@ export default function Upgrades() {
             "from-amber-600",
             "to-amber-800",
             "rounded-lg",
-            isAffordable ? "opacity-100" : "opacity-50",
+            isAffordable && !isPurchased ? "opacity-100" : "opacity-30",
           )}
         />
-        {isPurchased && <div className="absolute inset-[2px] bg-black/60 rounded-md z-10" />}
-        {/* <div className="absolute inset-[2px] bg-gradient-to-br from-slate-700 to-slate-900 rounded-md" /> */}
-
-        <div className="relative z-20 w-8 h-8 flex items-center justify-center p-1.5 text-amber-400 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          {Icon}
-        </div>
+        {isPurchased && <div className="absolute inset-[2px] bg-amber-950/60 rounded-md z-10" />}
+        <div className="relative z-20 w-8 h-8 flex items-center justify-center p-1 text-amber-400">{Icon}</div>
       </div>
     )
   }
@@ -97,31 +101,28 @@ export default function Upgrades() {
         <div className="flex flex-col w-32 items-center">
           <div>Click Damage</div>
           <div className="self-center">{clickDamage}</div>
-          <div className="flex gap-1">
-            <DisplayClickUpgrades2
+          <div className="flex gap-2.5 pt-1">
+            <DisplayClickUpgrades
               onClick={upgradeHandler}
-              Icon={ClickMultiIcon2()}
-              hidden={false}
+              Icon={ClickMultiIcon1()}
+              hidden={clickLevel < 10}
               isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
               isPurchased={clickMultiUpgrades > 0}
             />
-            <DisplayClickUpgrades2
+            <DisplayClickUpgrades
               onClick={upgradeHandler}
               Icon={ClickMultiIcon2()}
               hidden={clickMultiUpgrades < 1}
               isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
               isPurchased={clickMultiUpgrades > 1}
             />
-            <DisplayClickUpgrades2
+            <DisplayClickUpgrades
               onClick={upgradeHandler}
               Icon={ClickMultiIcon3()}
               hidden={clickMultiUpgrades < 2}
               isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
               isPurchased={clickMultiUpgrades > 2}
             />
-            {/* {
-              clickLevel > 9 && displayClickUpgrades() // Add tooltip, add border styling
-            } */}
           </div>
         </div>
         {/* Add disabled state for these buttons too */}

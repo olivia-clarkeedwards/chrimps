@@ -1,11 +1,10 @@
 import React from "react"
 import { selectGold } from "../../../../redux/playerSlice"
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import Upgrades from "./upgrades/upgrades"
+import { useAppSelector } from "../../../../redux/hooks"
+import UpgradeIndex from "./upgrades/upgradeIndex"
 
 export default function Panel() {
   const gold = useAppSelector(selectGold)
-  const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-col basis-3/5 bg-gradient-to-b from-amber-300 to-amber-950">
@@ -15,7 +14,7 @@ export default function Panel() {
           <div className="text-3xl">{gold}</div>
         </div>
       </div>
-      <Upgrades />
+      <UpgradeIndex />
     </div>
   )
 }
