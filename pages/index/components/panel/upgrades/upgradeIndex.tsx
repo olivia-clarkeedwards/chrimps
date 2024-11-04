@@ -19,7 +19,7 @@ export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
   const gold = useAppSelector(selectGold)
   const clickMulti = useAppSelector(selectClickMulti)
-  const clickMultiUpgrades = useAppSelector(selectClickMultiUpgradeCount)
+  const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickLevel = useAppSelector(selectClickLevel)
   const clickLevelUpCost = upgradeCost.clickLevelUpCost(clickLevel)
   const clickBaseDamage = useAppSelector(selectClickBaseDamage)
@@ -45,11 +45,13 @@ export default function UpgradeIndex() {
 
   function handleUpgrade(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
     const upgradeName = e.currentTarget.id
-    const clickMultiCost = upgradeCost.calcMultiCost(clickMulti)
+    const clickMultiCost = upgradeCost.calcMultiCost(clickMultiUpgradeCount)
 
     switch (upgradeName) {
       case "click-multi":
+        console.log("multi")
         if (gold >= clickMultiCost) {
+          console.log("multiaffordable")
           dispatch(incrementClickMulti())
           dispatch(decreaseGold(clickMultiCost))
         }
@@ -73,7 +75,7 @@ export default function UpgradeIndex() {
         id="click-multi"
         className={clsx(
           "relative cursor-pointer ring-2 ring-offset-2 rounded-lg ring-amber-800",
-          hidden && "hidden",
+          hidden && "invisible",
           isPurchased || !isAffordable ? "ring-offset-yellow-700" : "ring-offset-yellow-300",
           !isPurchased && !isAffordable && "ring-offset-yellow-600 opacity-60",
         )}
@@ -106,22 +108,22 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon1()}
               hidden={clickLevel < 10}
-              isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
-              isPurchased={clickMultiUpgrades > 0}
+              isAffordable={gold >= upgradeCost.calcMultiCost(clickMultiUpgradeCount)}
+              isPurchased={clickMultiUpgradeCount > 0}
             />
             <DisplayClickUpgrades
               onClick={handleUpgrade}
               Icon={ClickMultiIcon2()}
-              hidden={clickMultiUpgrades < 1}
-              isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
-              isPurchased={clickMultiUpgrades > 1}
+              hidden={clickMultiUpgradeCount < 1}
+              isAffordable={gold >= upgradeCost.calcMultiCost(clickMultiUpgradeCount)}
+              isPurchased={clickMultiUpgradeCount > 1}
             />
             <DisplayClickUpgrades
               onClick={handleUpgrade}
               Icon={ClickMultiIcon3()}
-              hidden={clickMultiUpgrades < 2}
-              isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
-              isPurchased={clickMultiUpgrades > 2}
+              hidden={clickMultiUpgradeCount < 2}
+              isAffordable={gold >= upgradeCost.calcMultiCost(clickMultiUpgradeCount)}
+              isPurchased={clickMultiUpgradeCount > 2}
             />
           </div>
         </div>

@@ -9,7 +9,7 @@ const initialState: PlayerState = {
   clickLevel: 1,
   clickMulti: 1,
   clickMultiUpgradeCount: 0,
-  gold: 400,
+  gold: 4400,
 }
 
 export const playerSlice = createSlice({
