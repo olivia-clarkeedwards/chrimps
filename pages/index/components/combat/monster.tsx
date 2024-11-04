@@ -37,7 +37,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const monsterValue = useAppSelector(selectMonsterGoldValue)
   const monsterAlive = useAppSelector(selectMonsterAlive)
 
-  function clickHandler() {
+  function handleClick() {
     dispatch(incrementClickCount())
     dispatch(increaseTotalClickDamageDealt(clickDamage))
     dispatch(takeClickDamage(clickDamage))
@@ -68,7 +68,7 @@ export default function Monster({ children }: PropsWithChildren) {
       </div>
       <div
         className="absolute h-[80%] w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        onClick={clickHandler}>
+        onClick={handleClick}>
         <img className="h-full w-full object-contain" src={monsterImage} />
       </div>
     </>

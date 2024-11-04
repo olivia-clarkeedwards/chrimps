@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   decreaseGold,
   increaseClickBaseDamage,
@@ -25,17 +25,17 @@ export default function UpgradeIndex() {
   const clickBaseDamage = useAppSelector(selectClickBaseDamage)
   const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMulti)
 
-  function levelUpHandler(e: React.MouseEvent<HTMLButtonElement>) {
+  const canAffordClickLevelUp = gold >= clickLevelUpCost
+
+  function handleLevelUp(e: React.MouseEvent<HTMLButtonElement>) {
     const upgradeName = e.currentTarget.id
 
     switch (upgradeName) {
       case "click-level":
-        if (gold >= clickLevelUpCost) {
+        if (canAffordClickLevelUp) {
           dispatch(incrementClickLevel())
           dispatch(increaseClickBaseDamage(1))
           dispatch(decreaseGold(clickLevelUpCost))
-        } else {
-          // dispatch stat for secret achievement for trying to purchase it too many times?
         }
         break
       default:
@@ -43,7 +43,7 @@ export default function UpgradeIndex() {
     }
   }
 
-  function upgradeHandler(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
+  function handleUpgrade(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
     const upgradeName = e.currentTarget.id
     const clickMultiCost = upgradeCost.calcMultiCost(clickMulti)
 
@@ -103,21 +103,21 @@ export default function UpgradeIndex() {
           <div className="self-center">{clickDamage}</div>
           <div className="flex gap-2.5 pt-1">
             <DisplayClickUpgrades
-              onClick={upgradeHandler}
+              onClick={handleUpgrade}
               Icon={ClickMultiIcon1()}
               hidden={clickLevel < 10}
               isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
               isPurchased={clickMultiUpgrades > 0}
             />
             <DisplayClickUpgrades
-              onClick={upgradeHandler}
+              onClick={handleUpgrade}
               Icon={ClickMultiIcon2()}
               hidden={clickMultiUpgrades < 1}
               isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
               isPurchased={clickMultiUpgrades > 1}
             />
             <DisplayClickUpgrades
-              onClick={upgradeHandler}
+              onClick={handleUpgrade}
               Icon={ClickMultiIcon3()}
               hidden={clickMultiUpgrades < 2}
               isAffordable={gold >= upgradeCost.calcMultiCost(clickMulti)}
@@ -125,11 +125,14 @@ export default function UpgradeIndex() {
             />
           </div>
         </div>
-        {/* Add disabled state for these buttons too */}
         <button
+          disabled={!canAffordClickLevelUp}
           id="click-level"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-          onClick={levelUpHandler}>
+          className={clsx(
+            "bg-blue-500  text-white font-bold py-2 px-4 border border-blue-700 rounded",
+            canAffordClickLevelUp ? "bg-blue-500 hover:bg-blue-700" : "bg-blue-950",
+          )}
+          onClick={handleLevelUp}>
           Level up {clickLevelUpCost}
         </button>
       </div>
@@ -142,7 +145,7 @@ export default function UpgradeIndex() {
         <button
           id="placeholder"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-          onClick={levelUpHandler}>
+          onClick={handleLevelUp}>
           Placeholder
         </button>
       </div>
@@ -155,7 +158,7 @@ export default function UpgradeIndex() {
         <button
           id="placeholder"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-          onClick={levelUpHandler}>
+          onClick={handleLevelUp}>
           Placeholder
         </button>
       </div>
