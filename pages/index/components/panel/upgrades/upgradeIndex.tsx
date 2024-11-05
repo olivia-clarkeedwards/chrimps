@@ -42,14 +42,12 @@ export default function UpgradeIndex() {
   }
 
   function handleUpgrade(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
-    const upgradeName = e.currentTarget.id
+    const [upgradeName, purchasedUpgradeLevel] = e.currentTarget.id.split(".")
     const clickMultiCost = upgradeCost.calcMultiCost(clickMultiUpgradeCount)
 
     switch (upgradeName) {
       case "click-multi":
-        console.log("multi")
-        if (gold >= clickMultiCost) {
-          console.log("multiaffordable")
+        if (gold >= clickMultiCost && Number(purchasedUpgradeLevel) > clickMultiUpgradeCount) {
           dispatch(incrementClickMulti())
           dispatch(decreaseGold(clickMultiCost))
         }
@@ -60,6 +58,7 @@ export default function UpgradeIndex() {
   }
 
   interface UpgradeComponentProps {
+    id: string
     onClick: (e: React.MouseEvent<HTMLDivElement>) => void
     Icon: JSX.Element
     isAffordable: boolean
@@ -67,10 +66,10 @@ export default function UpgradeIndex() {
     hidden: boolean
   }
 
-  const DisplayClickUpgrades = ({ onClick, Icon, hidden, isAffordable, isPurchased }: UpgradeComponentProps) => {
+  const DisplayClickUpgrades = ({ id, onClick, Icon, hidden, isAffordable, isPurchased }: UpgradeComponentProps) => {
     return (
       <div
-        id="click-multi"
+        id={id}
         className={clsx(
           "relative cursor-pointer ring-2 ring-offset-2 rounded-lg ring-amber-800",
           hidden && "invisible",
@@ -103,6 +102,7 @@ export default function UpgradeIndex() {
           <div className="self-center">{clickDamage}</div>
           <div className="flex gap-2.5 pt-1">
             <DisplayClickUpgrades
+              id="click-multi.1"
               onClick={handleUpgrade}
               Icon={ClickMultiIcon1()}
               hidden={clickLevel < 10}
@@ -110,6 +110,7 @@ export default function UpgradeIndex() {
               isPurchased={clickMultiUpgradeCount > 0}
             />
             <DisplayClickUpgrades
+              id="click-multi.2"
               onClick={handleUpgrade}
               Icon={ClickMultiIcon2()}
               hidden={clickMultiUpgradeCount < 1}
@@ -117,6 +118,7 @@ export default function UpgradeIndex() {
               isPurchased={clickMultiUpgradeCount > 1}
             />
             <DisplayClickUpgrades
+              id="click-multi.3"
               onClick={handleUpgrade}
               Icon={ClickMultiIcon3()}
               hidden={clickMultiUpgradeCount < 2}

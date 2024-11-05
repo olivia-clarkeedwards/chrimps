@@ -7,7 +7,6 @@ import { PlayerState } from "../models/state"
 const initialState: PlayerState = {
   clickBaseDamage: 1,
   clickLevel: 1,
-  clickMulti: 1,
   clickMultiUpgradeCount: 0,
   gold: 4400,
 }
@@ -30,7 +29,6 @@ export const playerSlice = createSlice({
     },
     incrementClickMulti: (state) => {
       state.clickMultiUpgradeCount++
-      state.clickMulti *= 2
     },
   },
 })
@@ -41,6 +39,5 @@ export const { increaseClickBaseDamage, increaseGold, decreaseGold, incrementCli
 export const selectClickBaseDamage = (state: RootState) => state.player.clickBaseDamage
 export const selectClickLevel = (state: RootState) => state.player.clickLevel
 export const selectGold = (state: RootState) => state.player.gold
-export const selectClickMulti = (state: RootState) => state.player.clickMulti
 export const selectClickMultiUpgradeCount = (state: RootState) => state.player.clickMultiUpgradeCount
 export default playerSlice.reducer
