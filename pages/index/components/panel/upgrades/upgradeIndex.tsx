@@ -5,7 +5,6 @@ import {
   incrementClickLevel,
   incrementClickMulti,
   selectClickLevel,
-  selectClickMulti,
   selectGold,
   selectClickBaseDamage,
   selectClickMultiUpgradeCount,
@@ -18,12 +17,11 @@ import clsx from "clsx/lite"
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
   const gold = useAppSelector(selectGold)
-  const clickMulti = useAppSelector(selectClickMulti)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickLevel = useAppSelector(selectClickLevel)
   const clickLevelUpCost = upgradeCost.clickLevelUpCost(clickLevel)
   const clickBaseDamage = useAppSelector(selectClickBaseDamage)
-  const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMulti)
+  const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMultiUpgradeCount)
 
   const canAffordClickLevelUp = gold >= clickLevelUpCost
 

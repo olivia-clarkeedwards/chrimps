@@ -9,5 +9,5 @@ export const upgradeCost: UpgradeCost = {
 }
 
 export const playerCalc: PlayerCalc = {
-  clickDamage: (clickBaseDamage, clickMulti) => clickBaseDamage * clickMulti,
+  clickDamage: (clickBaseDamage, clickMultiUpgradeCount) => clickBaseDamage * Math.pow(2, clickMultiUpgradeCount),
 }

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { increaseGold, selectClickBaseDamage, selectClickMulti } from "../../../../redux/playerSlice"
+import { increaseGold, selectClickBaseDamage, selectClickMultiUpgradeCount } from "../../../../redux/playerSlice"
 import { playerCalc } from "../../../../gameconfig/upgrades"
 import {
   selectMonsterAlive,
@@ -26,8 +26,8 @@ export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
 
   const clickBaseDamage = useAppSelector(selectClickBaseDamage)
-  const clickMulti = useAppSelector(selectClickMulti)
-  const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMulti)
+  const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
+  const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMultiUpgradeCount)
 
   let zone = useAppSelector(selectZoneNumber)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
