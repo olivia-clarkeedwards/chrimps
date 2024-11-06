@@ -7,7 +7,7 @@ export default function Panel() {
   const gold = useAppSelector(selectGold)
 
   return (
-    <div className="flex flex-col basis-3/5 min-h-[66svh] bg-gradient-to-b from-amber-300 to-amber-950">
+    <div className="flex flex-col basis-3/5 min-h-[66svh] bg-gradient-to-br from-amber-400 via-orange-500 to-purple-800">
       <div id="gold-cont" className="flex flex-col items-center basis-1/6 relative">
         <div className="flex absolute items-center gap-1 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <img className="pl-20" src="/icons/coin.png" alt="gold coin" />
