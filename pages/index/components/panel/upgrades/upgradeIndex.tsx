@@ -91,16 +91,35 @@ export default function UpgradeIndex() {
             />
           </div>
         </div>
-        <button
-          disabled={!canAffordClickLevelUp}
-          id="click-level"
-          className={clsx(
-            "bg-blue-500  text-white font-bold py-2 px-4 border border-blue-700 rounded",
-            canAffordClickLevelUp ? "bg-blue-500 hover:bg-blue-700" : "bg-blue-950",
-          )}
-          onClick={handleLevelUp}>
-          Level up {clickLevelUpCost}
-        </button>
+        <div className="border-4 border-amber-950 bg-amber-950">
+          <button
+            disabled={!canAffordClickLevelUp}
+            id="click-level"
+            className={clsx(
+              // This buttons frame has a nice texture when disabled, need to find way to reproduce it when enabled
+              // Base
+              "text-white font-bold py-2 px-4 rounde",
+              "border-2 border-amber-300",
+              "transition-all duration-75",
+              "shadow-[0_0_4px_0px_rgba(251,191,36,0.9),inset_0_0_4px_-1px_rgba(251,191,36,0.8)]",
+
+              // Enabled
+              "enabled:hover:border-amber-200",
+              "enabled:hover:shadow-[0_0_6px_0px_rgba(251,191,36,1),inset_0_0_6px_-1px_rgba(251,191,36,0.9)]",
+
+              // Pressed
+              "enabled:active:translate-y-0.5",
+              "enabled:active:shadow-[0_0_3px_0px_rgba(251,191,36,0.8),inset_0_0_8px_-1px_rgba(251,191,36,1)]",
+              "enabled:active:border-amber-400",
+
+              canAffordClickLevelUp
+                ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700"
+                : "bg-blue-950 border-amber-950",
+            )}
+            onClick={handleLevelUp}>
+            Level up {clickLevelUpCost}
+          </button>
+        </div>
       </div>
       <div className="flex w-full items-start justify-between align-start py-4 px-4">
         <div className="flex flex-col w-32 items-center">
