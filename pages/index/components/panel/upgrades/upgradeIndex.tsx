@@ -12,7 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks"
 import { playerCalc, upgradeCost } from "../../../../../gameconfig/upgrades"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/click-icons"
-import { MultiplierUpgrade } from "./multiplierUpgrade"
+import MultiplierUpgrade from "./multiplierUpgrade"
 import clsx from "clsx/lite"
 
 export default function UpgradeIndex() {

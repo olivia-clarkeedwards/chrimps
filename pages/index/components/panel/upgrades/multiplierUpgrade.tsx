@@ -10,7 +10,7 @@ interface MultiplierProps {
   hidden: boolean
 }
 
-export function MultiplierUpgrade({ id, onClick, Icon, hidden, isAffordable, isPurchased }: MultiplierProps) {
+export default function MultiplierUpgrade({ id, onClick, Icon, hidden, isAffordable, isPurchased }: MultiplierProps) {
   return (
     <div
       id={id}

@@ -59,7 +59,7 @@ export default function Monster({ children }: PropsWithChildren) {
 
   return (
     <>
-      <div className="absolute top-[-4%]">
+      <div className="absolute top-[-4%] text-black">
         Debug: monsterValue: {monsterValue} Zone: {zone}, clickDamage: {clickDamage}
       </div>
       <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
