@@ -14,10 +14,10 @@ export default function ZoneVisualiser() {
         {stages.map((stageNumber) => (
           <div
             key={stageNumber}
-            className="relative h-8 w-16 border-2 border-gray-300 flex items-center justify-center text-sm">
-            <div
-              className={clsx("absolute w-full h-full border-2", stageNumber === currentStage && "border-yellow-400")}
-            />
+            className={clsx(
+              "relative h-8 w-16 border-2 border-gray-300 flex items-center justify-center",
+              stageNumber === currentStage ? "text-base text-gray-500 bg-yellow-400" : "bg-gray-500 text-sm",
+            )}>
             {stageNumber}
           </div>
         ))}
