@@ -98,7 +98,7 @@ export default function UpgradeIndex() {
             className={clsx(
               // This buttons frame has a nice texture when disabled, need to find way to reproduce it when enabled
               // Base
-              "text-white font-bold py-2 px-4 rounde",
+              "flex flex-col items-center py-1 px-4 min-w-28 text-white font-bold ",
               "border-2 border-amber-300",
               "transition-all duration-75",
               "shadow-[0_0_4px_0px_rgba(251,191,36,0.9),inset_0_0_4px_-1px_rgba(251,191,36,0.8)]",
@@ -117,7 +117,11 @@ export default function UpgradeIndex() {
                 : "bg-blue-950 border-amber-950",
             )}
             onClick={handleLevelUp}>
-            Level up {clickLevelUpCost}
+            <span>Level {clickLevel}</span>
+            <span>
+              <img className="m-auto w-[1.4rem] inline-block self-center" src="/icons/coin.png" alt="gold coin" />{" "}
+              {clickLevelUpCost}
+            </span>
           </button>
         </div>
       </div>
