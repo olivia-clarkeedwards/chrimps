@@ -7,7 +7,7 @@ class BaseMonster implements BaseEnemy {
   }
 
   constructor(zoneNumber: number, stageNumber: number) {
-    this.level = zoneNumber * stageNumber
+    this.level = (zoneNumber - 1) * 30 + stageNumber
     if (stageNumber === 30) this.level += 20
   }
 }
@@ -24,7 +24,7 @@ class Monster extends BaseMonster implements Enemy {
     this.name = config.name
     this.healthMulti = config.healthMulti
     this.image = config.imagePath
-    this.health = Math.floor(this.baseHealth * this.healthMulti * stageNumber)
+    this.health = Math.floor(this.baseHealth * this.healthMulti)
     this.goldValue = Math.floor((this.baseHealth / 3) * (this.healthMulti * 1.5))
   }
 }

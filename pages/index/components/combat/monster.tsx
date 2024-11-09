@@ -54,11 +54,9 @@ export default function Monster({ children }: PropsWithChildren) {
         dispatch(incrementZonesCompleted())
         dispatch(incrementZoneNumber())
         zone > highestZoneEver && dispatch(incrementHighestZoneEver())
-        console.log(`creating lvl ${zone * currentStage + 1} monster`)
         const newMonster = getRandomMonster(zone, 30) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       } else {
-        console.log(`creating lvl! ${zone * currentStage + 1} monster`)
         console.log(zone, currentStage)
         const newMonster = getRandomMonster(zone, currentStage + 1) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
