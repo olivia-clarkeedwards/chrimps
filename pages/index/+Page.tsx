@@ -10,8 +10,8 @@ export default function Page() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <div className="flex h-screen ">
-          <div className="flex w-screen self-center min-h-[66svh] lg:flex-row flex-col">
+        <div className="flex items-end lg:h-screen">
+          <div className="flex w-full lg:min-h-[90svh] lg:flex-row flex-col flex-col-reverse">
             <Panel />
             <Combat />
           </div>
