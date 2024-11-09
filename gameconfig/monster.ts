@@ -1,15 +1,20 @@
 import { BaseEnemy, Enemy } from "../models/monsters"
-import { BaseZone } from "../models/zones"
-import { zone } from "./zone"
+
+interface MonsterConfiguration {
+  name: string
+  healthMulti: number
+  imagePath: string
+}
 
 class BaseMonster implements BaseEnemy {
   level = 0
   get baseHealth(): number {
-    return Math.pow(1.2, this.level) + 9
+    return Math.pow(1.1, this.level) + 9
   }
 
-  constructor(zone: BaseZone) {
-    this.level = zone.zoneNumber
+  constructor(zoneNumber: number, stageNumber: number) {
+    this.level = zoneNumber * stageNumber
+    if (stageNumber === 30) this.level *= 20
   }
 }
 
@@ -20,37 +25,24 @@ class Monster extends BaseMonster implements Enemy {
   health
   goldValue
 
-  constructor(name: string, zone: BaseZone, healthMulti: number, imagePath: string) {
-    super(zone)
-    this.name = name
-    this.healthMulti = healthMulti
-    this.image = imagePath
-    this.health = Math.floor(this.baseHealth * this.healthMulti)
-    this.goldValue = Math.floor((this.baseHealth / 10) * (this.healthMulti * 1.5))
-  }
-
-  static spawnSlime(zone: BaseZone): Monster {
-    return new Monster("Slime", zone, 1, "/monsters/ph-slime.png")
-  }
-  static spawnWorm(zone: BaseZone): Monster {
-    return new Monster("Worm", zone, 1.05, "/monsters/ph-worm.png")
-  }
-  static spawnCacodemon(zone: BaseZone): Monster {
-    return new Monster("Cacodemon", zone, 1.1, "/monsters/ph-cacodemon.png")
-  }
-  static spawnYeti(zone: BaseZone): Monster {
-    return new Monster("Yeti", zone, 1.2, "/monsters/ph-yeti.png")
+  constructor(config: MonsterConfiguration, zoneNumber: number, stageNumber: number) {
+    super(zoneNumber, stageNumber)
+    this.name = config.name
+    this.healthMulti = config.healthMulti
+    this.image = config.imagePath
+    this.health = Math.floor(this.baseHealth * this.healthMulti * stageNumber)
+    this.goldValue = Math.floor((this.baseHealth / 3) * (this.healthMulti * 1.5))
   }
 }
 
-export const monsters = [
-  (zone: BaseZone) => Monster.spawnSlime(zone),
-  (zone: BaseZone) => Monster.spawnWorm(zone),
-  (zone: BaseZone) => Monster.spawnCacodemon(zone),
-  (zone: BaseZone) => Monster.spawnYeti(zone),
+const MONSTER_VARIATIONS: MonsterConfiguration[] = [
+  { name: "Slime", healthMulti: 1, imagePath: "/monsters/ph-slime.png" },
+  { name: "Worm", healthMulti: 1.05, imagePath: "/monsters/ph-worm.png" },
+  { name: "Cacodemon", healthMulti: 1.1, imagePath: "/monsters/ph-cacodemon.png" },
+  { name: "Yeti", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
 ]
 
-export function getRandomMonster(zone: BaseZone): Monster {
-  const randomIndex = Math.floor(Math.random() * monsters.length)
-  return monsters[randomIndex](zone)
+export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Monster {
+  const randomMonster = MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
+  return new Monster(randomMonster, zoneNumber, stageNumber)
 }

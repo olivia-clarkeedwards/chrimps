@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useState } from "react"
+import React, { PropsWithChildren, useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { increaseGold, selectClickBaseDamage, selectClickMultiUpgradeCount } from "../../../../redux/playerSlice"
 import { playerCalc } from "../../../../gameconfig/upgrades"
@@ -15,8 +15,9 @@ import {
   incrementClickCount,
   incrementHighestZoneEver,
   incrementKillCount,
-  incrementTotalZonesCompleted,
+  incrementZonesCompleted,
   selectHighestZoneEver,
+  selectKillCount,
 } from "../../../../redux/statsSlice"
 import { incrementZoneNumber, selectZoneNumber } from "../../../../redux/zoneSlice"
 import { Enemy } from "../../../../models/monsters"
@@ -29,6 +30,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMultiUpgradeCount)
 
+  const stage = (useAppSelector(selectKillCount) + 1) % 30
   let zone = useAppSelector(selectZoneNumber)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
@@ -48,11 +50,12 @@ export default function Monster({ children }: PropsWithChildren) {
     if (!monsterAlive) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
-      dispatch(incrementTotalZonesCompleted())
-      dispatch(incrementZoneNumber()) // Zone variable does not update immediately; stale closure
-      zone++
-      zone > highestZoneEver && dispatch(incrementHighestZoneEver())
-      const newMonster = getRandomMonster({ zoneNumber: zone }) as Enemy
+      if (stage === 0) {
+        dispatch(incrementZonesCompleted())
+        dispatch(incrementZoneNumber())
+        zone > highestZoneEver && dispatch(incrementHighestZoneEver())
+      }
+      const newMonster = getRandomMonster(zone, stage) as Enemy
       dispatch(spawnMonster({ ...newMonster, alive: true }))
     }
   }, [monsterAlive])
@@ -60,7 +63,7 @@ export default function Monster({ children }: PropsWithChildren) {
   return (
     <>
       <div className="absolute top-[-4%] text-black">
-        Debug: monsterValue: {monsterValue} Zone: {zone}, clickDamage: {clickDamage}
+        Debug: monsterValue: {monsterValue} Stage: {stage} Zone: {zone}, clickDamage: {clickDamage}
       </div>
       <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
         <div className="">{monsterName}</div>

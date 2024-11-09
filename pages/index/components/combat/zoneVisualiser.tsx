@@ -1,12 +1,12 @@
 import clsx from "clsx/lite"
 import React from "react"
-import { selectZoneNumber } from "../../../../redux/zoneSlice"
 import { useAppSelector } from "../../../../redux/hooks"
+import { selectKillCount } from "../../../../redux/statsSlice"
 
 export default function ZoneVisualiser() {
   const stages = Array.from({ length: 30 }, (cur, acc) => acc + 1)
 
-  const currentStage = useAppSelector(selectZoneNumber) as number
+  const currentStage = ((useAppSelector(selectKillCount) + 1) % 30) as number
 
   return (
     <div className="flex items-end opacity-100">

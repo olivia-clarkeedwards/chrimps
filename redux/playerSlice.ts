@@ -5,7 +5,7 @@ import { Root } from "react-dom/client"
 import { PlayerState } from "../models/state"
 
 const initialState: PlayerState = {
-  clickBaseDamage: 1,
+  clickBaseDamage: 100,
   clickLevel: 1,
   clickMultiUpgradeCount: 0,
   gold: 4400,
