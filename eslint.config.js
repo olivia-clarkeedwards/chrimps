@@ -5,6 +5,8 @@ import prettier from "eslint-plugin-prettier/recommended"
 import react from "eslint-plugin-react/configs/recommended.js"
 import globals from "globals"
 import tseslint from "typescript-eslint"
+import reactCompiler from "eslint-plugin-react-compiler"
+import reactHooks from "eslint-plugin-react-hooks"
 
 export default tseslint.config(
   {
@@ -21,7 +23,14 @@ export default tseslint.config(
       "*.cjs",
       "*.mjs",
     ],
-    extends: ["plugin:react-hooks/recommended"],
+    extends: [
+      "@eslint/js",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:react/jsx-runtime",
+      "plugin:react-hooks/recommended",
+      "plugin:prettier/recommended",
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
@@ -37,13 +46,19 @@ export default tseslint.config(
   {
     rules: {
       "react-compiler/react-compiler": "error",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
       "@typescript-eslint/no-unused-vars": [
         1,
         {
           argsIgnorePattern: "^_",
         },
       ],
+      "prettier/prettier": "warn",
       "@typescript-eslint/no-namespace": 0,
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
     },
   },
 
