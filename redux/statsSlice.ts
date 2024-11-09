@@ -17,7 +17,7 @@ const initialState: StatsState = {
   killCount: 0,
   zonesCompleted: 0,
   totalZonesCompleted: 0,
-  highestZoneEver: 0,
+  highestZoneEver: 1,
 }
 
 export const statsSlice = createSlice({

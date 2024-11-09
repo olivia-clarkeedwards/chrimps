@@ -6,7 +6,8 @@ import { selectKillCount } from "../../../../redux/statsSlice"
 export default function ZoneVisualiser() {
   const stages = Array.from({ length: 30 }, (cur, acc) => acc + 1)
 
-  const currentStage = ((useAppSelector(selectKillCount) + 1) % 30) as number
+  const stage = ((useAppSelector(selectKillCount) + 1) % 30) as number
+  const currentStage = stage || 30
 
   return (
     <div className="flex items-end opacity-100">

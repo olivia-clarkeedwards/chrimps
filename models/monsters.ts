@@ -10,3 +10,9 @@ export interface Enemy extends BaseEnemy {
   goldValue: number
   image: string
 }
+
+export interface MonsterConfiguration {
+  name: string
+  healthMulti: number
+  imagePath: string
+}

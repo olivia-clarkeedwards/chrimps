@@ -30,7 +30,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMultiUpgradeCount)
 
-  const stage = (useAppSelector(selectKillCount) + 1) % 30
+  const currentStage = (useAppSelector(selectKillCount) + 1) % 30
   let zone = useAppSelector(selectZoneNumber)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
@@ -50,20 +50,26 @@ export default function Monster({ children }: PropsWithChildren) {
     if (!monsterAlive) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
-      if (stage === 0) {
+      if (currentStage === 29) {
         dispatch(incrementZonesCompleted())
         dispatch(incrementZoneNumber())
         zone > highestZoneEver && dispatch(incrementHighestZoneEver())
+        console.log(`creating lvl ${zone * currentStage + 1} monster`)
+        const newMonster = getRandomMonster(zone, 30) as Enemy
+        dispatch(spawnMonster({ ...newMonster, alive: true }))
+      } else {
+        console.log(`creating lvl! ${zone * currentStage + 1} monster`)
+        console.log(zone, currentStage)
+        const newMonster = getRandomMonster(zone, currentStage + 1) as Enemy
+        dispatch(spawnMonster({ ...newMonster, alive: true }))
       }
-      const newMonster = getRandomMonster(zone, stage) as Enemy
-      dispatch(spawnMonster({ ...newMonster, alive: true }))
     }
   }, [monsterAlive])
 
   return (
     <>
       <div className="absolute top-[-4%] text-black">
-        Debug: monsterValue: {monsterValue} Stage: {stage} Zone: {zone}, clickDamage: {clickDamage}
+        Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {zone}, clickDamage: {clickDamage}
       </div>
       <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
         <div className="">{monsterName}</div>

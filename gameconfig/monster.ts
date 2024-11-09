@@ -1,10 +1,4 @@
-import { BaseEnemy, Enemy } from "../models/monsters"
-
-interface MonsterConfiguration {
-  name: string
-  healthMulti: number
-  imagePath: string
-}
+import { BaseEnemy, Enemy, MonsterConfiguration } from "../models/monsters"
 
 class BaseMonster implements BaseEnemy {
   level = 0
@@ -14,7 +8,7 @@ class BaseMonster implements BaseEnemy {
 
   constructor(zoneNumber: number, stageNumber: number) {
     this.level = zoneNumber * stageNumber
-    if (stageNumber === 30) this.level *= 20
+    if (stageNumber === 30) this.level += 20
   }
 }
 
