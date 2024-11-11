@@ -13,7 +13,7 @@ export default function Panel() {
         // Base
         "flex flex-col relative basis-3/5 border-t-4 lg:border-b-0 lg:border-r-4 border-amber-300/50 shadow-[4px_0_15px_-1px_rgba(251,191,36,0.3)]",
         // Mobile
-        "md:bg-gradient-to-tr md:from-amber-400 md:via-orange-500 md:to-purple-950",
+        "bg-gradient-to-tr from-amber-400 via-orange-500 to-purple-950",
         // Large
         "lg:bg-gradient-to-br lg:from-amber-400 lg:via-orange-500 lg:to-purple-950",
       )}>
