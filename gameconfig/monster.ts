@@ -36,7 +36,14 @@ const MONSTER_VARIATIONS: MonsterConfiguration[] = [
   { name: "Yeti", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
 ]
 
+const BOSS_VARIATIONS: MonsterConfiguration[] = [
+  { name: "Tooth", healthMulti: 1, imagePath: "/monsters/ph-boss-tooth.png" },
+]
+
 export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Monster {
-  const randomMonster = MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
+  const randomMonster =
+    stageNumber !== 30
+      ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
+      : BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
   return new Monster(randomMonster, zoneNumber, stageNumber)
 }
