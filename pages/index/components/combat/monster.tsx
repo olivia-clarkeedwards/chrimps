@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect } from "react"
+import React, { PropsWithChildren, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { increaseGold, selectClickBaseDamage, selectClickMultiUpgradeCount } from "../../../../redux/playerSlice"
 import { playerCalc } from "../../../../gameconfig/upgrades"
@@ -45,6 +45,42 @@ export default function Monster({ children }: PropsWithChildren) {
     dispatch(takeClickDamage(clickDamage))
     // Goto useEffect if monster died
   }
+
+  const loopCount = useRef(0)
+
+  function gameLoop() {
+    loopCount.current++
+    console.log("50ms")
+
+    // const autoDamage = playerCalc.getAutoDamage()
+    // if (autoDamage > 0) {
+    //   dispatch(takeDamage(autoDamage))
+    //   dispatch(increaseTotalDamageDealt(autoDamage))
+    // }
+
+    // 200ms
+    if (loopCount.current % 4 === 0) {
+    }
+
+    // 500ms
+    if (loopCount.current % 10 === 0) {
+    }
+
+    // 1 second
+    if (loopCount.current % 20 === 0) {
+    }
+
+    // 2 seconds
+    if (loopCount.current % 40 === 0) {
+    }
+  }
+
+  useEffect(() => {
+    const loop = setInterval(() => gameLoop(), 50)
+    return () => {
+      clearInterval(loop)
+    }
+  }, [])
 
   useEffect(() => {
     if (!monsterAlive) {
