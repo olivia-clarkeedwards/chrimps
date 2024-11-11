@@ -5,10 +5,10 @@ import { Root } from "react-dom/client"
 import { PlayerState } from "../models/state"
 
 const initialState: PlayerState = {
-  clickBaseDamage: 100,
+  clickBaseDamage: 1,
   clickLevel: 1,
   clickMultiUpgradeCount: 0,
-  gold: 4400,
+  gold: 1000  ,
 }
 
 export const playerSlice = createSlice({

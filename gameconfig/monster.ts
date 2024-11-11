@@ -25,7 +25,7 @@ class Monster extends BaseMonster implements Enemy {
     this.healthMulti = config.healthMulti
     this.image = config.imagePath
     this.health = Math.floor(this.baseHealth * this.healthMulti)
-    this.goldValue = Math.floor((this.baseHealth / 3) * (this.healthMulti * 1.5))
+    this.goldValue = Math.floor((this.baseHealth / 4) * (this.healthMulti * 1.5))
   }
 }
 

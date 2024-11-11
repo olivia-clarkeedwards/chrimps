@@ -1,6 +1,6 @@
 # Chrimps (working title)
 
-An incremental game inspired by the adventure of [Trimps](https://trimps.github.io/) and the presentation and RPG mechanics of [Clicker Heroes](https://www.clickerheroes.com/).
+An incremental game inspired by the adventure and discover of [Trimps](https://trimps.github.io/), and the presentation and RPG mechanics of [Clicker Heroes](https://www.clickerheroes.com/).
 
 A [React](https://react.dev/) app created using the [Vike framework](https://vike.dev/).
 
