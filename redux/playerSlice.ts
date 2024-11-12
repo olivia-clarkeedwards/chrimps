@@ -8,7 +8,9 @@ const initialState: PlayerState = {
   clickBaseDamage: 1,
   clickLevel: 1,
   clickMultiUpgradeCount: 0,
-  gold: 1000  ,
+  gold: 1000,
+  dotLevel: 0,
+  dotMultiUpgradeCount: 0,
 }
 
 export const playerSlice = createSlice({
@@ -27,17 +29,33 @@ export const playerSlice = createSlice({
     incrementClickLevel: (state) => {
       state.clickLevel++
     },
-    incrementClickMulti: (state) => {
+    incrementClickMultiUpgradeCount: (state) => {
       state.clickMultiUpgradeCount++
+    },
+    incrementDotLevel: (state) => {
+      state.dotLevel++
+    },
+    incrementDotMultiUpgradeCount: (state) => {
+      state.dotMultiUpgradeCount++
     },
   },
 })
 
-export const { increaseClickBaseDamage, increaseGold, decreaseGold, incrementClickLevel, incrementClickMulti } =
-  playerSlice.actions
+export const {
+  increaseClickBaseDamage,
+  increaseGold,
+  decreaseGold,
+  incrementClickLevel,
+  incrementClickMultiUpgradeCount,
+  incrementDotLevel,
+  incrementDotMultiUpgradeCount,
+} = playerSlice.actions
 
 export const selectClickBaseDamage = (state: RootState) => state.player.clickBaseDamage
 export const selectClickLevel = (state: RootState) => state.player.clickLevel
-export const selectGold = (state: RootState) => state.player.gold
 export const selectClickMultiUpgradeCount = (state: RootState) => state.player.clickMultiUpgradeCount
+export const selectGold = (state: RootState) => state.player.gold
+export const selectDotLevel = (state: RootState) => state.player.dotLevel
+export const selectDotMultiUpgradeCount = (state: RootState) => state.player.dotMultiUpgradeCount
+
 export default playerSlice.reducer

@@ -93,7 +93,6 @@ export default function Monster({ children }: PropsWithChildren) {
         const newMonster = getRandomMonster(zone, 30) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       } else {
-        console.log(zone, currentStage)
         const newMonster = getRandomMonster(zone, currentStage + 1) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       }
