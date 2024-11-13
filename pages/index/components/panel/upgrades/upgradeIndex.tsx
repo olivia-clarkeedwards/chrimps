@@ -13,17 +13,18 @@ import {
   incrementDotMultiUpgradeCount,
 } from "../../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks"
-import { playerCalc, upgradeCost } from "../../../../../gameconfig/upgrades"
+import { playerCalc, UPGRADE_CONFIG } from "../../../../../gameconfig/upgrades"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/click-icons"
 import MultiplierUpgrade from "./multiplierUpgrade"
 import clsx from "clsx/lite"
+import { UpgradeElement, UpgradeId } from "../../../../../models/upgrades"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
   const gold = useAppSelector(selectGold)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickLevel = useAppSelector(selectClickLevel)
-  const clickLevelUpCost = upgradeCost.clickLevelUpCost(clickLevel)
+  const clickLevelUpCost = UPGRADE_CONFIG.click.levelUpCost(clickLevel)
   const clickBaseDamage = useAppSelector(selectClickBaseDamage)
   const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMultiUpgradeCount)
   const dotLevel = useAppSelector(selectDotLevel)
@@ -49,13 +50,9 @@ export default function UpgradeIndex() {
 
   function handleUpgrade(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
     const [upgradeId, purchasedUpgradeLevel] = e.currentTarget.id.split(".")
-    const upgradeKey = (upgradeId === "clickMulti" ? "clickMultiCosts" : "dotMultiCosts") as
-      | "clickMultiCosts"
-      | "dotMultiCosts"
-
     const upgradeCount = upgradeId === "clickMulti" ? clickMultiUpgradeCount : dotMultiUpgradeCount
 
-    const cost = upgradeCost.calcMultiCost(upgradeKey, upgradeCount)
+    const cost = UPGRADE_CONFIG.calcMultiCost(upgradeId as UpgradeId, upgradeCount)
 
     // This logic should soon be made generic
     switch (upgradeId) {
@@ -87,7 +84,7 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon1()}
               hidden={clickLevel < 10}
-              isAffordable={gold >= upgradeCost.calcMultiCost("clickMultiCosts", clickMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("clickMulti", clickMultiUpgradeCount)}
               isPurchased={clickMultiUpgradeCount > 0}
             />
             <MultiplierUpgrade
@@ -95,7 +92,7 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon2()}
               hidden={clickMultiUpgradeCount < 1}
-              isAffordable={gold >= upgradeCost.calcMultiCost("clickMultiCosts", clickMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("clickMulti", clickMultiUpgradeCount)}
               isPurchased={clickMultiUpgradeCount > 1}
             />
             <MultiplierUpgrade
@@ -103,7 +100,7 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon3()}
               hidden={clickMultiUpgradeCount < 2}
-              isAffordable={gold >= upgradeCost.calcMultiCost("clickMultiCosts", clickMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("clickMulti", clickMultiUpgradeCount)}
               isPurchased={clickMultiUpgradeCount > 2}
             />
           </div>
@@ -152,7 +149,7 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon1()}
               hidden={dotLevel < 10}
-              isAffordable={gold >= upgradeCost.calcMultiCost("dotMultiCosts", dotMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("dotMulti", dotMultiUpgradeCount)}
               isPurchased={dotMultiUpgradeCount > 0}
             />
             <MultiplierUpgrade
@@ -160,7 +157,7 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon2()}
               hidden={dotMultiUpgradeCount < 1}
-              isAffordable={gold >= upgradeCost.calcMultiCost("dotMultiCosts", dotMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("dotMulti", dotMultiUpgradeCount)}
               isPurchased={dotMultiUpgradeCount > 1}
             />
             <MultiplierUpgrade
@@ -168,7 +165,7 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon3()}
               hidden={dotMultiUpgradeCount < 2}
-              isAffordable={gold >= upgradeCost.calcMultiCost("dotMultiCosts", dotMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("dotMulti", dotMultiUpgradeCount)}
               isPurchased={dotMultiUpgradeCount > 2}
             />
           </div>

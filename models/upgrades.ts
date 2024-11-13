@@ -1,26 +1,23 @@
 import { PlayerState } from "./state"
 
-// const UPGRADE_CONFIG: Record<string, UpgradeInfo> = {
-//   clickMulti: {
-//     id: 'clickMulti',
-//     costKey: 'clickMultiCosts',
-//     getCount: selectClickMultiUpgradeCount,
-//     incrementAction: incrementClickMultiUpgradeCount,
-//   },
-//   dotMulti: {
-//     id: 'dotMulti',
-//     costKey: 'dotMultiCosts',
-//     getCount: selectDotMultiUpgradeCount,
-//     incrementAction: incrementDotMultiUpgradeCount,
-//   },
-// }
+export type UpgradeId = "clickMulti" | "dotMulti"
+export type CostKey = "clickMultiCosts" | "dotMultiCosts"
 
-export interface UpgradeCost {
-  clickLevelUpCost: (currentLevel: number) => number
-  clickMultiCosts: number[]
-  dotLevelUpCost: (currentLevel: number) => number
-  dotMultiCosts: number[]
-  calcMultiCost: (upgradeName: "clickMultiCosts" | "dotMultiCosts", upgradeCount: number) => number
+export interface UpgradeElement {
+  upgradeId: UpgradeId
+  purchasedUpgradeLevel: string
+}
+
+export interface Upgrade {
+  elementId: UpgradeId
+  costKey: CostKey
+  costs: number[]
+  levelUpCost: (currentLevel: number) => number
+}
+export interface UpgradeConfig {
+  click: Upgrade
+  dot: Upgrade
+  calcMultiCost: (upgradeName: UpgradeId, upgradeCount: number) => number
 }
 
 export interface PlayerCalc {
