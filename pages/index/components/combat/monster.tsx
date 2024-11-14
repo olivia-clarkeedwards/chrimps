@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { increaseGold, selectClickBaseDamage, selectClickMultiUpgradeCount } from "../../../../redux/playerSlice"
+import { increaseGold, selectClickLevel, selectClickMultiUpgradeCount } from "../../../../redux/playerSlice"
 import { playerCalc } from "../../../../gameconfig/upgrades"
 import {
   selectMonsterAlive,
@@ -26,9 +26,9 @@ import { getRandomMonster } from "../../../../gameconfig/monster"
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
 
-  const clickBaseDamage = useAppSelector(selectClickBaseDamage)
+  const clickLevel = useAppSelector(selectClickLevel)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
-  const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMultiUpgradeCount)
+  const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
 
   const currentStage = (useAppSelector(selectKillCount) + 1) % 30
   let zone = useAppSelector(selectZoneNumber)

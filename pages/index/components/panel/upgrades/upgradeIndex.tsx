@@ -1,50 +1,65 @@
-import React, { useState } from "react"
+import React from "react"
 import {
   decreaseGold,
-  increaseClickBaseDamage,
   incrementClickLevel,
   incrementClickMultiUpgradeCount,
-  selectClickLevel,
   selectGold,
-  selectClickBaseDamage,
+  selectClickLevel,
   selectClickMultiUpgradeCount,
   selectDotLevel,
   selectDotMultiUpgradeCount,
   incrementDotMultiUpgradeCount,
+  incrementDotLevel,
 } from "../../../../../redux/playerSlice"
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks"
 import { playerCalc, UPGRADE_CONFIG } from "../../../../../gameconfig/upgrades"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/click-icons"
 import MultiplierUpgrade from "./multiplierUpgrade"
 import clsx from "clsx/lite"
-import { UpgradeElement, UpgradeId } from "../../../../../models/upgrades"
+import { levelUpID, Upgrade, UpgradeConfig, UpgradeElement, UpgradeId } from "../../../../../models/upgrades"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
   const gold = useAppSelector(selectGold)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickLevel = useAppSelector(selectClickLevel)
-  const clickLevelUpCost = UPGRADE_CONFIG.click.levelUpCost(clickLevel)
-  const clickBaseDamage = useAppSelector(selectClickBaseDamage)
-  const clickDamage = playerCalc.clickDamage(clickBaseDamage, clickMultiUpgradeCount)
+  const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
   const dotLevel = useAppSelector(selectDotLevel)
   const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
-
+  // To be removed when levelup buttons are made into components
+  const clickLevelUpCost = UPGRADE_CONFIG.click.levelUpCost(clickLevel)
+  const dotLevelUpCost = UPGRADE_CONFIG.dot.levelUpCost(dotLevel)
   const canAffordClickLevelUp = gold >= clickLevelUpCost
+  const canAffordDotLevelUp = gold >= dotLevelUpCost
+  const LevelUpCosts = {
+    click: {
+      levelUpCost: clickLevelUpCost,
+    },
+    dot: {
+      levelUpCost: dotLevelUpCost,
+    },
+  }
 
   function handleLevelUp(e: React.MouseEvent<HTMLButtonElement>) {
-    const upgradeName = e.currentTarget.id
+    const levelUpId = e.currentTarget.id as levelUpID
 
-    switch (upgradeName) {
-      case "click-level":
+    const cost = LevelUpCosts[levelUpId].levelUpCost
+
+    switch (levelUpId) {
+      case "click":
         if (canAffordClickLevelUp) {
           dispatch(incrementClickLevel())
-          dispatch(increaseClickBaseDamage(1))
-          dispatch(decreaseGold(clickLevelUpCost))
+          dispatch(decreaseGold(cost))
+        }
+        break
+      case "dot":
+        if (canAffordDotLevelUp) {
+          dispatch(incrementDotLevel())
+          dispatch(decreaseGold(cost))
         }
         break
       default:
-        throw new Error("Unexpected levelup target")
+        throw new Error(`Unexpected levelup target ${levelUpId}`)
     }
   }
 
@@ -68,7 +83,7 @@ export default function UpgradeIndex() {
           dispatch(decreaseGold(cost))
         }
       default:
-        throw new Error("Unexpected upgrade target")
+        throw new Error(`Unexpected upgrade target ${upgradeId}`)
     }
   }
 
@@ -84,7 +99,9 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon1()}
               hidden={clickLevel < 10}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("clickMulti", clickMultiUpgradeCount)}
+              isAffordable={
+                gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.click.elementId, clickMultiUpgradeCount)
+              }
               isPurchased={clickMultiUpgradeCount > 0}
             />
             <MultiplierUpgrade
@@ -92,7 +109,9 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon2()}
               hidden={clickMultiUpgradeCount < 1}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("clickMulti", clickMultiUpgradeCount)}
+              isAffordable={
+                gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.click.elementId, clickMultiUpgradeCount)
+              }
               isPurchased={clickMultiUpgradeCount > 1}
             />
             <MultiplierUpgrade
@@ -100,7 +119,9 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon3()}
               hidden={clickMultiUpgradeCount < 2}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("clickMulti", clickMultiUpgradeCount)}
+              isAffordable={
+                gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.click.elementId, clickMultiUpgradeCount)
+              }
               isPurchased={clickMultiUpgradeCount > 2}
             />
           </div>
@@ -108,7 +129,7 @@ export default function UpgradeIndex() {
         <div className="border-4 border-amber-950 bg-amber-950">
           <button
             disabled={!canAffordClickLevelUp}
-            id="click-level"
+            id="click"
             className={clsx(
               // This buttons frame has a nice texture when disabled, need to find way to reproduce it when enabled
               // Base
@@ -142,14 +163,14 @@ export default function UpgradeIndex() {
       <div className="flex w-full items-start justify-between align-start py-4 px-4">
         <div className="flex flex-col w-40 items-center text-center">
           <div className="text-center">Damage over time</div>
-          <div className="self-center">{clickDamage}</div>
+          <div className="self-center">{}</div>
           <div className="flex gap-2.5 pt-1">
             <MultiplierUpgrade
               id="dotMulti.1"
               onClick={handleUpgrade}
               Icon={ClickMultiIcon1()}
               hidden={dotLevel < 10}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("dotMulti", dotMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.dot.elementId, dotMultiUpgradeCount)}
               isPurchased={dotMultiUpgradeCount > 0}
             />
             <MultiplierUpgrade
@@ -157,7 +178,7 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon2()}
               hidden={dotMultiUpgradeCount < 1}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("dotMulti", dotMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.dot.elementId, dotMultiUpgradeCount)}
               isPurchased={dotMultiUpgradeCount > 1}
             />
             <MultiplierUpgrade
@@ -165,15 +186,15 @@ export default function UpgradeIndex() {
               onClick={handleUpgrade}
               Icon={ClickMultiIcon3()}
               hidden={dotMultiUpgradeCount < 2}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost("dotMulti", dotMultiUpgradeCount)}
+              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.dot.elementId, dotMultiUpgradeCount)}
               isPurchased={dotMultiUpgradeCount > 2}
             />
           </div>
         </div>
         <div className="border-4 border-amber-950 bg-amber-950">
           <button
-            disabled={!canAffordClickLevelUp}
-            id="click-level"
+            disabled={!canAffordDotLevelUp}
+            id="dot"
             className={clsx(
               // This buttons frame has a nice texture when disabled, need to find way to reproduce it when enabled
               // Base
@@ -191,15 +212,13 @@ export default function UpgradeIndex() {
               "enabled:active:shadow-[0_0_3px_0px_rgba(251,191,36,0.8),inset_0_0_8px_-1px_rgba(251,191,36,1)]",
               "enabled:active:border-amber-400",
 
-              canAffordClickLevelUp
-                ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700"
-                : "bg-blue-950 border-amber-950",
+              canAffordDotLevelUp ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700" : "bg-blue-950 border-amber-950",
             )}
             onClick={handleLevelUp}>
-            <span>Level {clickLevel}</span>
+            <span>Level {dotLevel}</span>
             <span className="">
               <img className="w-[1.4rem] inline-block self-center" src="/icons/coin.png" alt="gold coin" />{" "}
-              {clickLevelUpCost}
+              {dotLevelUpCost}
             </span>
           </button>
         </div>

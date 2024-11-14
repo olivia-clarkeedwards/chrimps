@@ -5,7 +5,6 @@ import { Root } from "react-dom/client"
 import { PlayerState } from "../models/state"
 
 const initialState: PlayerState = {
-  clickBaseDamage: 1,
   clickLevel: 1,
   clickMultiUpgradeCount: 0,
   gold: 1000,
@@ -17,9 +16,6 @@ export const playerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
-    increaseClickBaseDamage(state, action: PayloadAction<number>) {
-      state.clickBaseDamage += action.payload
-    },
     increaseGold(state, action: PayloadAction<number>) {
       state.gold += action.payload
     },
@@ -42,7 +38,6 @@ export const playerSlice = createSlice({
 })
 
 export const {
-  increaseClickBaseDamage,
   increaseGold,
   decreaseGold,
   incrementClickLevel,
@@ -51,7 +46,6 @@ export const {
   incrementDotMultiUpgradeCount,
 } = playerSlice.actions
 
-export const selectClickBaseDamage = (state: RootState) => state.player.clickBaseDamage
 export const selectClickLevel = (state: RootState) => state.player.clickLevel
 export const selectClickMultiUpgradeCount = (state: RootState) => state.player.clickMultiUpgradeCount
 export const selectGold = (state: RootState) => state.player.gold

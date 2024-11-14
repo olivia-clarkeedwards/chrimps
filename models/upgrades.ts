@@ -1,7 +1,6 @@
-import { PlayerState } from "./state"
-
 export type UpgradeId = "clickMulti" | "dotMulti"
 export type CostKey = "clickMultiCosts" | "dotMultiCosts"
+export type levelUpID = "click" | "dot"
 
 export interface UpgradeElement {
   upgradeId: UpgradeId
@@ -21,6 +20,6 @@ export interface UpgradeConfig {
 }
 
 export interface PlayerCalc {
-  clickDamage: (clickBaseDamage: number, clickMulti: number) => number
-  dotDamage: (dotBaseDamage: number, dotMulti: number) => number
+  clickDamage: (clickLevel: number, clickMulti: number) => number
+  dotDamage: (dotLevel: number, dotMulti: number) => number
 }
