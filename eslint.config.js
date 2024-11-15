@@ -10,9 +10,7 @@ import reactHooks from "eslint-plugin-react-hooks"
 
 export default tseslint.config(
   {
-    plugins: {
-      "react-compiler": reactCompiler,
-    },
+    plugins: ["eslint-plugin-react-compiler"],
     ignores: [
       "dist/*",
       // Temporary compiled files
@@ -55,7 +53,6 @@ export default tseslint.config(
         },
       ],
       "prettier/prettier": "warn",
-      "@typescript-eslint/no-namespace": 0,
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/explicit-module-boundary-types": "off",

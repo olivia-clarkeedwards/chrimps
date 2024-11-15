@@ -1,6 +1,12 @@
 import React, { PropsWithChildren, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
-import { increaseGold, selectClickLevel, selectClickMultiUpgradeCount } from "../../../../redux/playerSlice"
+import {
+  increaseGold,
+  selectClickLevel,
+  selectClickMultiUpgradeCount,
+  selectDotLevel,
+  selectDotMultiUpgradeCount,
+} from "../../../../redux/playerSlice"
 import { playerCalc } from "../../../../gameconfig/upgrades"
 import {
   selectMonsterAlive,
@@ -8,10 +14,11 @@ import {
   selectMonsterImage,
   selectMonsterName,
   spawnMonster,
-  takeClickDamage,
+  takeDamage,
 } from "../../../../redux/monsterSlice"
 import {
   increaseTotalClickDamageDealt,
+  increaseTotalDotDamageDealt,
   incrementClickCount,
   incrementHighestZoneEver,
   incrementKillCount,
@@ -29,6 +36,9 @@ export default function Monster({ children }: PropsWithChildren) {
   const clickLevel = useAppSelector(selectClickLevel)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
+  const dotLevel = useAppSelector(selectDotLevel)
+  const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
+  const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
 
   const currentStage = (useAppSelector(selectKillCount) + 1) % 30
   let zone = useAppSelector(selectZoneNumber)
@@ -42,7 +52,7 @@ export default function Monster({ children }: PropsWithChildren) {
   function handleClick() {
     dispatch(incrementClickCount())
     dispatch(increaseTotalClickDamageDealt(clickDamage))
-    dispatch(takeClickDamage(clickDamage))
+    dispatch(takeDamage(clickDamage))
     // Goto useEffect if monster died
   }
 
@@ -50,13 +60,11 @@ export default function Monster({ children }: PropsWithChildren) {
 
   function gameLoop() {
     loopCount.current++
-    console.log("50ms")
 
-    // const autoDamage = playerCalc.getAutoDamage()
-    // if (autoDamage > 0) {
-    //   dispatch(takeDamage(autoDamage))
-    //   dispatch(increaseTotalDamageDealt(autoDamage))
-    // }
+    if (dotDamage) {
+      dispatch(increaseTotalDotDamageDealt(dotDamage))
+      dispatch(takeDamage(0.1))
+    }
 
     // 200ms
     if (loopCount.current % 4 === 0) {
@@ -80,7 +88,7 @@ export default function Monster({ children }: PropsWithChildren) {
     return () => {
       clearInterval(loop)
     }
-  }, [])
+  }, [dotDamage])
 
   useEffect(() => {
     if (!monsterAlive) {
@@ -102,7 +110,8 @@ export default function Monster({ children }: PropsWithChildren) {
   return (
     <>
       <div className="absolute top-[-4%] text-black">
-        Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {zone}, clickDamage: {clickDamage}
+        Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {zone}, clickDamage: {clickDamage}, dotDamage:{" "}
+        {dotDamage}
       </div>
       <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
         <div className="">{monsterName}</div>
@@ -111,7 +120,7 @@ export default function Monster({ children }: PropsWithChildren) {
       <div
         className="absolute h-[80%] w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         onClick={handleClick}>
-        <img className="h-full w-full object-contain" src={monsterImage} />
+        <img className="h-full w-full object-contain" src={monsterImage} alt={monsterName} />
       </div>
     </>
   )

@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { getRandomMonster } from "../gameconfig/monster"
-import { Root } from "react-dom/client"
 import { Enemy } from "../models/monsters"
 
 interface EnemyState extends Enemy {
@@ -15,8 +14,8 @@ export const monsterSlice = createSlice({
   name: "monster",
   initialState,
   reducers: {
-    takeClickDamage(state, action: PayloadAction<number>) {
-      state.health - action.payload < 1 ? (state.alive = false) : (state.health -= action.payload)
+    takeDamage(state, action: PayloadAction<number>) {
+      state.health - action.payload < 0.1 ? (state.alive = false) : (state.health -= action.payload)
     },
     spawnMonster(state, action: PayloadAction<EnemyState>) {
       return { ...action.payload }
@@ -27,7 +26,7 @@ export const monsterSlice = createSlice({
   },
 })
 
-export const { takeClickDamage, spawnMonster, monsterDied } = monsterSlice.actions
+export const { takeDamage, spawnMonster, monsterDied } = monsterSlice.actions
 
 export const selectMonsterName = (state: RootState) => state.monster.name
 export const selectMonsterLevel = (state: RootState) => state.monster.level

@@ -5,6 +5,7 @@ import type { RootState } from "./store"
 interface StatsState {
   clickCount: number
   totalClickDamage: number
+  totalDotDamage: number
   killCount: number
   zonesCompleted: number
   totalZonesCompleted: number
@@ -14,6 +15,7 @@ interface StatsState {
 const initialState: StatsState = {
   clickCount: 0,
   totalClickDamage: 0,
+  totalDotDamage: 0,
   killCount: 0,
   zonesCompleted: 0,
   totalZonesCompleted: 0,
@@ -28,6 +30,9 @@ export const statsSlice = createSlice({
       state.clickCount++
     },
     increaseTotalClickDamageDealt(state, action: PayloadAction<number>) {
+      state.totalClickDamage += action.payload
+    },
+    increaseTotalDotDamageDealt(state, action: PayloadAction<number>) {
       state.totalClickDamage += action.payload
     },
     incrementKillCount: (state) => {
@@ -46,6 +51,7 @@ export const statsSlice = createSlice({
 export const {
   incrementClickCount,
   increaseTotalClickDamageDealt,
+  increaseTotalDotDamageDealt,
   incrementKillCount,
   incrementZonesCompleted,
   incrementHighestZoneEver,
@@ -53,6 +59,7 @@ export const {
 
 export const selectClickCount = (state: RootState) => state.stats.clickCount
 export const selecttotalClickDamageDealt = (state: RootState) => state.stats.totalClickDamage
+export const selecttotalDotDamageDealt = (state: RootState) => state.stats.totalDotDamage
 export const selectKillCount = (state: RootState) => state.stats.killCount
 export const zonesCompleted = (state: RootState) => state.stats.zonesCompleted
 export const selectTotalZonesCompleted = (state: RootState) => state.stats.totalZonesCompleted
