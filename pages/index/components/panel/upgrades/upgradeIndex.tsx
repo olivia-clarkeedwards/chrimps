@@ -89,8 +89,8 @@ export default function UpgradeIndex() {
   }
 
   return (
-    <div className="divide-y-2 divide-slate-500">
-      <div className="flex w-full items-start justify-between align-start py-4 px-4">
+    <div className="">
+      <div className="flex w-full items-start justify-between align-start py-4 px-4 border-y-2 border-amber-950">
         <div className="flex flex-col w-40 items-center">
           <div className="">Click Damage</div>
           <div className="self-center">{clickDamage}</div>
@@ -161,7 +161,7 @@ export default function UpgradeIndex() {
           </button>
         </div>
       </div>
-      <div className="flex w-full items-start justify-between align-start py-4 px-4">
+      <div className="flex w-full items-start justify-between align-start py-4 px-4 border-b-2 border-amber-950">
         <div className="flex flex-col w-40 items-center text-center">
           <div className="text-center">Damage over time</div>
           <div className="self-center">{dotDamage}</div>
@@ -224,7 +224,7 @@ export default function UpgradeIndex() {
           </button>
         </div>
       </div>
-      <div className="flex w-full items-start justify-between align-start py-4 px-4">
+      <div className="flex w-full items-start justify-between align-start py-4 px-4 border-b-2 border-amber-950">
         <div className="flex flex-col w-32 items-center">
           <div>Placeholder</div>
           <div className="self-center">dmg#</div>
