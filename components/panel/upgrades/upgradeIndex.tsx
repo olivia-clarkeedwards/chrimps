@@ -129,15 +129,13 @@ export default function UpgradeIndex() {
             />
           </div>
         </div>
-        <div className="border-4 border-amber-950 bg-amber-950">
-          <LevelUpButton
-            id="click"
-            onClick={handleLevelUp}
-            currentLevel={clickLevel}
-            levelUpCost={clickLevelUpCost}
-            isAffordable={canAffordClickLevelUp}
-          />
-        </div>
+        <LevelUpButton
+          id="click"
+          onClick={handleLevelUp}
+          currentLevel={clickLevel}
+          levelUpCost={clickLevelUpCost}
+          isAffordable={canAffordClickLevelUp}
+        />
       </div>
       <div className="flex w-full items-start justify-between align-start py-4 px-4 border-b-2 border-amber-950">
         <div className="flex flex-col w-40 items-center text-center">
@@ -170,15 +168,13 @@ export default function UpgradeIndex() {
             />
           </div>
         </div>
-        <div className="border-4 border-amber-950 bg-amber-950">
-          <LevelUpButton
-            id="dot"
-            onClick={handleLevelUp}
-            currentLevel={dotLevel}
-            levelUpCost={dotLevelUpCost}
-            isAffordable={canAffordDotLevelUp}
-          />
-        </div>
+        <LevelUpButton
+          id="dot"
+          onClick={handleLevelUp}
+          currentLevel={dotLevel}
+          levelUpCost={dotLevelUpCost}
+          isAffordable={canAffordDotLevelUp}
+        />
       </div>
       <div className="flex w-full items-start justify-between align-start py-4 px-4 border-b-2 border-amber-950">
         <div className="flex flex-col w-32 items-center">
