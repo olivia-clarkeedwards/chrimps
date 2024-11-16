@@ -113,9 +113,9 @@ export default function Monster({ children }: PropsWithChildren) {
         Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {zone}, clickDamage: {clickDamage}, dotDamage:{" "}
         {dotDamage}
       </div>
-      <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
+      <div className="absolute flex flex-col items-center top-1 left-1/2 transform -translate-x-1/2">
         <div className="">{monsterName}</div>
-        <div className="text-center">{children}</div>
+        <div className="text-left inline-block min-w-[100px] pl-[38%]">{children}</div>
       </div>
       <div
         className="absolute h-[80%] w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"

@@ -29,6 +29,7 @@ export default function UpgradeIndex() {
   // To be removed when levelup buttons are made into components
   const clickLevelUpCost = UPGRADE_CONFIG.click.levelUpCost(clickLevel)
   const dotLevelUpCost = UPGRADE_CONFIG.dot.levelUpCost(dotLevel)
+  const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
   const canAffordClickLevelUp = gold >= clickLevelUpCost
   const canAffordDotLevelUp = gold >= dotLevelUpCost
   const LevelUpCosts = {
@@ -163,7 +164,7 @@ export default function UpgradeIndex() {
       <div className="flex w-full items-start justify-between align-start py-4 px-4">
         <div className="flex flex-col w-40 items-center text-center">
           <div className="text-center">Damage over time</div>
-          <div className="self-center">{}</div>
+          <div className="self-center">{dotDamage}</div>
           <div className="flex gap-2.5 pt-1">
             <MultiplierUpgrade
               id="dotMulti.1"

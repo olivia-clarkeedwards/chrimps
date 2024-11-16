@@ -15,7 +15,7 @@ export const monsterSlice = createSlice({
   initialState,
   reducers: {
     takeDamage(state, action: PayloadAction<number>) {
-      state.health - action.payload < 0.1 ? (state.alive = false) : (state.health -= action.payload)
+      state.health - action.payload < 1 ? (state.alive = false) : (state.health -= action.payload)
     },
     spawnMonster(state, action: PayloadAction<EnemyState>) {
       return { ...action.payload }
