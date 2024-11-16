@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useRef } from "react"
+import React, { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import {
   increaseGold,
@@ -49,23 +49,13 @@ export default function Monster({ children }: PropsWithChildren) {
   const monsterValue = useAppSelector(selectMonsterGoldValue)
   const monsterAlive = useAppSelector(selectMonsterAlive)
 
-  function handleClick() {
-    dispatch(incrementClickCount())
-    dispatch(increaseTotalClickDamageDealt(clickDamage))
-    dispatch(takeDamage(clickDamage))
-    // Goto useEffect if monster died
-  }
-
-  const loopCount = useRef(0)
-
-  function gameLoop() {
-    loopCount.current++
-
-    if (dotDamage) {
-      dispatch(increaseTotalDotDamageDealt(dotDamage))
-      dispatch(takeDamage(0.1))
+  const checkAchievements = useCallback(() => {
+    if (clickLevel > 5) {
+      console.log("Achievement unlocked: Click level")
     }
+  }, [clickLevel])
 
+  const checkEvents = useCallback(() => {
     // 200ms
     if (loopCount.current % 4 === 0) {
     }
@@ -76,11 +66,28 @@ export default function Monster({ children }: PropsWithChildren) {
 
     // 1 second
     if (loopCount.current % 20 === 0) {
+      checkAchievements()
     }
 
     // 2 seconds
     if (loopCount.current % 40 === 0) {
     }
+  }, [checkAchievements])
+
+  const dealDamageOverTime = useCallback(() => {
+    if (dotDamage) {
+      const damageThisTick = dotDamage / 20
+      dispatch(increaseTotalDotDamageDealt(damageThisTick))
+      dispatch(takeDamage(damageThisTick))
+    }
+  }, [dotDamage])
+
+  const loopCount = useRef(0)
+
+  function gameLoop() {
+    loopCount.current++
+    dealDamageOverTime()
+    checkEvents()
   }
 
   useEffect(() => {
@@ -88,7 +95,14 @@ export default function Monster({ children }: PropsWithChildren) {
     return () => {
       clearInterval(loop)
     }
-  }, [dotDamage])
+  }, [dealDamageOverTime, checkEvents])
+
+  function handleClick() {
+    dispatch(incrementClickCount())
+    dispatch(increaseTotalClickDamageDealt(clickDamage))
+    dispatch(takeDamage(clickDamage))
+    // Goto !monsterAlive useEffect if monster died
+  }
 
   useEffect(() => {
     if (!monsterAlive) {
