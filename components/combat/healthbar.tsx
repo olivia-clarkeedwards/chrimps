@@ -1,7 +1,7 @@
 import React from "react"
-import { useAppSelector } from "../../../../redux/hooks"
-import { selectMonsterHealth } from "../../../../redux/monsterSlice"
-import { selectDotLevel } from "../../../../redux/playerSlice"
+import { useAppSelector } from "../../redux/hooks"
+import { selectMonsterHealth } from "../../redux/monsterSlice"
+import { selectDotLevel } from "../../redux/playerSlice"
 
 export default function Healthbar() {
   const monsterHealth = useAppSelector(selectMonsterHealth)

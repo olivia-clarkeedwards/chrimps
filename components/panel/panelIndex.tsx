@@ -1,6 +1,6 @@
 import React from "react"
-import { selectGold } from "../../../../redux/playerSlice"
-import { useAppSelector } from "../../../../redux/hooks"
+import { selectGold } from "../../redux/playerSlice"
+import { useAppSelector } from "../../redux/hooks"
 import UpgradeIndex from "./upgrades/upgradeIndex"
 import clsx from "clsx/lite"
 

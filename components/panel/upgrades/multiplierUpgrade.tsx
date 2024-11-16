@@ -3,14 +3,14 @@ import clsx from "clsx/lite"
 
 interface MultiplierProps {
   id: string
+  icon: JSX.Element
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void
-  Icon: JSX.Element
   isAffordable: boolean
   isPurchased: boolean
   hidden: boolean
 }
 
-export default function MultiplierUpgrade({ id, onClick, Icon, hidden, isAffordable, isPurchased }: MultiplierProps) {
+export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAffordable, isPurchased }: MultiplierProps) {
   return (
     <div
       id={id}
@@ -33,7 +33,7 @@ export default function MultiplierUpgrade({ id, onClick, Icon, hidden, isAfforda
         )}
       />
       {isPurchased && <div className="absolute inset-[2px] bg-amber-950/60 rounded-md z-10" />}
-      <div className="relative z-20 w-8 h-8 flex items-center justify-center p-1 text-amber-400">{Icon}</div>
+      <div className="relative z-20 w-8 h-8 flex items-center justify-center p-1 text-amber-400">{icon}</div>
     </div>
   )
 }

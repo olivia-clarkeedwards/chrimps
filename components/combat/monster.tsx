@@ -1,13 +1,13 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef } from "react"
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   increaseGold,
   selectClickLevel,
   selectClickMultiUpgradeCount,
   selectDotLevel,
   selectDotMultiUpgradeCount,
-} from "../../../../redux/playerSlice"
-import { playerCalc } from "../../../../gameconfig/upgrades"
+} from "../../redux/playerSlice"
+import { playerCalc } from "../../gameconfig/upgrades"
 import {
   selectMonsterAlive,
   selectMonsterGoldValue,
@@ -15,7 +15,7 @@ import {
   selectMonsterName,
   spawnMonster,
   takeDamage,
-} from "../../../../redux/monsterSlice"
+} from "../../redux/monsterSlice"
 import {
   increaseTotalClickDamageDealt,
   increaseTotalDotDamageDealt,
@@ -25,10 +25,10 @@ import {
   incrementZonesCompleted,
   selectHighestZoneEver,
   selectKillCount,
-} from "../../../../redux/statsSlice"
-import { incrementZoneNumber, selectZoneNumber } from "../../../../redux/zoneSlice"
-import { Enemy } from "../../../../models/monsters"
-import { getRandomMonster } from "../../../../gameconfig/monster"
+} from "../../redux/statsSlice"
+import { incrementZoneNumber, selectZoneNumber } from "../../redux/zoneSlice"
+import { Enemy } from "../../models/monsters"
+import { getRandomMonster } from "../../gameconfig/monster"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
