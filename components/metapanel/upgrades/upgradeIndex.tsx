@@ -13,12 +13,10 @@ import {
   incrementDotMultiUpgradeCount,
   incrementDotLevel,
 } from "../../../redux/playerSlice"
-import MultiplierUpgrade from "./multiplierUpgrade"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/click-icons"
 import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { levelUpID, UpgradeId } from "../../../models/upgrades"
-import LevelUpButton from "./levelUpButton"
-import UpgradeContainer from "./upgradeContainer"
+import UpgradePane from "./upgradePane"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
@@ -94,14 +92,14 @@ export default function UpgradeIndex() {
 
   return (
     <div className="">
-      <UpgradeContainer
+      <UpgradePane
         config={UPGRADE_CONFIG.click}
         damage={clickDamage}
         multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
         onUpgrade={handleUpgrade}
         onLevelUp={handleLevelUp}
       />
-      <UpgradeContainer
+      <UpgradePane
         config={UPGRADE_CONFIG.dot}
         damage={dotDamage}
         multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}

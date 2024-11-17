@@ -8,7 +8,7 @@ import { Upgrade } from "../../../models/upgrades"
 import { PlayerState } from "../../../models/state"
 import LevelUpButton from "./levelUpButton"
 
-interface UpgradeContainerProps {
+interface UpgradePaneProps {
   config: Upgrade
   damage: number
   multiIcons: JSX.Element[]
@@ -16,7 +16,7 @@ interface UpgradeContainerProps {
   onLevelUp: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export default function UpgradeContainer({ config, damage, multiIcons, onUpgrade, onLevelUp }: UpgradeContainerProps) {
+export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onLevelUp }: UpgradePaneProps) {
   const [upgradeName] = config.elementId.split("-")
   const thisLevelUp = `${upgradeName}Level` as keyof PlayerState
   const thisMultiUpgradeCount = `${upgradeName}MultiUpgradeCount` as keyof PlayerState
