@@ -1,4 +1,4 @@
-export type UpgradeId = "clickMulti" | "dotMulti"
+export type UpgradeId = "click-multi" | "dot-multi"
 export type CostKey = "clickMultiCosts" | "dotMultiCosts"
 export type levelUpID = "click" | "dot"
 

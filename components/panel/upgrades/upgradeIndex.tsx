@@ -1,4 +1,6 @@
 import React from "react"
+import clsx from "clsx/lite"
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import {
   decreaseGold,
   incrementClickLevel,
@@ -11,26 +13,26 @@ import {
   incrementDotMultiUpgradeCount,
   incrementDotLevel,
 } from "../../../redux/playerSlice"
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
-import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
-import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/click-icons"
 import MultiplierUpgrade from "./multiplierUpgrade"
-import clsx from "clsx/lite"
-import { levelUpID, Upgrade, UpgradeConfig, UpgradeElement, UpgradeId } from "../../../models/upgrades"
+import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/click-icons"
+import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
+import { levelUpID, UpgradeId } from "../../../models/upgrades"
 import LevelUpButton from "./levelUpButton"
+import UpgradeContainer from "./upgradeContainer"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
+
   const gold = useAppSelector(selectGold)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickLevel = useAppSelector(selectClickLevel)
   const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
   const dotLevel = useAppSelector(selectDotLevel)
   const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
-  // To be removed when levelup buttons are made into components
   const clickLevelUpCost = UPGRADE_CONFIG.click.levelUpCost(clickLevel)
   const dotLevelUpCost = UPGRADE_CONFIG.dot.levelUpCost(dotLevel)
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
+
   const canAffordClickLevelUp = gold >= clickLevelUpCost
   const canAffordDotLevelUp = gold >= dotLevelUpCost
   const LevelUpCosts = {
@@ -67,19 +69,19 @@ export default function UpgradeIndex() {
 
   function handleUpgrade(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
     const [upgradeId, purchasedUpgradeLevel] = e.currentTarget.id.split(".")
-    const upgradeCount = upgradeId === "clickMulti" ? clickMultiUpgradeCount : dotMultiUpgradeCount
+    const upgradeCount = upgradeId === "click-multi" ? clickMultiUpgradeCount : dotMultiUpgradeCount
 
     const cost = UPGRADE_CONFIG.calcMultiCost(upgradeId as UpgradeId, upgradeCount)
 
     // This logic should soon be made generic
     switch (upgradeId) {
-      case "clickMulti":
+      case "click-multi":
         if (gold >= cost && Number(purchasedUpgradeLevel) > clickMultiUpgradeCount) {
           dispatch(incrementClickMultiUpgradeCount())
           dispatch(decreaseGold(cost))
         }
         break
-      case "dotMulti":
+      case "dot-multi":
         if (gold >= cost && Number(purchasedUpgradeLevel) > dotMultiUpgradeCount) {
           dispatch(incrementDotMultiUpgradeCount())
           dispatch(decreaseGold(cost))
@@ -92,90 +94,20 @@ export default function UpgradeIndex() {
 
   return (
     <div className="">
-      <div className="flex w-full items-start justify-between align-start py-4 px-4 border-y-2 border-amber-950">
-        <div className="flex flex-col w-40 items-center">
-          <div className="">Click Damage</div>
-          <div className="self-center">{clickDamage}</div>
-          <div className="flex gap-2.5 pt-1">
-            <MultiplierUpgrade
-              id="clickMulti.1"
-              onClick={handleUpgrade}
-              icon={ClickMultiIcon1()}
-              hidden={clickLevel < 10}
-              isAffordable={
-                gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.click.elementId, clickMultiUpgradeCount)
-              }
-              isPurchased={clickMultiUpgradeCount > 0}
-            />
-            <MultiplierUpgrade
-              id="clickMulti.2"
-              onClick={handleUpgrade}
-              icon={ClickMultiIcon2()}
-              hidden={clickMultiUpgradeCount < 1}
-              isAffordable={
-                gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.click.elementId, clickMultiUpgradeCount)
-              }
-              isPurchased={clickMultiUpgradeCount > 1}
-            />
-            <MultiplierUpgrade
-              id="clickMulti.3"
-              onClick={handleUpgrade}
-              icon={ClickMultiIcon3()}
-              hidden={clickMultiUpgradeCount < 2}
-              isAffordable={
-                gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.click.elementId, clickMultiUpgradeCount)
-              }
-              isPurchased={clickMultiUpgradeCount > 2}
-            />
-          </div>
-        </div>
-        <LevelUpButton
-          id="click"
-          onClick={handleLevelUp}
-          currentLevel={clickLevel}
-          levelUpCost={clickLevelUpCost}
-          isAffordable={canAffordClickLevelUp}
-        />
-      </div>
-      <div className="flex w-full items-start justify-between align-start py-4 px-4 border-b-2 border-amber-950">
-        <div className="flex flex-col w-40 items-center text-center">
-          <div className="text-center">Damage over time</div>
-          <div className="self-center">{dotDamage}</div>
-          <div className="flex gap-2.5 pt-1">
-            <MultiplierUpgrade
-              id="dotMulti.1"
-              onClick={handleUpgrade}
-              icon={ClickMultiIcon1()}
-              hidden={dotLevel < 10}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.dot.elementId, dotMultiUpgradeCount)}
-              isPurchased={dotMultiUpgradeCount > 0}
-            />
-            <MultiplierUpgrade
-              id="dotMulti.2"
-              onClick={handleUpgrade}
-              icon={ClickMultiIcon2()}
-              hidden={dotMultiUpgradeCount < 1}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.dot.elementId, dotMultiUpgradeCount)}
-              isPurchased={dotMultiUpgradeCount > 1}
-            />
-            <MultiplierUpgrade
-              id="dotMulti.3"
-              onClick={handleUpgrade}
-              icon={ClickMultiIcon3()}
-              hidden={dotMultiUpgradeCount < 2}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost(UPGRADE_CONFIG.dot.elementId, dotMultiUpgradeCount)}
-              isPurchased={dotMultiUpgradeCount > 2}
-            />
-          </div>
-        </div>
-        <LevelUpButton
-          id="dot"
-          onClick={handleLevelUp}
-          currentLevel={dotLevel}
-          levelUpCost={dotLevelUpCost}
-          isAffordable={canAffordDotLevelUp}
-        />
-      </div>
+      <UpgradeContainer
+        config={UPGRADE_CONFIG.click}
+        damage={clickDamage}
+        multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
+        onUpgrade={handleUpgrade}
+        onLevelUp={handleLevelUp}
+      />
+      <UpgradeContainer
+        config={UPGRADE_CONFIG.dot}
+        damage={dotDamage}
+        multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
+        onUpgrade={handleUpgrade}
+        onLevelUp={handleLevelUp}
+      />
       <div className="flex w-full items-start justify-between align-start py-4 px-4 border-b-2 border-amber-950">
         <div className="flex flex-col w-32 items-center">
           <div>Placeholder</div>
