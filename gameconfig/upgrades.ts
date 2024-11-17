@@ -2,6 +2,7 @@ import { PlayerCalc, UpgradeConfig } from "../models/upgrades"
 
 export const UPGRADE_CONFIG: UpgradeConfig = {
   click: {
+    visibleAtZone: 1,
     elementId: "click-multi",
     costKey: "clickMultiCosts",
     costs: [100, 400, 1000],
@@ -12,6 +13,7 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
     },
   },
   dot: {
+    visibleAtZone: 3,
     elementId: "dot-multi",
     costKey: "dotMultiCosts",
     costs: [5000, 10000, 25000],

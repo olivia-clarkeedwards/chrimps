@@ -7,6 +7,7 @@ import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { Upgrade } from "../../../models/upgrades"
 import { PlayerState } from "../../../models/state"
 import LevelUpButton from "./levelUpButton"
+import { selectZoneNumber } from "../../../redux/zoneSlice"
 
 interface UpgradePaneProps {
   config: Upgrade
@@ -26,12 +27,14 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   const cost = config.levelUpCost(upgradeLevel)
   const gold = useAppSelector(selectGold)
   const canAffordLevelUp = gold >= cost
+  const zone = useAppSelector(selectZoneNumber)
 
   return (
     <div
       className={clsx(
-        "flex w-full items-start justify-between align-start py-4 px-4 border-amber-950",
+        "w-full items-start justify-between align-start py-4 px-4 border-amber-950 transition-opacity duration-1000",
         upgradeName === "click" ? "border-y-2" : "border-b-2",
+        zone >= config.visibleAtZone ? "flex" : "hidden",
       )}>
       <div className="flex flex-col w-40 items-center">
         <div className="">{`${upgradeName[0].toUpperCase()}${upgradeName.substring(1)} Damage`}</div>

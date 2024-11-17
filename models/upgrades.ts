@@ -8,6 +8,7 @@ export interface UpgradeElement {
 }
 
 export interface Upgrade {
+  visibleAtZone: number
   elementId: UpgradeId
   costKey: CostKey
   costs: number[]

@@ -17,6 +17,7 @@ import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/cli
 import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { levelUpID, UpgradeId } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"
+import { selectZoneNumber } from "../../../redux/zoneSlice"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
@@ -30,6 +31,7 @@ export default function UpgradeIndex() {
   const clickLevelUpCost = UPGRADE_CONFIG.click.levelUpCost(clickLevel)
   const dotLevelUpCost = UPGRADE_CONFIG.dot.levelUpCost(dotLevel)
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
+  const zone = useAppSelector(selectZoneNumber)
 
   const canAffordClickLevelUp = gold >= clickLevelUpCost
   const canAffordDotLevelUp = gold >= dotLevelUpCost
@@ -106,6 +108,7 @@ export default function UpgradeIndex() {
         onUpgrade={handleUpgrade}
         onLevelUp={handleLevelUp}
       />
+
       <div className="flex w-full items-start justify-between align-start py-4 px-4 border-b-2 border-amber-950">
         <div className="flex flex-col w-32 items-center">
           <div>Placeholder</div>
