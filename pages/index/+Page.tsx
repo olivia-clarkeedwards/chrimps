@@ -1,7 +1,7 @@
 import "./style.css"
 import "./tailwind.css"
 import React from "react"
-import Panel from "../../components/panel/panelIndex"
+import Panel from "../../components/metapanel/panelIndex"
 import Combat from "../../components/combat/combatIndex"
 import { store } from "../../redux/store"
 import { Provider } from "react-redux"
