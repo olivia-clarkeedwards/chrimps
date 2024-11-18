@@ -40,7 +40,8 @@ export default function Monster({ children }: PropsWithChildren) {
   const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
 
-  const currentStage = (useAppSelector(selectKillCount) + 1) % 30
+  const deriveStage = (useAppSelector(selectKillCount) + 1) % 30
+  const currentStage = deriveStage === 0 ? 30 : deriveStage
   let zone = useAppSelector(selectZoneNumber)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
@@ -110,11 +111,11 @@ export default function Monster({ children }: PropsWithChildren) {
       dispatch(increaseGold(monsterValue))
       if (currentStage === 29) {
         dispatch(incrementZonesCompleted())
-        dispatch(incrementZoneNumber())
         zone > highestZoneEver && dispatch(incrementHighestZoneEver())
         const newMonster = getRandomMonster(zone, 30) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       } else {
+        if (currentStage === 30) dispatch(incrementZoneNumber())
         const newMonster = getRandomMonster(zone, currentStage + 1) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       }
