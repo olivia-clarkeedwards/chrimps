@@ -29,6 +29,7 @@ import {
 import { incrementZoneNumber, selectZoneNumber } from "../../redux/zoneSlice"
 import { Enemy } from "../../models/monsters"
 import { getRandomMonster } from "../../gameconfig/monster"
+import { ZONE_CONFIG } from "../../gameconfig/zone"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -40,8 +41,9 @@ export default function Monster({ children }: PropsWithChildren) {
   const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
 
-  const derivedStageNumber = (useAppSelector(selectKillCount) + 1) % 30
-  const currentStage = derivedStageNumber === 0 ? 30 : derivedStageNumber
+  const zoneLength = ZONE_CONFIG.length
+  const derivedStageNumber = (useAppSelector(selectKillCount) + 1) % zoneLength
+  const currentStage = derivedStageNumber === 0 ? zoneLength : derivedStageNumber
   let zone = useAppSelector(selectZoneNumber)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
@@ -109,13 +111,13 @@ export default function Monster({ children }: PropsWithChildren) {
     if (!monsterAlive) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
-      if (currentStage === 29) {
+      if (currentStage === zoneLength - 1) {
         dispatch(incrementZonesCompleted())
         zone > highestZoneEver && dispatch(incrementHighestZoneEver())
-        const newMonster = getRandomMonster(zone, 30) as Enemy
+        const newMonster = getRandomMonster(zone, zoneLength) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       } else {
-        if (currentStage === 30) dispatch(incrementZoneNumber())
+        if (currentStage === zoneLength) dispatch(incrementZoneNumber())
         const newMonster = getRandomMonster(zone, currentStage + 1) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       }

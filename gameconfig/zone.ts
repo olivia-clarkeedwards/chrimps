@@ -1,5 +1,10 @@
-import { BaseZone } from "../models/zones"
+import { BaseZone, ZoneConfig } from "../models/zones"
 
-export const zone: BaseZone = {
-  zoneNumber: 1,
+export const ZONE_CONFIG: ZoneConfig = {
+  length: 30,
+}
+export class zone implements BaseZone {
+  zoneLength = ZONE_CONFIG.length
+  zoneNumber = 1
+  Monsters = []
 }

@@ -1,6 +1,6 @@
 import { BaseEnemy, Enemy, MonsterConfig, BaseMonsterConfig } from "../models/monsters"
 
-const MONSTER_BASE_CONFIG: BaseMonsterConfig = {
+const MONSTER_CONFIG: BaseMonsterConfig = {
   health: {
     base: 10,
     growth: 1.1,
@@ -27,7 +27,7 @@ const SPECIAL_VARIATIONS: MonsterConfig[] = [
 class BaseMonster implements BaseEnemy {
   level = 0
   get baseHealth(): number {
-    const { base, growth, smoothing } = MONSTER_BASE_CONFIG.health
+    const { base, growth, smoothing } = MONSTER_CONFIG.health
     return base * Math.sqrt(this.level) * Math.pow(growth, this.level / smoothing)
   }
 
@@ -51,7 +51,7 @@ class Monster extends BaseMonster implements Enemy {
     this.image = config.imagePath
     this.health = Math.floor(this.baseHealth * this.healthMulti)
     const goldMulti = (config.goldMulti ??= 1)
-    const { healthDivisor, healthMultiBonus } = MONSTER_BASE_CONFIG.gold
+    const { healthDivisor, healthMultiBonus } = MONSTER_CONFIG.gold
     this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (this.healthMulti * healthMultiBonus) * goldMulti)
   }
 }
