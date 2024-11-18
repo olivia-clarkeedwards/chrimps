@@ -1,11 +1,30 @@
-import { BaseEnemy, Enemy, MonsterConfiguration } from "../models/monsters"
+import { BaseEnemy, Enemy, MonsterConfig, BaseMonsterConfig } from "../models/monsters"
 
+const MONSTER_BASE_CONFIG: BaseMonsterConfig = {
+  health: {
+    base: 10,
+    growth: 1.1,
+    smoothing: 6,
+  },
+  gold: {
+    healthDivisor: 4,
+    healthMultiBonus: 1.5,
+  },
+  // attack etc.
+}
+
+const MONSTER_VARIATIONS: MonsterConfig[] = [
+  { name: "Slime", healthMulti: 1, imagePath: "/monsters/ph-slime.png" },
+  { name: "Worm", healthMulti: 1.05, imagePath: "/monsters/ph-worm.png" },
+  { name: "Cacodemon", healthMulti: 1.1, imagePath: "/monsters/ph-cacodemon.png" },
+  { name: "Yeti", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
+]
+
+const BOSS_VARIATIONS: MonsterConfig[] = [{ name: "Tooth", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" }]
 class BaseMonster implements BaseEnemy {
   level = 0
   get baseHealth(): number {
-    const base = 10
-    const growth = 1.1
-    const smoothing = 6
+    const { base, growth, smoothing } = MONSTER_BASE_CONFIG.health
     return base * Math.sqrt(this.level) * Math.pow(growth, this.level / smoothing)
   }
 
@@ -22,26 +41,16 @@ class Monster extends BaseMonster implements Enemy {
   health
   goldValue
 
-  constructor(config: MonsterConfiguration, zoneNumber: number, stageNumber: number) {
+  constructor(config: MonsterConfig, zoneNumber: number, stageNumber: number) {
     super(zoneNumber, stageNumber)
     this.name = config.name
     this.healthMulti = config.healthMulti
     this.image = config.imagePath
     this.health = Math.floor(this.baseHealth * this.healthMulti)
-    this.goldValue = Math.floor((this.baseHealth / 4) * (this.healthMulti * 1.5))
+    const { healthDivisor, healthMultiBonus } = MONSTER_BASE_CONFIG.gold
+    this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (this.healthMulti * healthMultiBonus))
   }
 }
-
-const MONSTER_VARIATIONS: MonsterConfiguration[] = [
-  { name: "Slime", healthMulti: 1, imagePath: "/monsters/ph-slime.png" },
-  { name: "Worm", healthMulti: 1.05, imagePath: "/monsters/ph-worm.png" },
-  { name: "Cacodemon", healthMulti: 1.1, imagePath: "/monsters/ph-cacodemon.png" },
-  { name: "Yeti", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
-]
-
-const BOSS_VARIATIONS: MonsterConfiguration[] = [
-  { name: "Tooth", healthMulti: 1, imagePath: "/monsters/ph-boss-tooth.png" },
-]
 
 export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Monster {
   const randomMonster =
