@@ -3,7 +3,10 @@ import { BaseEnemy, Enemy, MonsterConfiguration } from "../models/monsters"
 class BaseMonster implements BaseEnemy {
   level = 0
   get baseHealth(): number {
-    return Math.pow(1.1, this.level) + 9
+    const base = 10
+    const growth = 1.1
+    const smoothing = 6
+    return base * Math.sqrt(this.level) * Math.pow(growth, this.level / smoothing)
   }
 
   constructor(zoneNumber: number, stageNumber: number) {
