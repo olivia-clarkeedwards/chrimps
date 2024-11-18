@@ -40,8 +40,8 @@ export default function Monster({ children }: PropsWithChildren) {
   const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
 
-  const deriveStage = (useAppSelector(selectKillCount) + 1) % 30
-  const currentStage = deriveStage === 0 ? 30 : deriveStage
+  const derivedStageNumber = (useAppSelector(selectKillCount) + 1) % 30
+  const currentStage = derivedStageNumber === 0 ? 30 : derivedStageNumber
   let zone = useAppSelector(selectZoneNumber)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
