@@ -29,7 +29,7 @@ import {
 import { incrementZoneNumber, selectZoneNumber } from "../../redux/zoneSlice"
 import { Enemy } from "../../models/monsters"
 import { getRandomMonster } from "../../gameconfig/monster"
-import { ZONE_CONFIG } from "../../gameconfig/zone"
+import { zone, ZONE_CONFIG } from "../../gameconfig/zone"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -44,13 +44,16 @@ export default function Monster({ children }: PropsWithChildren) {
   const zoneLength = ZONE_CONFIG.length
   const derivedStageNumber = (useAppSelector(selectKillCount) + 1) % zoneLength
   const currentStage = derivedStageNumber === 0 ? zoneLength : derivedStageNumber
-  let zone = useAppSelector(selectZoneNumber)
+  let currentZone = useAppSelector(selectZoneNumber)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
   const monsterName = useAppSelector(selectMonsterName)
   const monsterImage = useAppSelector(selectMonsterImage)
   const monsterValue = useAppSelector(selectMonsterGoldValue)
   const monsterAlive = useAppSelector(selectMonsterAlive)
+
+  const thisZone = new zone(currentZone)
+  console.log(thisZone)
 
   const checkAchievements = useCallback(() => {
     if (clickLevel > 5) {
@@ -113,12 +116,12 @@ export default function Monster({ children }: PropsWithChildren) {
       dispatch(increaseGold(monsterValue))
       if (currentStage === zoneLength - 1) {
         dispatch(incrementZonesCompleted())
-        zone > highestZoneEver && dispatch(incrementHighestZoneEver())
-        const newMonster = getRandomMonster(zone, zoneLength) as Enemy
+        currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
+        const newMonster = getRandomMonster(currentZone, zoneLength) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       } else {
         if (currentStage === zoneLength) dispatch(incrementZoneNumber())
-        const newMonster = getRandomMonster(zone, currentStage + 1) as Enemy
+        const newMonster = getRandomMonster(currentZone, currentStage + 1) as Enemy
         dispatch(spawnMonster({ ...newMonster, alive: true }))
       }
     }
@@ -127,8 +130,8 @@ export default function Monster({ children }: PropsWithChildren) {
   return (
     <>
       <div className="absolute top-[-4%] text-black">
-        Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {zone}, clickDamage: {clickDamage}, dotDamage:{" "}
-        {dotDamage}
+        Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {currentZone}, clickDamage: {clickDamage},
+        dotDamage: {dotDamage}
       </div>
       <div className="absolute flex flex-col items-center top-1 left-1/2 transform -translate-x-1/2">
         <div className="">{monsterName}</div>

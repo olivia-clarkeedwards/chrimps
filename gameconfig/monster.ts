@@ -1,4 +1,4 @@
-import { BaseEnemy, Enemy, MonsterConfig, BaseMonsterConfig } from "../models/monsters"
+import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig } from "../models/monsters"
 
 const MONSTER_CONFIG: BaseMonsterConfig = {
   health: {
@@ -13,15 +13,15 @@ const MONSTER_CONFIG: BaseMonsterConfig = {
   // attack etc.
 }
 
-const MONSTER_VARIATIONS: MonsterConfig[] = [
+const MONSTER_VARIATIONS: MonsterType[] = [
   { name: "Slime", healthMulti: 1, imagePath: "/monsters/ph-slime.png" },
   { name: "Worm", healthMulti: 1.05, imagePath: "/monsters/ph-worm.png" },
   { name: "Cacodemon", healthMulti: 1.1, imagePath: "/monsters/ph-cacodemon.png" },
   { name: "Yeti", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
 ]
 
-const BOSS_VARIATIONS: MonsterConfig[] = [{ name: "Tooth", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" }]
-const SPECIAL_VARIATIONS: MonsterConfig[] = [
+const BOSS_VARIATIONS: MonsterType[] = [{ name: "Tooth", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" }]
+const SPECIAL_VARIATIONS: MonsterType[] = [
   { name: "Treasure Goblin", healthMulti: 0.5, goldMulti: 20, imagePath: "/monsters/ph-treasure-monster.webp" },
 ]
 class BaseMonster implements BaseEnemy {
@@ -44,7 +44,7 @@ class Monster extends BaseMonster implements Enemy {
   health
   goldValue
 
-  constructor(config: MonsterConfig, zoneNumber: number, stageNumber: number) {
+  constructor(config: MonsterType, zoneNumber: number, stageNumber: number) {
     super(zoneNumber, stageNumber)
     this.name = config.name
     this.healthMulti = config.healthMulti
@@ -56,7 +56,7 @@ class Monster extends BaseMonster implements Enemy {
   }
 }
 
-export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Monster {
+export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Enemy {
   const randomMonster =
     stageNumber !== 30
       ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]

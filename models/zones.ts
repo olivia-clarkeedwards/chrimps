@@ -1,8 +1,8 @@
-import { MonsterConfig } from "./monsters"
+import { Enemy } from "./monsters"
 export interface BaseZone {
   zoneLength: number
   zoneNumber: number
-  Monsters: MonsterConfig[]
+  Monsters: Enemy[]
 }
 
 export interface ZoneConfig {

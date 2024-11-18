@@ -11,7 +11,7 @@ export interface Enemy extends BaseEnemy {
   image: string
 }
 
-export interface MonsterConfig {
+export interface MonsterType {
   name: string
   healthMulti: number
   goldMulti?: number
