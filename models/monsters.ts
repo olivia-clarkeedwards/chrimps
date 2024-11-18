@@ -14,19 +14,21 @@ export interface Enemy extends BaseEnemy {
 export interface MonsterConfig {
   name: string
   healthMulti: number
+  goldMulti?: number
   imagePath: string
 }
 
-type HealthConfig = {
+interface HealthConfig {
   base: number
   growth: number
   smoothing: number
 }
 
-type GoldConfig = {
+interface GoldConfig {
   healthDivisor: number
   healthMultiBonus: number
 }
+
 export interface BaseMonsterConfig {
   health: HealthConfig
   gold: GoldConfig

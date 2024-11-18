@@ -21,6 +21,9 @@ const MONSTER_VARIATIONS: MonsterConfig[] = [
 ]
 
 const BOSS_VARIATIONS: MonsterConfig[] = [{ name: "Tooth", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" }]
+const SPECIAL_VARIATIONS: MonsterConfig[] = [
+  { name: "Treasure Goblin", healthMulti: 0.5, goldMulti: 20, imagePath: "/monsters/ph-treasure-monster.webp" },
+]
 class BaseMonster implements BaseEnemy {
   level = 0
   get baseHealth(): number {
@@ -47,8 +50,9 @@ class Monster extends BaseMonster implements Enemy {
     this.healthMulti = config.healthMulti
     this.image = config.imagePath
     this.health = Math.floor(this.baseHealth * this.healthMulti)
+    const goldMulti = (config.goldMulti ??= 1)
     const { healthDivisor, healthMultiBonus } = MONSTER_BASE_CONFIG.gold
-    this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (this.healthMulti * healthMultiBonus))
+    this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (this.healthMulti * healthMultiBonus) * goldMulti)
   }
 }
 
