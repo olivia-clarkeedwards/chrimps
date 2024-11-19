@@ -3,9 +3,8 @@ export interface BaseEnemy {
   baseHealth: number
 }
 
-export interface Enemy extends BaseEnemy {
+export interface Enemy {
   name: string
-  healthMulti: number
   health: number
   goldValue: number
   image: string

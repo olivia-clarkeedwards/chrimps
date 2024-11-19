@@ -26,6 +26,7 @@ const SPECIAL_VARIATIONS: MonsterType[] = [
 ]
 class BaseMonster implements BaseEnemy {
   level = 0
+  basehealth = 0
   get baseHealth(): number {
     const { base, growth, smoothing } = MONSTER_CONFIG.health
     return base * Math.sqrt(this.level) * Math.pow(growth, this.level / smoothing)
@@ -39,20 +40,19 @@ class BaseMonster implements BaseEnemy {
 
 class Monster extends BaseMonster implements Enemy {
   name
-  healthMulti
-  image
   health
+  image
   goldValue
 
   constructor(config: MonsterType, zoneNumber: number, stageNumber: number) {
     super(zoneNumber, stageNumber)
     this.name = config.name
-    this.healthMulti = config.healthMulti
+    const healthMulti = config.healthMulti
+    this.health = Math.floor(this.baseHealth * healthMulti)
     this.image = config.imagePath
-    this.health = Math.floor(this.baseHealth * this.healthMulti)
     const goldMulti = (config.goldMulti ??= 1)
     const { healthDivisor, healthMultiBonus } = MONSTER_CONFIG.gold
-    this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (this.healthMulti * healthMultiBonus) * goldMulti)
+    this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (healthMulti * healthMultiBonus) * goldMulti)
   }
 }
 
@@ -61,7 +61,16 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Enemy {
     stageNumber !== 30
       ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
       : BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
-  return new Monster(randomMonster, zoneNumber, stageNumber)
+  const newMonster = new Monster(randomMonster, zoneNumber, stageNumber)
+
+  const monster = {
+    name: newMonster.name,
+    level: newMonster.level,
+    health: newMonster.health,
+    goldValue: newMonster.goldValue,
+    image: newMonster.image,
+  }
+  return monster
 }
 
 export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1): Enemy {
