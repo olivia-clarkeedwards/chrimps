@@ -61,22 +61,25 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Enemy {
     stageNumber !== 30
       ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
       : BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
-  const newMonster = new Monster(randomMonster, zoneNumber, stageNumber)
-
-  const monster = {
-    name: newMonster.name,
-    level: newMonster.level,
-    health: newMonster.health,
-    goldValue: newMonster.goldValue,
-    image: newMonster.image,
-  }
-  return monster
+  const newMonster = serializableMonster(new Monster(randomMonster, zoneNumber, stageNumber))
+  return newMonster
 }
 
 export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1): Enemy {
   const allMonsters = MONSTER_VARIATIONS.concat(BOSS_VARIATIONS, SPECIAL_VARIATIONS)
   for (const monster of allMonsters) {
-    if (monster.name === monsterName) return new Monster(monster, zoneNumber, stageNumber)
+    if (monster.name === monsterName) return serializableMonster(new Monster(monster, zoneNumber, stageNumber))
   }
   throw new Error(`Monster not found: ${monsterName}`)
+}
+
+function serializableMonster(monster: Monster): Enemy {
+  const serializable = {
+    name: monster.name,
+    level: monster.level,
+    health: monster.health,
+    goldValue: monster.goldValue,
+    image: monster.image,
+  }
+  return serializable
 }

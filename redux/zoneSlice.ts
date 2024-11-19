@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { Enemy } from "../models/monsters"
 import { Zone } from "../gameconfig/zone"
+import { getMonster } from "../gameconfig/monster"
 
 interface ZoneState {
   zoneNumber: number
@@ -9,7 +10,12 @@ interface ZoneState {
   Monsters: Enemy[]
 }
 
-const initialState: ZoneState = { ...new Zone(1) }
+const firstZone = new Zone(1)
+firstZone.Monsters = firstZone.Monsters.slice(1)
+firstZone.Monsters.unshift({ ...getMonster("Slime") })
+const { zoneLength, zoneNumber, Monsters } = firstZone
+
+const initialState = { zoneLength, zoneNumber, Monsters }
 
 export const zoneSlice = createSlice({
   name: "zone",
@@ -22,11 +28,7 @@ export const zoneSlice = createSlice({
       state.zoneLength = action.payload
     },
     setMonsters(state, action: PayloadAction<Enemy[]>) {
-      if (state.zoneNumber === 1) {
-        state.Monsters = [...state.Monsters, ...action.payload.slice(1)]
-      } else {
-        state.Monsters = action.payload
-      }
+      state.Monsters = action.payload
     },
   },
 })

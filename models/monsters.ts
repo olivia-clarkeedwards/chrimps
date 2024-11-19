@@ -32,3 +32,7 @@ export interface BaseMonsterConfig {
   health: HealthConfig
   gold: GoldConfig
 }
+
+export interface EnemyState extends Enemy {
+  level: number
+}

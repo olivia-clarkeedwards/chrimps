@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { getMonster, getRandomMonster } from "../gameconfig/monster"
-import { Enemy } from "../models/monsters"
+import { EnemyState } from "../models/monsters"
 
-interface EnemyState extends Enemy {
+interface EnemyThatDies extends EnemyState {
   alive: boolean
 }
 
-const initialState = { ...getMonster("Slime"), alive: true } as EnemyState
+const initialState = { ...getMonster("Slime"), alive: true } as EnemyThatDies
 
 export const monsterSlice = createSlice({
   name: "monster",
@@ -18,7 +18,7 @@ export const monsterSlice = createSlice({
       state.health - action.payload < 1 ? (state.alive = false) : (state.health -= action.payload)
     },
     spawnMonster(state, action: PayloadAction<EnemyState>) {
-      return { ...action.payload }
+      return { ...action.payload, alive: true }
     },
     monsterDied: (state) => {
       state.alive = false
