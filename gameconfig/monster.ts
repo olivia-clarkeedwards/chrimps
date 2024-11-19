@@ -63,3 +63,11 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Enemy {
       : BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
   return new Monster(randomMonster, zoneNumber, stageNumber)
 }
+
+export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1): Enemy {
+  const allMonsters = MONSTER_VARIATIONS.concat(BOSS_VARIATIONS, SPECIAL_VARIATIONS)
+  for (const monster of allMonsters) {
+    if (monster.name === monsterName) return new Monster(monster, zoneNumber, stageNumber)
+  }
+  throw new Error(`Monster not found: ${monsterName}`)
+}

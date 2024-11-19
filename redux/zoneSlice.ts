@@ -1,15 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit"
-import type { PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
-import { BaseZone } from "../models/zones"
+import { Enemy } from "../models/monsters"
+import { Zone } from "../gameconfig/zone"
 
-interface ZoneState extends BaseZone {
-  zoneNumber: 1
+interface ZoneState {
+  zoneNumber: number
+  zoneLength: number
+  Monsters: Enemy[]
 }
 
-const initialState = {
-  zoneNumber: 1,
-} as ZoneState
+const initialState: ZoneState = { ...new Zone(1) }
 
 export const zoneSlice = createSlice({
   name: "zone",
@@ -18,11 +18,23 @@ export const zoneSlice = createSlice({
     incrementZoneNumber: (state) => {
       state.zoneNumber++
     },
+    selectZoneLength(state, action: PayloadAction<number>) {
+      state.zoneLength = action.payload
+    },
+    setMonsters(state, action: PayloadAction<Enemy[]>) {
+      if (state.zoneNumber === 1) {
+        state.Monsters = [...state.Monsters, ...action.payload.slice(1)]
+      } else {
+        state.Monsters = action.payload
+      }
+    },
   },
 })
 
-export const { incrementZoneNumber } = zoneSlice.actions
+export const { incrementZoneNumber, setMonsters } = zoneSlice.actions
 
 export const selectZoneNumber = (state: RootState) => state.zone.zoneNumber
+export const selectZoneLength = (state: RootState) => state.zone.zoneLength
+export const selectZoneMonsters = (state: RootState) => state.zone.Monsters
 
 export default zoneSlice.reducer

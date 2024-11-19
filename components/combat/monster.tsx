@@ -26,10 +26,10 @@ import {
   selectHighestZoneEver,
   selectKillCount,
 } from "../../redux/statsSlice"
-import { incrementZoneNumber, selectZoneNumber } from "../../redux/zoneSlice"
+import { incrementZoneNumber, selectZoneNumber, setMonsters } from "../../redux/zoneSlice"
 import { Enemy } from "../../models/monsters"
 import { getRandomMonster } from "../../gameconfig/monster"
-import { zone, ZONE_CONFIG } from "../../gameconfig/zone"
+import { Zone, ZONE_CONFIG } from "../../gameconfig/zone"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -52,8 +52,8 @@ export default function Monster({ children }: PropsWithChildren) {
   const monsterValue = useAppSelector(selectMonsterGoldValue)
   const monsterAlive = useAppSelector(selectMonsterAlive)
 
-  const thisZone = new zone(currentZone)
-  console.log(thisZone)
+  const thisZone = new Zone(currentZone)
+  dispatch(setMonsters(thisZone.Monsters))
 
   const checkAchievements = useCallback(() => {
     if (clickLevel > 5) {

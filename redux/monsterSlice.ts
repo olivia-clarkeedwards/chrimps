@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
-import { getRandomMonster } from "../gameconfig/monster"
+import { getMonster, getRandomMonster } from "../gameconfig/monster"
 import { Enemy } from "../models/monsters"
 
 interface EnemyState extends Enemy {
   alive: boolean
 }
 
-const initialState = { ...getRandomMonster(), alive: true } as EnemyState
+const initialState = { ...getMonster("Slime"), alive: true } as EnemyState
 
 export const monsterSlice = createSlice({
   name: "monster",
