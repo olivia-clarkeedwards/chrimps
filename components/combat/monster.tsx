@@ -37,6 +37,7 @@ import {
 import { Enemy, EnemyState } from "../../models/monsters"
 import { getRandomMonster } from "../../gameconfig/monster"
 import { Zone, ZONE_CONFIG } from "../../gameconfig/zone"
+import { store } from "../../redux/store"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -51,7 +52,6 @@ export default function Monster({ children }: PropsWithChildren) {
   const zoneLength = ZONE_CONFIG.length
   const currentStageIndex = useAppSelector(selectStageIndex)
   const currentZone = useAppSelector(selectZoneNumber)
-  const currentZoneMonsters = useAppSelector(selectZoneMonsters)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
   const monsters = useAppSelector(selectZoneMonsters)
 
@@ -122,11 +122,13 @@ export default function Monster({ children }: PropsWithChildren) {
         dispatch(incrementZonesCompleted())
         currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
         dispatch(incrementZoneNumber())
+        const nextMonster = selectZoneMonsters(store.getState())[currentStageIndex]
+        dispatch(spawnMonster(nextMonster))
       } else {
         dispatch(incrementStageNumber())
+        const nextMonster = monsters[currentStageIndex]
+        dispatch(spawnMonster(nextMonster))
       }
-      const nextMonster = monsters[currentStageIndex]
-      dispatch(spawnMonster(nextMonster))
     }
   }, [monsterAlive])
   return (
