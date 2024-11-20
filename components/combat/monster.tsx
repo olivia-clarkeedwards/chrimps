@@ -26,7 +26,14 @@ import {
   selectHighestZoneEver,
   selectKillCount,
 } from "../../redux/statsSlice"
-import { incrementZoneNumber, selectZoneMonsters, selectZoneNumber, setMonsters } from "../../redux/zoneSlice"
+import {
+  incrementStageNumber,
+  incrementZoneNumber,
+  selectStageIndex,
+  selectZoneMonsters,
+  selectZoneNumber,
+  setMonsters,
+} from "../../redux/zoneSlice"
 import { Enemy, EnemyState } from "../../models/monsters"
 import { getRandomMonster } from "../../gameconfig/monster"
 import { Zone, ZONE_CONFIG } from "../../gameconfig/zone"
@@ -42,11 +49,11 @@ export default function Monster({ children }: PropsWithChildren) {
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
 
   const zoneLength = ZONE_CONFIG.length
-  const derivedStageNumber = (useAppSelector(selectKillCount) + 1) % zoneLength
-  const currentStage = derivedStageNumber === 0 ? zoneLength : derivedStageNumber
+  const currentStageIndex = useAppSelector(selectStageIndex)
   const currentZone = useAppSelector(selectZoneNumber)
   const currentZoneMonsters = useAppSelector(selectZoneMonsters)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
+  const monsters = useAppSelector(selectZoneMonsters)
 
   const monsterName = useAppSelector(selectMonsterName)
   const monsterImage = useAppSelector(selectMonsterImage)
@@ -111,26 +118,22 @@ export default function Monster({ children }: PropsWithChildren) {
     if (!monsterAlive) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
-      if (currentStage === zoneLength - 1) {
-        console.log(`spawning!! ${currentStage}`)
-        dispatch(spawnMonster(currentZoneMonsters[currentStage]))
+      if (currentStageIndex === zoneLength) {
+        dispatch(incrementZonesCompleted())
+        currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
+        dispatch(incrementZoneNumber())
       } else {
-        if (currentStage === zoneLength) {
-          dispatch(incrementZonesCompleted())
-          currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
-          dispatch(incrementZoneNumber())
-          dispatch(spawnMonster(currentZoneMonsters[0]))
-          return
-        }
-        dispatch(spawnMonster(currentZoneMonsters[currentStage]))
+        dispatch(incrementStageNumber())
       }
+      const nextMonster = monsters[currentStageIndex]
+      dispatch(spawnMonster(nextMonster))
     }
-  }, [monsterAlive, currentZone])
+  }, [monsterAlive])
   return (
     <>
       <div className="absolute top-[-4%] text-black">
-        Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {currentZone}, clickDamage: {clickDamage},
-        dotDamage: {dotDamage}
+        Debug: monsterValue: {monsterValue} Stage: {currentStageIndex + 1} Zone: {currentZone}, clickDamage:{" "}
+        {clickDamage}, dotDamage: {dotDamage}
       </div>
       <div className="absolute flex flex-col items-center top-1 left-1/2 transform -translate-x-1/2">
         <div className="">{monsterName}</div>

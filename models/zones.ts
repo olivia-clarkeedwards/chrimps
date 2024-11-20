@@ -2,7 +2,7 @@ import { Enemy } from "./monsters"
 export interface BaseZone {
   zoneLength?: number
   zoneNumber: number
-  Monsters: Enemy[]
+  monsters: Enemy[]
 }
 
 export interface ZoneConfig {

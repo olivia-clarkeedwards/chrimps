@@ -7,16 +7,18 @@ import { getMonster } from "../gameconfig/monster"
 interface ZoneState {
   zoneNumber: number
   zoneLength: number
-  Monsters: EnemyState[]
+  monsters: EnemyState[]
+  currentStageIndex: number
 }
 
 const firstZone = new Zone(1)
-firstZone.Monsters = firstZone.Monsters.slice(1)
-firstZone.Monsters.unshift({ ...getMonster("Slime") })
-const { zoneLength, zoneNumber, Monsters } = firstZone
-
-const initialState = { zoneLength, zoneNumber, Monsters }
-
+firstZone.monsters = [getMonster("Slime"), ...firstZone.monsters.slice(1)]
+const initialState: ZoneState = {
+  zoneLength: firstZone.zoneLength,
+  zoneNumber: firstZone.zoneNumber,
+  monsters: firstZone.monsters,
+  currentStageIndex: 1,
+}
 export const zoneSlice = createSlice({
   name: "zone",
   initialState,
@@ -24,23 +26,31 @@ export const zoneSlice = createSlice({
     incrementZoneNumber: (state) => {
       state.zoneNumber++
       const nextZone = new Zone(state.zoneNumber)
-      state.Monsters = nextZone.Monsters
-      console.log(state.Monsters)
+      state.monsters = nextZone.monsters
+      console.log(state.monsters)
       return
     },
-    selectZoneLength(state, action: PayloadAction<number>) {
+    incrementStageNumber: (state) => {
+      if (state.currentStageIndex === state.zoneLength) {
+        state.currentStageIndex = 0
+      } else {
+        state.currentStageIndex++
+      }
+    },
+    setZoneLength(state, action: PayloadAction<number>) {
       state.zoneLength = action.payload
     },
     setMonsters(state, action: PayloadAction<EnemyState[]>) {
-      state.Monsters = action.payload
+      state.monsters = action.payload
     },
   },
 })
 
-export const { incrementZoneNumber, setMonsters } = zoneSlice.actions
+export const { incrementZoneNumber, incrementStageNumber, setMonsters, setZoneLength } = zoneSlice.actions
 
 export const selectZoneNumber = (state: RootState) => state.zone.zoneNumber
 export const selectZoneLength = (state: RootState) => state.zone.zoneLength
-export const selectZoneMonsters = (state: RootState) => state.zone.Monsters
+export const selectZoneMonsters = (state: RootState) => state.zone.monsters
+export const selectStageIndex = (state: RootState) => state.zone.currentStageIndex
 
 export default zoneSlice.reducer

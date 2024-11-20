@@ -8,12 +8,12 @@ export const ZONE_CONFIG: ZoneConfig = {
 export class Zone implements BaseZone {
   zoneLength = ZONE_CONFIG.length
   zoneNumber = 1
-  Monsters = [] as EnemyState[]
+  monsters = [] as EnemyState[]
 
   constructor(currentZoneNumber: number, zoneLength?: number) {
     const length = (zoneLength ??= this.zoneLength)
     for (let i = 0; i < length; i++) {
-      this.Monsters.push(getRandomMonster(currentZoneNumber, i + 1))
+      this.monsters.push(getRandomMonster(currentZoneNumber, i + 1))
     }
   }
 }
