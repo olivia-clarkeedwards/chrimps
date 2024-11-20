@@ -26,6 +26,7 @@ export const zoneSlice = createSlice({
       const nextZone = new Zone(state.zoneNumber)
       state.Monsters = nextZone.Monsters
       console.log(state.Monsters)
+      return
     },
     selectZoneLength(state, action: PayloadAction<number>) {
       state.zoneLength = action.payload
