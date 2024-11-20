@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
-import { Enemy } from "../models/monsters"
+import { EnemyState } from "../models/monsters"
 import { Zone } from "../gameconfig/zone"
 import { getMonster } from "../gameconfig/monster"
 
 interface ZoneState {
   zoneNumber: number
   zoneLength: number
-  Monsters: Enemy[]
+  Monsters: EnemyState[]
 }
 
 const firstZone = new Zone(1)
@@ -23,11 +23,14 @@ export const zoneSlice = createSlice({
   reducers: {
     incrementZoneNumber: (state) => {
       state.zoneNumber++
+      const nextZone = new Zone(state.zoneNumber)
+      state.Monsters = nextZone.Monsters
+      console.log(state.Monsters)
     },
     selectZoneLength(state, action: PayloadAction<number>) {
       state.zoneLength = action.payload
     },
-    setMonsters(state, action: PayloadAction<Enemy[]>) {
+    setMonsters(state, action: PayloadAction<EnemyState[]>) {
       state.Monsters = action.payload
     },
   },

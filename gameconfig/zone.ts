@@ -1,4 +1,4 @@
-import { Enemy } from "../models/monsters"
+import { Enemy, EnemyState } from "../models/monsters"
 import { BaseZone, ZoneConfig } from "../models/zones"
 import { getRandomMonster } from "./monster"
 
@@ -8,7 +8,7 @@ export const ZONE_CONFIG: ZoneConfig = {
 export class Zone implements BaseZone {
   zoneLength = ZONE_CONFIG.length
   zoneNumber = 1
-  Monsters = [] as Enemy[]
+  Monsters = [] as EnemyState[]
 
   constructor(currentZoneNumber: number, zoneLength?: number) {
     const length = (zoneLength ??= this.zoneLength)

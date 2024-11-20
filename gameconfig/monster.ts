@@ -1,4 +1,4 @@
-import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig } from "../models/monsters"
+import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig, EnemyState } from "../models/monsters"
 
 const MONSTER_CONFIG: BaseMonsterConfig = {
   health: {
@@ -56,7 +56,7 @@ class Monster extends BaseMonster implements Enemy {
   }
 }
 
-export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Enemy {
+export function getRandomMonster(zoneNumber = 1, stageNumber = 1): EnemyState {
   const randomMonster =
     stageNumber !== 30
       ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
@@ -65,7 +65,7 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1): Enemy {
   return newMonster
 }
 
-export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1): Enemy {
+export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1): EnemyState {
   const allMonsters = MONSTER_VARIATIONS.concat(BOSS_VARIATIONS, SPECIAL_VARIATIONS)
   for (const monster of allMonsters) {
     if (monster.name === monsterName) return serializableMonster(new Monster(monster, zoneNumber, stageNumber))
@@ -73,7 +73,7 @@ export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1)
   throw new Error(`Monster not found: ${monsterName}`)
 }
 
-function serializableMonster(monster: Monster): Enemy {
+function serializableMonster(monster: Monster): EnemyState {
   const serializable = {
     name: monster.name,
     level: monster.level,

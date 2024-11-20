@@ -58,7 +58,6 @@ export default function Monster({ children }: PropsWithChildren) {
       console.log("Achievement unlocked: Click level")
     }
   }, [clickLevel])
-  console.log(currentZoneMonsters)
   const checkEvents = useCallback(() => {
     // 200ms
     if (loopCount.current % 4 === 0) {
@@ -113,17 +112,20 @@ export default function Monster({ children }: PropsWithChildren) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
       if (currentStage === zoneLength - 1) {
-        dispatch(incrementZonesCompleted())
-        currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
-        const newMonster = getRandomMonster(currentZone, zoneLength) as EnemyState
-        dispatch(spawnMonster({ ...newMonster }))
+        console.log(`spawning!! ${currentStage}`)
+        dispatch(spawnMonster(currentZoneMonsters[currentStage]))
       } else {
-        if (currentStage === zoneLength) dispatch(incrementZoneNumber())
-        const newMonster = getRandomMonster(currentZone, currentStage + 1) as EnemyState
-        dispatch(spawnMonster({ ...newMonster }))
+        if (currentStage === zoneLength) {
+          dispatch(incrementZonesCompleted())
+          currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
+          dispatch(incrementZoneNumber())
+          dispatch(spawnMonster(currentZoneMonsters[0]))
+          return
+        }
+        dispatch(spawnMonster(currentZoneMonsters[currentStage]))
       }
     }
-  }, [monsterAlive])
+  }, [monsterAlive, currentZone])
   return (
     <>
       <div className="absolute top-[-4%] text-black">
