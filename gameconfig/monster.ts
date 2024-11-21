@@ -57,6 +57,7 @@ class Monster extends BaseMonster implements Enemy {
 }
 
 export function getRandomMonster(zoneNumber = 1, stageNumber = 1): EnemyState {
+  // all logic to replace regular monster with a special monster - base * Math.pow(0.99, upgradeLvl)
   const randomMonster =
     stageNumber !== 30
       ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]

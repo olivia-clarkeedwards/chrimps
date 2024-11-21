@@ -24,7 +24,6 @@ import {
   incrementKillCount,
   incrementZonesCompleted,
   selectHighestZoneEver,
-  selectKillCount,
 } from "../../redux/statsSlice"
 import {
   incrementStageNumber,
@@ -32,12 +31,10 @@ import {
   selectStageIndex,
   selectZoneMonsters,
   selectZoneNumber,
-  setMonsters,
 } from "../../redux/zoneSlice"
-import { Enemy, EnemyState } from "../../models/monsters"
-import { getRandomMonster } from "../../gameconfig/monster"
-import { Zone, ZONE_CONFIG } from "../../gameconfig/zone"
+import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
+import { EnemyState } from "../../models/monsters"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -118,19 +115,21 @@ export default function Monster({ children }: PropsWithChildren) {
     if (!monsterAlive) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
+      let nextMonster: EnemyState
+
       if (currentStageIndex === zoneLength) {
         dispatch(incrementZonesCompleted())
         currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
         dispatch(incrementZoneNumber())
-        const nextMonster = selectZoneMonsters(store.getState())[currentStageIndex]
-        dispatch(spawnMonster(nextMonster))
+        nextMonster = selectZoneMonsters(store.getState())[0]
       } else {
         dispatch(incrementStageNumber())
-        const nextMonster = monsters[currentStageIndex]
-        dispatch(spawnMonster(nextMonster))
+        nextMonster = monsters[currentStageIndex]
       }
+      dispatch(spawnMonster(nextMonster))
     }
   }, [monsterAlive])
+
   return (
     <>
       <div className="absolute top-[-4%] text-black">
