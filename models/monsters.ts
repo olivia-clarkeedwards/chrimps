@@ -31,6 +31,7 @@ interface GoldConfig {
 export interface BaseMonsterConfig {
   health: HealthConfig
   gold: GoldConfig
+  regularSpawnChance: number
 }
 
 export interface EnemyState extends Enemy {

@@ -1,3 +1,4 @@
+import e from "express"
 import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig, EnemyState } from "../models/monsters"
 
 const MONSTER_CONFIG: BaseMonsterConfig = {
@@ -10,6 +11,7 @@ const MONSTER_CONFIG: BaseMonsterConfig = {
     healthDivisor: 4,
     healthMultiBonus: 1.5,
   },
+  regularSpawnChance: 0.97,
   // attack etc.
 }
 
@@ -56,12 +58,18 @@ class Monster extends BaseMonster implements Enemy {
   }
 }
 
-export function getRandomMonster(zoneNumber = 1, stageNumber = 1): EnemyState {
-  // all logic to replace regular monster with a special monster - base * Math.pow(0.99, upgradeLvl)
-  const randomMonster =
-    stageNumber !== 30
-      ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
-      : BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
+export function getRandomMonster(zoneNumber = 1, stageNumber = 1, specialMonsterBonus = 0): EnemyState {
+  let randomMonster: MonsterType
+  if (stageNumber === 30) {
+    randomMonster = BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
+  } else {
+    const randomValue = Math.random()
+    const regularSpawnChance = MONSTER_CONFIG.regularSpawnChance * Math.pow(0.99, specialMonsterBonus)
+    randomMonster =
+      regularSpawnChance > randomValue
+        ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
+        : SPECIAL_VARIATIONS[Math.floor(Math.random() * SPECIAL_VARIATIONS.length)]
+  }
   const newMonster = serializableMonster(new Monster(randomMonster, zoneNumber, stageNumber))
   return newMonster
 }

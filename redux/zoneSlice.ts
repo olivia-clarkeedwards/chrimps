@@ -27,15 +27,12 @@ export const zoneSlice = createSlice({
       state.zoneNumber++
       const nextZone = new Zone(state.zoneNumber)
       state.monsters = nextZone.monsters
+      state.currentStageIndex = 0
       console.log(state.monsters)
       return
     },
     incrementStageNumber: (state) => {
-      if (state.currentStageIndex === state.zoneLength) {
-        state.currentStageIndex = 0
-      } else {
-        state.currentStageIndex++
-      }
+      state.currentStageIndex++
     },
     setZoneLength(state, action: PayloadAction<number>) {
       state.zoneLength = action.payload
