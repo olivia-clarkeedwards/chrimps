@@ -28,7 +28,7 @@ import {
 import {
   incrementStageNumber,
   incrementZoneNumber,
-  selectStageIndex,
+  selectStage,
   selectZoneMonsters,
   selectZoneNumber,
 } from "../../redux/zoneSlice"
@@ -47,7 +47,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
 
   const zoneLength = ZONE_CONFIG.length
-  const currentStageIndex = useAppSelector(selectStageIndex)
+  const currentStage = useAppSelector(selectStage)
   const currentZone = useAppSelector(selectZoneNumber)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
   const monsters = useAppSelector(selectZoneMonsters)
@@ -117,14 +117,14 @@ export default function Monster({ children }: PropsWithChildren) {
       dispatch(increaseGold(monsterValue))
       let nextMonster: EnemyState
 
-      if (currentStageIndex === zoneLength) {
+      if (currentStage === zoneLength) {
         dispatch(incrementZonesCompleted())
         currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
         dispatch(incrementZoneNumber())
         nextMonster = selectZoneMonsters(store.getState())[0]
       } else {
         dispatch(incrementStageNumber())
-        nextMonster = monsters[currentStageIndex]
+        nextMonster = monsters[currentStage]
       }
       dispatch(spawnMonster(nextMonster))
     }
@@ -133,7 +133,7 @@ export default function Monster({ children }: PropsWithChildren) {
   return (
     <>
       <div className="absolute top-[-4%] text-black">
-        Debug: monsterValue: {monsterValue} Stage: {currentStageIndex} Zone: {currentZone}, clickDamage: {clickDamage},
+        Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {currentZone}, clickDamage: {clickDamage},
         dotDamage: {dotDamage}
       </div>
       <div className="absolute flex flex-col items-center top-1 left-1/2 transform -translate-x-1/2">

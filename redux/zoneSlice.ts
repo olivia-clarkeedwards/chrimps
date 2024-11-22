@@ -8,7 +8,7 @@ interface ZoneState {
   zoneNumber: number
   zoneLength: number
   monsters: EnemyState[]
-  currentStageIndex: number
+  nextStageIndex: number
 }
 
 const firstZone = new Zone(1)
@@ -17,7 +17,7 @@ const initialState: ZoneState = {
   zoneLength: firstZone.zoneLength,
   zoneNumber: firstZone.zoneNumber,
   monsters: firstZone.monsters,
-  currentStageIndex: 1,
+  nextStageIndex: 1,
 }
 export const zoneSlice = createSlice({
   name: "zone",
@@ -27,12 +27,12 @@ export const zoneSlice = createSlice({
       state.zoneNumber++
       const nextZone = new Zone(state.zoneNumber)
       state.monsters = nextZone.monsters
-      state.currentStageIndex = 1
+      state.nextStageIndex = 1
       console.log(state.monsters)
       return
     },
     incrementStageNumber: (state) => {
-      state.currentStageIndex++
+      state.nextStageIndex++
     },
     setZoneLength(state, action: PayloadAction<number>) {
       state.zoneLength = action.payload
@@ -48,6 +48,6 @@ export const { incrementZoneNumber, incrementStageNumber, setMonsters, setZoneLe
 export const selectZoneNumber = (state: RootState) => state.zone.zoneNumber
 export const selectZoneLength = (state: RootState) => state.zone.zoneLength
 export const selectZoneMonsters = (state: RootState) => state.zone.monsters
-export const selectStageIndex = (state: RootState) => state.zone.currentStageIndex
+export const selectStage = (state: RootState) => state.zone.nextStageIndex
 
 export default zoneSlice.reducer
