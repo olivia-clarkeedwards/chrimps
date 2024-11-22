@@ -1,5 +1,6 @@
 import e from "express"
 import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig, EnemyState } from "../models/monsters"
+import { ZONE_CONFIG } from "./zone"
 
 const MONSTER_CONFIG: BaseMonsterConfig = {
   health: {
@@ -35,7 +36,7 @@ class BaseMonster implements BaseEnemy {
   }
 
   constructor(zoneNumber: number, stageNumber: number, isBoss: boolean) {
-    this.level = (zoneNumber - 1) * 30 + stageNumber
+    this.level = (zoneNumber - 1) * ZONE_CONFIG.length + stageNumber
     if (isBoss) this.level += 20
   }
 }
