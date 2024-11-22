@@ -34,9 +34,9 @@ class BaseMonster implements BaseEnemy {
     return base * Math.sqrt(this.level) * Math.pow(growth, this.level / smoothing)
   }
 
-  constructor(zoneNumber: number, stageNumber: number) {
+  constructor(zoneNumber: number, stageNumber: number, isBoss: boolean) {
     this.level = (zoneNumber - 1) * 30 + stageNumber
-    if (stageNumber === 30) this.level += 20
+    if (isBoss) this.level += 20
   }
 }
 
@@ -46,8 +46,8 @@ class Monster extends BaseMonster implements Enemy {
   image
   goldValue
 
-  constructor(config: MonsterType, zoneNumber: number, stageNumber: number) {
-    super(zoneNumber, stageNumber)
+  constructor(config: MonsterType, zoneNumber: number, stageNumber: number, isBoss: boolean) {
+    super(zoneNumber, stageNumber, isBoss)
     this.name = config.name
     const healthMulti = config.healthMulti
     this.health = Math.floor(this.baseHealth * healthMulti)
@@ -58,9 +58,9 @@ class Monster extends BaseMonster implements Enemy {
   }
 }
 
-export function getRandomMonster(zoneNumber = 1, stageNumber = 1, specialMonsterBonus = 0): EnemyState {
+export function getRandomMonster(zoneNumber = 1, stageNumber = 1, isBoss = false, specialMonsterBonus = 0): EnemyState {
   let randomMonster: MonsterType
-  if (stageNumber === 30) {
+  if (isBoss) {
     randomMonster = BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
   } else {
     const randomValue = Math.random()
@@ -70,14 +70,14 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1, specialMonster
         ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
         : SPECIAL_VARIATIONS[Math.floor(Math.random() * SPECIAL_VARIATIONS.length)]
   }
-  const newMonster = serializableMonster(new Monster(randomMonster, zoneNumber, stageNumber))
+  const newMonster = serializableMonster(new Monster(randomMonster, zoneNumber, stageNumber, isBoss))
   return newMonster
 }
 
-export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1): EnemyState {
+export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1, isBoss = false): EnemyState {
   const allMonsters = MONSTER_VARIATIONS.concat(BOSS_VARIATIONS, SPECIAL_VARIATIONS)
   for (const monster of allMonsters) {
-    if (monster.name === monsterName) return serializableMonster(new Monster(monster, zoneNumber, stageNumber))
+    if (monster.name === monsterName) return serializableMonster(new Monster(monster, zoneNumber, stageNumber, isBoss))
   }
   throw new Error(`Monster not found: ${monsterName}`)
 }

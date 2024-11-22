@@ -13,7 +13,8 @@ export class Zone implements BaseZone {
   constructor(currentZoneNumber: number, zoneLength?: number) {
     const length = (zoneLength ??= this.zoneLength)
     for (let i = 0; i < length; i++) {
-      this.monsters.push(getRandomMonster(currentZoneNumber, i + 1))
+      const isBoss = i === length - 1 ? true : false
+      this.monsters.push(getRandomMonster(currentZoneNumber, i + 1, isBoss))
     }
   }
 }

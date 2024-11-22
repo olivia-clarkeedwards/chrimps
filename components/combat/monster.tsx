@@ -118,7 +118,6 @@ export default function Monster({ children }: PropsWithChildren) {
       let nextMonster: EnemyState
 
       if (currentStageIndex === zoneLength) {
-        console.log("max length")
         dispatch(incrementZonesCompleted())
         currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
         dispatch(incrementZoneNumber())
