@@ -27,7 +27,7 @@ export const zoneSlice = createSlice({
       state.zoneNumber++
       const nextZone = new Zone(state.zoneNumber)
       state.monsters = nextZone.monsters
-      state.currentStageIndex = 0
+      state.currentStageIndex = 1
       console.log(state.monsters)
       return
     },
