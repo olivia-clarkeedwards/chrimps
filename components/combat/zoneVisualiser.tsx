@@ -2,9 +2,11 @@ import clsx from "clsx/lite"
 import React from "react"
 import { useAppSelector } from "../../redux/hooks"
 import { selectKillCount } from "../../redux/statsSlice"
+import { selectZoneLength } from "../../redux/zoneSlice"
 
 export default function ZoneVisualiser() {
-  const stages = Array.from({ length: 30 }, (cur, acc) => acc + 1)
+  const zoneLength = useAppSelector(selectZoneLength)
+  const stages = Array.from({ length: zoneLength }, (cur, acc) => acc + 1)
 
   const stage = ((useAppSelector(selectKillCount) + 1) % 30) as number
   const currentStage = stage || 30
