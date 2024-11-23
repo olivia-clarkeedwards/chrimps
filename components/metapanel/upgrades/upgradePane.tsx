@@ -37,7 +37,7 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   useEffect(() => {
     if (zone >= config.visibleAtZone && !shouldMount) {
       setShouldMount(true)
-      setTimeout(() => setIsVisible(true), 50)
+      setTimeout(() => setIsVisible(true), 350)
     }
   }, [zone, config.visibleAtZone, shouldMount])
 
