@@ -12,11 +12,12 @@ interface MultiplierProps {
 
 export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAffordable, isPurchased }: MultiplierProps) {
   const [shouldMount, setShouldMount] = useState(false)
+  const [shimmer, setShimmer] = useState(false)
 
   useEffect(() => {
     if (!hidden && !shouldMount) {
       setShouldMount(true)
-      setTimeout(() => console.log("animation finished"), 1000)
+      setTimeout(() => setShimmer(true), 400)
     }
   }, [hidden])
 
@@ -24,7 +25,21 @@ export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAfforda
     <div
       id={id}
       className={clsx(
-        "relative cursor-pointer ring-2 ring-offset-2 rounded-lg ring-amber-800 opacity-0 transition-opacity, duration-1000",
+        // Base
+        "relative cursor-pointer rounded-lg",
+        "ring-2 ring-offset-2 ring-amber-800",
+        "opacity-0 transition-all duration-1000",
+
+        // Shimmer effect
+        "before:absolute before:inset-0 before:rounded-lg",
+        "before:bg-[linear-gradient(60deg,transparent_50%,rgba(255,255,255,0.1)_50%,transparent_75%,transparent_100%)]",
+        "before:bg-[length:400%_200%]",
+        "before:bg-[position:-150%_0]",
+        "before:transition-[background-position] before:duration-[2000ms]",
+        "before:z-30",
+        shimmer && "before:bg-[position:150%_0]",
+
+        // Conditionals
         hidden && "invisible",
         !hidden && "opacity-100",
         !isPurchased && !isAffordable && "ring-offset-yellow-600 opacity-60",
@@ -33,12 +48,8 @@ export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAfforda
       onClick={onClick}>
       <div
         className={clsx(
-          "absolute",
-          "inset-0",
-          "bg-gradient-to-br",
-          "from-amber-600",
-          "to-amber-800",
-          "rounded-lg",
+          "absolute inset-0 rounded-lg z-10",
+          "bg-gradient-to-br from-amber-600 to-amber-800",
           isAffordable && !isPurchased ? "opacity-100" : "opacity-30",
         )}
       />
