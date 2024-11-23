@@ -32,26 +32,24 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   const [shouldMount, setShouldMount] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
+  const isNotClick = upgradeName !== "click"
+
   useEffect(() => {
     if (zone >= config.visibleAtZone && !shouldMount) {
       setShouldMount(true)
-      // Wait for next tick to start fade-in animation
-      if (upgradeName === "click") {
-        setIsVisible(true)
-      } else {
-        setTimeout(() => setIsVisible(true), 50)
-      }
+      setTimeout(() => setIsVisible(true), 50)
     }
   }, [zone, config.visibleAtZone, shouldMount])
 
-  if (!shouldMount) return null
+  if (!shouldMount && isNotClick) return null
 
   return (
     <div
       className={clsx(
         "flex w-full items-start justify-between align-start py-4 px-4 border-amber-950 transition-opacity duration-1000",
         upgradeName === "click" ? "border-y-2" : "border-b-2",
-        isVisible ? "opacity-100" : "opacity-0",
+        isVisible && isNotClick && "opacity-100",
+        !isVisible && isNotClick && "opacity-0",
       )}>
       <div className="flex flex-col w-40 items-center">
         <div className="">{`${upgradeName[0].toUpperCase()}${upgradeName.substring(1)} Damage`}</div>
