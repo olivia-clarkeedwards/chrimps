@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import clsx from "clsx/lite"
 
 interface MultiplierProps {
@@ -11,14 +11,24 @@ interface MultiplierProps {
 }
 
 export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAffordable, isPurchased }: MultiplierProps) {
+  const [shouldMount, setShouldMount] = useState(false)
+
+  useEffect(() => {
+    if (!hidden && !shouldMount) {
+      setShouldMount(true)
+      setTimeout(() => console.log("animation finished"), 1000)
+    }
+  }, [hidden])
+
   return (
     <div
       id={id}
       className={clsx(
-        "relative cursor-pointer ring-2 ring-offset-2 rounded-lg ring-amber-800",
+        "relative cursor-pointer ring-2 ring-offset-2 rounded-lg ring-amber-800 opacity-0 transition-opacity, duration-1000",
         hidden && "invisible",
-        isPurchased || !isAffordable ? "ring-offset-yellow-700" : "ring-offset-yellow-300",
+        !hidden && "opacity-100",
         !isPurchased && !isAffordable && "ring-offset-yellow-600 opacity-60",
+        isPurchased || !isAffordable ? "ring-offset-yellow-700" : "ring-offset-yellow-300",
       )}
       onClick={onClick}>
       <div
