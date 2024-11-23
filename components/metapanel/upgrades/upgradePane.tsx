@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import clsx from "clsx/lite"
 import { useAppSelector } from "../../../redux/hooks"
 import { selectGold } from "../../../redux/playerSlice"
@@ -29,12 +29,29 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   const canAffordLevelUp = gold >= cost
   const zone = useAppSelector(selectZoneNumber)
 
+  const [shouldMount, setShouldMount] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    if (zone >= config.visibleAtZone && !shouldMount) {
+      setShouldMount(true)
+      // Wait for next tick to start fade-in animation
+      if (upgradeName === "click") {
+        setIsVisible(true)
+      } else {
+        setTimeout(() => setIsVisible(true), 50)
+      }
+    }
+  }, [zone, config.visibleAtZone, shouldMount])
+
+  if (!shouldMount) return null
+
   return (
     <div
       className={clsx(
-        "w-full items-start justify-between align-start py-4 px-4 border-amber-950 transition-opacity duration-1000",
+        "flex w-full items-start justify-between align-start py-4 px-4 border-amber-950 transition-opacity duration-1000",
         upgradeName === "click" ? "border-y-2" : "border-b-2",
-        zone >= config.visibleAtZone ? "flex" : "hidden",
+        isVisible ? "opacity-100" : "opacity-0",
       )}>
       <div className="flex flex-col w-40 items-center">
         <div className="">{`${upgradeName[0].toUpperCase()}${upgradeName.substring(1)} Damage`}</div>

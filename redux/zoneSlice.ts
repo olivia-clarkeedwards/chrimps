@@ -15,9 +15,9 @@ const firstZone = new Zone(1)
 firstZone.monsters = [getMonster("Slime"), ...firstZone.monsters.slice(1)]
 const initialState: ZoneState = {
   zoneLength: firstZone.zoneLength,
-  zoneNumber: firstZone.zoneNumber,
+  zoneNumber: 2,
   monsters: firstZone.monsters,
-  nextStageIndex: 1,
+  nextStageIndex: 30,
 }
 export const zoneSlice = createSlice({
   name: "zone",

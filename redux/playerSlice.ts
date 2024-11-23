@@ -7,7 +7,7 @@ import { PlayerState } from "../models/state"
 const initialState: PlayerState = {
   clickLevel: 1,
   clickMultiUpgradeCount: 0,
-  gold: 10,
+  gold: 1000000,
   dotLevel: 0,
   dotMultiUpgradeCount: 0,
 }
