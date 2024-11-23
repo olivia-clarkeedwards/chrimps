@@ -13,7 +13,7 @@ import {
   incrementDotMultiUpgradeCount,
   incrementDotLevel,
 } from "../../../redux/playerSlice"
-import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/click-icons"
+import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/clickIcons"
 import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { levelUpID, UpgradeId } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"

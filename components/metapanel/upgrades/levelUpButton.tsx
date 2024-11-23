@@ -32,7 +32,7 @@ export default function LevelUpButton({ id, onClick, currentLevel, levelUpCost, 
           "enabled:active:shadow-[0_0_3px_0px_rgba(251,191,36,0.8),inset_0_0_8px_-1px_rgba(251,191,36,1)]",
           "enabled:active:border-amber-400",
 
-          isAffordable ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700" : "bg-blue-950 border-amber-950",
+          isAffordable ? "bg-blue-600 hover:bg-blue-700 active:bg-blue-800" : "bg-blue-950 border-amber-950",
         )}
         onClick={onClick}>
         <span>Level {currentLevel}</span>

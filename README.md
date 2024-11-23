@@ -14,3 +14,7 @@ Current status: Pre-MVP
   - Static site deployment
 - Core (Make it good)
   - Server supported with multiplayer guild content
+
+## Credits
+
+Icons from https://game-icons.net/

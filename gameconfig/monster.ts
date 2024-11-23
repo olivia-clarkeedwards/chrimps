@@ -17,15 +17,23 @@ const MONSTER_CONFIG: BaseMonsterConfig = {
 }
 
 const MONSTER_VARIATIONS: MonsterType[] = [
-  { name: "Slime", healthMulti: 1, imagePath: "/monsters/ph-slime.png" },
-  { name: "Worm", healthMulti: 1.05, imagePath: "/monsters/ph-worm.png" },
-  { name: "Cacodemon", healthMulti: 1.1, imagePath: "/monsters/ph-cacodemon.png" },
-  { name: "Yeti", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
+  { name: "Slime", kind: "regular", healthMulti: 1, imagePath: "/monsters/ph-slime.png" },
+  { name: "Worm", kind: "regular", healthMulti: 1.05, imagePath: "/monsters/ph-worm.png" },
+  { name: "Cacodemon", kind: "regular", healthMulti: 1.1, imagePath: "/monsters/ph-cacodemon.png" },
+  { name: "Yeti", kind: "regular", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
 ]
 
-const BOSS_VARIATIONS: MonsterType[] = [{ name: "Tooth", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" }]
+const BOSS_VARIATIONS: MonsterType[] = [
+  { name: "Tooth", kind: "boss", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" },
+]
 const SPECIAL_VARIATIONS: MonsterType[] = [
-  { name: "Treasure Goblin", healthMulti: 0.5, goldMulti: 20, imagePath: "/monsters/ph-treasure-monster.webp" },
+  {
+    name: "Treasure Goblin",
+    kind: "special",
+    healthMulti: 0.5,
+    goldMulti: 20,
+    imagePath: "/monsters/ph-treasure-monster.webp",
+  },
 ]
 class BaseMonster implements BaseEnemy {
   level = 0
@@ -43,6 +51,7 @@ class BaseMonster implements BaseEnemy {
 
 class Monster extends BaseMonster implements Enemy {
   name
+  kind
   health
   image
   goldValue
@@ -50,6 +59,7 @@ class Monster extends BaseMonster implements Enemy {
   constructor(config: MonsterType, zoneNumber: number, stageNumber: number, isBoss: boolean) {
     super(zoneNumber, stageNumber, isBoss)
     this.name = config.name
+    this.kind = config.kind
     const healthMulti = config.healthMulti
     this.health = Math.floor(this.baseHealth * healthMulti)
     this.image = config.imagePath
@@ -86,6 +96,7 @@ export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1,
 function serializableMonster(monster: Monster): EnemyState {
   const serializable = {
     name: monster.name,
+    kind: monster.kind,
     level: monster.level,
     health: monster.health,
     goldValue: monster.goldValue,

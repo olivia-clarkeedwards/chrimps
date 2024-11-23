@@ -12,6 +12,7 @@ export interface Enemy {
 
 export interface MonsterType {
   name: string
+  kind: "regular" | "special" | "boss"
   healthMulti: number
   goldMulti?: number
   imagePath: string
@@ -36,4 +37,5 @@ export interface BaseMonsterConfig {
 
 export interface EnemyState extends Enemy {
   level: number
+  kind: string
 }
