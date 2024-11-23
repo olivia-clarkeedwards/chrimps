@@ -38,7 +38,7 @@ export default function ZoneVisualiser() {
               stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
               stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
             )}>
-            <div className="flex bg-gradient-to-r from-white/30 to-gray-700/10 w-full h-full items-center justify-center">
+            <div className="flex bg-gradient-to-tr from-white/30 to-blue-700/20 w-full h-full items-center justify-center">
               <div className="w-7 fill-white">{getIcon(stageIndex - 1)}</div>
             </div>
           </div>
