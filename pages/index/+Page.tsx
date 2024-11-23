@@ -11,7 +11,7 @@ export default function Page() {
     <React.StrictMode>
       <Provider store={store}>
         <div className="flex items-end lg:h-screen select-none">
-          <div className="flex w-full lg:min-h-[90svh] lg:flex-row flex-col flex-col-reverse">
+          <div className="flex w-full lg:min-h-[90svh] lg:flex-row flex-col flex-col-reverse lg:border-t-2 border-yellow-500">
             <Panel />
             <Combat />
           </div>
