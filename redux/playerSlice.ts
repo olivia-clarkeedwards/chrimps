@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { Root } from "react-dom/client"
-import { PlayerState } from "../models/state"
+import { PlayerState } from "../models/player"
 
 const initialState: PlayerState = {
   clickLevel: 1,
@@ -10,6 +10,9 @@ const initialState: PlayerState = {
   gold: 1000,
   dotLevel: 0,
   dotMultiUpgradeCount: 0,
+
+  // Never changes
+  startTime: performance.timeOrigin,
 }
 
 export const playerSlice = createSlice({
@@ -51,5 +54,6 @@ export const selectClickMultiUpgradeCount = (state: RootState) => state.player.c
 export const selectGold = (state: RootState) => state.player.gold
 export const selectDotLevel = (state: RootState) => state.player.dotLevel
 export const selectDotMultiUpgradeCount = (state: RootState) => state.player.dotMultiUpgradeCount
+export const selectStartTime = (state: RootState) => state.player.startTime
 
 export default playerSlice.reducer

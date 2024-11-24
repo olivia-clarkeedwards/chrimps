@@ -5,7 +5,7 @@ import { selectGold } from "../../../redux/playerSlice"
 import MultiplierUpgrade from "./multiplierUpgrade"
 import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { Upgrade } from "../../../models/upgrades"
-import { PlayerState } from "../../../models/state"
+import { PlayerState } from "../../../models/player"
 import LevelUpButton from "./levelUpButton"
 import { selectZoneNumber } from "../../../redux/zoneSlice"
 

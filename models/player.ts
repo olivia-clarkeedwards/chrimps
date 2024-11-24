@@ -4,4 +4,5 @@ export interface PlayerState {
   clickMultiUpgradeCount: number
   dotLevel: number
   dotMultiUpgradeCount: number
+  startTime: number
 }
