@@ -11,6 +11,7 @@ export const store = configureStore({
     stats: statsReducer,
     zone: zoneReducer,
   },
+  // preloadedState: {}
 })
 
 export type RootState = ReturnType<typeof store.getState>

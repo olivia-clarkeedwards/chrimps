@@ -38,6 +38,11 @@ import { EnemyState } from "../../models/monsters"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
+  const tickCount = useRef(0)
+  const lastFrameTime = useRef(performance.now())
+  const frameRef = useRef<number>()
+  const TICK_RATE = 20
+  const TICK_TIME = 1000 / TICK_RATE
 
   const clickLevel = useAppSelector(selectClickLevel)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
@@ -64,20 +69,20 @@ export default function Monster({ children }: PropsWithChildren) {
   }, [clickLevel])
   const checkEvents = useCallback(() => {
     // 200ms
-    if (loopCount.current % 4 === 0) {
+    if (tickCount.current % 4 === 0) {
     }
 
     // 500ms
-    if (loopCount.current % 10 === 0) {
+    if (tickCount.current % 10 === 0) {
     }
 
     // 1 second
-    if (loopCount.current % 20 === 0) {
+    if (tickCount.current % 20 === 0) {
       checkAchievements()
     }
 
     // 2 seconds
-    if (loopCount.current % 40 === 0) {
+    if (tickCount.current % 40 === 0) {
     }
   }, [checkAchievements])
 
@@ -89,20 +94,46 @@ export default function Monster({ children }: PropsWithChildren) {
     }
   }, [dotDamage])
 
-  const loopCount = useRef(0)
-
-  function gameLoop() {
-    loopCount.current++
-    dealDamageOverTime()
-    checkEvents()
-  }
+  const gameLoop = useCallback(
+    (currentTime: number) => {
+      let delta = currentTime - lastFrameTime.current
+      while (delta >= TICK_TIME) {
+        console.log(delta, TICK_TIME)
+        tickCount.current++
+        dealDamageOverTime()
+        checkEvents()
+        console.log("!!!!!!")
+        delta -= TICK_TIME
+      }
+      console.log("exit catchup loop")
+      lastFrameTime.current = currentTime - delta
+      frameRef.current = requestAnimationFrame(gameLoop)
+    },
+    [dealDamageOverTime, checkEvents],
+  )
 
   useEffect(() => {
-    const loop = setInterval(() => gameLoop(), 50)
-    return () => {
-      clearInterval(loop)
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        console.log("document hidden")
+        if (frameRef.current) cancelAnimationFrame(frameRef.current)
+        lastFrameTime.current = performance.now()
+      } else {
+        lastFrameTime.current = performance.now()
+        console.log(lastFrameTime.current)
+        frameRef.current = requestAnimationFrame(gameLoop)
+      }
     }
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
   }, [dealDamageOverTime, checkEvents])
+
+  useEffect(() => {
+    frameRef.current = requestAnimationFrame(gameLoop)
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current)
+    }
+  }, [gameLoop])
 
   function handleClick() {
     dispatch(incrementClickCount())
