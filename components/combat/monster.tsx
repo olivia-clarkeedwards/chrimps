@@ -97,15 +97,18 @@ export default function Monster({ children }: PropsWithChildren) {
   const gameLoop = useCallback(
     (currentTime: number) => {
       let delta = currentTime - lastFrameTime.current
+      let whileLoops = 0
+
+      // Todo: if delta > [a large number] then do fullscreen catchup
+
       while (delta >= TICK_TIME) {
-        console.log(delta, TICK_TIME)
+        whileLoops++
         tickCount.current++
         dealDamageOverTime()
         checkEvents()
-        console.log("!!!!!!")
         delta -= TICK_TIME
       }
-      console.log("exit catchup loop")
+      console.log(`Loops this tick: ${whileLoops}`)
       lastFrameTime.current = currentTime - delta
       frameRef.current = requestAnimationFrame(gameLoop)
     },
@@ -115,13 +118,11 @@ export default function Monster({ children }: PropsWithChildren) {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        console.log("document hidden")
         if (frameRef.current) cancelAnimationFrame(frameRef.current)
-        lastFrameTime.current = performance.now()
       } else {
-        lastFrameTime.current = performance.now()
-        console.log(lastFrameTime.current)
-        frameRef.current = requestAnimationFrame(gameLoop)
+        setTimeout(() => {
+          frameRef.current = requestAnimationFrame(gameLoop)
+        }, 0)
       }
     }
     document.addEventListener("visibilitychange", handleVisibilityChange)
