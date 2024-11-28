@@ -97,18 +97,18 @@ export default function Monster({ children }: PropsWithChildren) {
   const gameLoop = useCallback(
     (currentTime: number) => {
       let delta = currentTime - lastFrameTime.current
-      let whileLoops = 0
 
       // Todo: if delta > [a large number] then do fullscreen catchup
 
       while (delta >= TICK_TIME) {
-        whileLoops++
         tickCount.current++
         dealDamageOverTime()
         checkEvents()
         delta -= TICK_TIME
       }
-      console.log(`Loops this tick: ${whileLoops}`)
+
+      // Todo: if tickCount % [frequency] dispatch update last time online
+
       lastFrameTime.current = currentTime - delta
       frameRef.current = requestAnimationFrame(gameLoop)
     },
@@ -120,6 +120,7 @@ export default function Monster({ children }: PropsWithChildren) {
       if (document.hidden) {
         if (frameRef.current) cancelAnimationFrame(frameRef.current)
       } else {
+        // The setTimeout seems to prevent extra loops between document hidden and document visible
         setTimeout(() => {
           frameRef.current = requestAnimationFrame(gameLoop)
         }, 0)
