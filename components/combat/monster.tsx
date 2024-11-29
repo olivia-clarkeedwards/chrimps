@@ -67,7 +67,7 @@ export default function Monster({ children }: PropsWithChildren) {
       console.log("Achievement unlocked: Click level")
     }
   }, [clickLevel])
-  const checkEvents = useCallback(() => {
+  const runTasks = useCallback(() => {
     // 200ms
     if (tickCount.current % 4 === 0) {
     }
@@ -83,6 +83,11 @@ export default function Monster({ children }: PropsWithChildren) {
 
     // 2 seconds
     if (tickCount.current % 40 === 0) {
+    }
+
+    // 10 seconds
+    if (tickCount.current % 200 === 0) {
+      // dispatch(updateLastPlayed)
     }
   }, [checkAchievements])
 
@@ -103,7 +108,7 @@ export default function Monster({ children }: PropsWithChildren) {
       while (delta >= TICK_TIME) {
         tickCount.current++
         dealDamageOverTime()
-        checkEvents()
+        runTasks()
         delta -= TICK_TIME
       }
 
@@ -112,7 +117,7 @@ export default function Monster({ children }: PropsWithChildren) {
       lastFrameTime.current = currentTime - delta
       frameRef.current = requestAnimationFrame(gameLoop)
     },
-    [dealDamageOverTime, checkEvents],
+    [dealDamageOverTime, runTasks],
   )
 
   useEffect(() => {
@@ -128,7 +133,7 @@ export default function Monster({ children }: PropsWithChildren) {
     }
     document.addEventListener("visibilitychange", handleVisibilityChange)
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
-  }, [dealDamageOverTime, checkEvents])
+  }, [dealDamageOverTime, runTasks])
 
   useEffect(() => {
     frameRef.current = requestAnimationFrame(gameLoop)
