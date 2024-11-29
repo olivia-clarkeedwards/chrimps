@@ -25,11 +25,7 @@ export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAfforda
     <div
       id={id}
       className={clsx(
-        // Base
-        "relative cursor-pointer rounded-lg",
-        "ring-2 ring-offset-2 ring-amber-800",
-        "opacity-0 transition-all duration-1000",
-
+        "relative",
         // Shimmer effect
         "before:absolute before:inset-0 before:rounded-lg",
         "before:bg-[linear-gradient(60deg,transparent_50%,rgba(255,255,255,0.1)_50%,transparent_75%,transparent_100%)]",
@@ -38,23 +34,31 @@ export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAfforda
         "before:transition-[background-position] before:duration-[2000ms]",
         "before:z-30",
         shimmer && "before:bg-[position:150%_0]",
-
-        // Conditionals
-        hidden && "invisible",
-        !hidden && "opacity-100",
-        !isPurchased && !isAffordable && "ring-offset-yellow-600 opacity-60",
-        isPurchased || !isAffordable ? "ring-offset-yellow-700" : "ring-offset-yellow-300",
       )}
       onClick={onClick}>
       <div
         className={clsx(
-          "absolute inset-0 rounded-lg z-10",
-          "bg-gradient-to-br from-amber-600 to-amber-800",
-          isAffordable && !isPurchased ? "opacity-100" : "opacity-30",
-        )}
-      />
-      {isPurchased && <div className="absolute inset-[2px] bg-amber-950/60 rounded-md z-10" />}
-      <div className="relative z-20 w-8 h-8 flex items-center justify-center p-1 text-amber-400">{icon}</div>
+          // Base
+          "relative cursor-pointer rounded-lg",
+          "ring-2 ring-offset-2 ring-amber-800",
+          "opacity-0 transition-all duration-1000",
+
+          // Conditionals
+          hidden && "invisible",
+          !hidden && "opacity-100",
+          !isPurchased && !isAffordable && "ring-offset-yellow-600 opacity-60",
+          isPurchased || !isAffordable ? "ring-offset-yellow-700" : "ring-offset-yellow-300",
+        )}>
+        <div
+          className={clsx(
+            "absolute inset-0 rounded-lg z-10",
+            "bg-gradient-to-br from-amber-600 to-amber-800",
+            isAffordable && !isPurchased ? "opacity-100" : "opacity-30",
+          )}
+        />
+        {isPurchased && <div className="absolute inset-[2px] bg-amber-950/60 rounded-md z-10" />}
+        <div className="relative z-20 w-8 h-8 flex items-center justify-center p-1 text-amber-400">{icon}</div>
+      </div>
     </div>
   )
 }
