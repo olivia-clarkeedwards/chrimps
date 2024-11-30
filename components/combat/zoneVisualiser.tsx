@@ -25,7 +25,7 @@ export default function ZoneVisualiser() {
   }
 
   return (
-    <div className="flex basis-2/12 items-end opacity-100">
+    <div className="flex basis-4/12 md:basis-2/12 items-end opacity-100">
       <div className="flex w-[20rem] md:w-[40rem] lg:w-[40rem] mb-1 md:m-2 flex-wrap-reverse content-start border-2 border-gray-300 box-content z-10">
         {stages.map((stageIndex) => (
           <div

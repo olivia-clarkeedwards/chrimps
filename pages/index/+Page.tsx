@@ -10,10 +10,10 @@ export default function Page() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <div className="flex-col lg:h-screen select-none">
+        <div className="flex-col min-h-screen lg:h-screen select-none">
           <div className="lg:h-[10%]"></div>
-          <div className="flex lg:h-screen">
-            <div className="flex w-full lg:h-[90%] lg:flex-row flex-col flex-col-reverse lg:border-t-2 border-yellow-500">
+          <div className="flex lg:h-[90%]">
+            <div className="flex w-full lg:flex-row flex-col flex-col-reverse lg:border-t-2 border-yellow-500">
               <Panel />
               <Combat />
             </div>
