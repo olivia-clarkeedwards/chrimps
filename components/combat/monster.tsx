@@ -169,8 +169,8 @@ export default function Monster({ children }: PropsWithChildren) {
   }, [monsterAlive])
 
   return (
-    <>
-      <div className="absolute top-[-4%] text-black">
+    <div className="basis-10/12">
+      <div className="absolute top-[-24%] text-black">
         Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {currentZone}, clickDamage: {clickDamage},
         dotDamage: {dotDamage}
       </div>
@@ -178,11 +178,9 @@ export default function Monster({ children }: PropsWithChildren) {
         <div className="">{monsterName}</div>
         <div className="text-left inline-block min-w-[100px] pl-[38%]">{children}</div>
       </div>
-      <div
-        className="absolute h-[80%] w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        onClick={handleClick}>
-        <img className="h-full w-full object-contain pointer-events-none" src={monsterImage} alt={monsterName} />
+      <div className="" onClick={handleClick}>
+        <img className="h-full w-full object-cover pointer-events-none" src={monsterImage} alt={monsterName} />
       </div>
-    </>
+    </div>
   )
 }
