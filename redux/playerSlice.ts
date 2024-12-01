@@ -11,7 +11,7 @@ const debugState: PlayerState = {
   dotMultiUpgradeCount: 0,
 
   // Never changes
-  startTime: performance.timeOrigin,
+  startDate: performance.timeOrigin,
 }
 
 const initialState: PlayerState = {
@@ -22,7 +22,7 @@ const initialState: PlayerState = {
   dotMultiUpgradeCount: 0,
 
   // Never changes
-  startTime: performance.timeOrigin,
+  startDate: performance.timeOrigin,
 }
 
 export const playerSlice = createSlice({
@@ -64,6 +64,6 @@ export const selectClickMultiUpgradeCount = (state: RootState) => state.player.c
 export const selectGold = (state: RootState) => state.player.gold
 export const selectDotLevel = (state: RootState) => state.player.dotLevel
 export const selectDotMultiUpgradeCount = (state: RootState) => state.player.dotMultiUpgradeCount
-export const selectStartTime = (state: RootState) => state.player.startTime
+export const selectStartDate = (state: RootState) => state.player.startDate
 
 export default playerSlice.reducer

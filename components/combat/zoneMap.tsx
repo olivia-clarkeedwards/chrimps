@@ -1,11 +1,11 @@
 import React from "react"
 import { useAppSelector } from "../../redux/hooks"
-import { selectStage, selectZoneLength, selectZoneMonsters } from "../../redux/zoneSlice"
+import { selectStage, selectCurrentZoneLength, selectZoneMonsters } from "../../redux/zoneSlice"
 import clsx from "clsx/lite"
 import { BossIcon, CookieEnjoyerIcon, MoneybagIcon } from "../svg/stageIcons"
 
 export default function ZoneMap() {
-  const zoneLength = useAppSelector(selectZoneLength)
+  const zoneLength = useAppSelector(selectCurrentZoneLength)
   const stages = Array.from({ length: zoneLength }, (cur, acc) => acc + 1)
 
   const currentStage = useAppSelector(selectStage)

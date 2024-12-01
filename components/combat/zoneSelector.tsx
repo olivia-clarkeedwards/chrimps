@@ -1,16 +1,19 @@
 import React from "react"
 import clsx from "clsx/lite"
-import { useAppSelector } from "../../redux/hooks"
-import { selectZoneNumber } from "../../redux/zoneSlice"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { selectZoneNumber, setFarmZone } from "../../redux/zoneSlice"
 
 export default function ZoneSelector() {
+  const dispatch = useAppDispatch()
   const currentZone = useAppSelector(selectZoneNumber)
   const selectedZones = Array.from({ length: 5 }, (cur, acc) => acc + 1)
 
   function handleZoneChange(e: React.MouseEvent<HTMLDivElement>) {
-    const [elementName, delta] = e.currentTarget.id.split(".")
-    // Make delta a number
-    console.log(delta)
+    const [elementName, deltaSuffix] = e.currentTarget.id.split(".")
+    const delta = Number(deltaSuffix) - 1
+    if (delta) {
+      dispatch(setFarmZone(delta))
+    }
   }
 
   // Todo: Vary size
@@ -22,7 +25,7 @@ export default function ZoneSelector() {
         <div
           key={zoneIndex}
           id={`zone-delta.${zoneIndex}`}
-          className="h-14 w-full bg-white border"
+          className="h-14 w-full bg-white border border-black"
           onClick={handleZoneChange}></div>
       ))}
     </div>

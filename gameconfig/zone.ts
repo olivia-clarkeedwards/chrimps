@@ -10,10 +10,10 @@ export class Zone implements BaseZone {
   zoneNumber = 1
   monsters = [] as EnemyState[]
 
-  constructor(currentZoneNumber: number, zoneLength?: number) {
+  constructor(currentZoneNumber: number, isFarming = false, zoneLength?: number) {
     const length = (zoneLength ??= this.zoneLength)
     for (let i = 0; i < length; i++) {
-      const isBoss = i === length - 1 ? true : false
+      const isBoss = (i === length - 1 ? true : false) && !isFarming
       this.monsters.push(getRandomMonster(currentZoneNumber, i + 1, isBoss))
     }
   }
