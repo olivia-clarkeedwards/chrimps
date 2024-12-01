@@ -4,7 +4,7 @@ import { selectStage, selectZoneLength, selectZoneMonsters } from "../../redux/z
 import clsx from "clsx/lite"
 import { BossIcon, CookieEnjoyerIcon, MoneybagIcon } from "../svg/stageIcons"
 
-export default function ZoneVisualiser() {
+export default function ZoneMap() {
   const zoneLength = useAppSelector(selectZoneLength)
   const stages = Array.from({ length: zoneLength }, (cur, acc) => acc + 1)
 
@@ -43,7 +43,7 @@ export default function ZoneVisualiser() {
             </div>
           </div>
         ))}
-      </div>
+      </div>{" "}
     </div>
   )
 }
