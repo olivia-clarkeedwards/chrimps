@@ -178,7 +178,7 @@ export default function Monster({ children }: PropsWithChildren) {
       <div className="basis-2/12 flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center">
           <div className="">{monsterName}</div>
-          <div className="absolute right-2 w-8 h-8 fill-white">{FarmToggleIcon()}</div>
+          <div className="absolute right-2 w-8 h-8 text-white">{FarmToggleIcon()}</div>
         </div>
         <div className="text-left inline-block min-w-[100px] pl-[2.5rem]">{children}</div>
       </div>

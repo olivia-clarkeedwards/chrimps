@@ -4,11 +4,11 @@ import type { RootState } from "./store"
 import { PlayerState } from "../models/player"
 
 const debugState: PlayerState = {
-  clickLevel: 100,
+  clickLevel: 10000,
   clickMultiUpgradeCount: 0,
   gold: 100,
-  dotLevel: 0,
-  dotMultiUpgradeCount: 0,
+  dotLevel: 50,
+  dotMultiUpgradeCount: 3,
 
   // Never changes
   startDate: performance.timeOrigin,
