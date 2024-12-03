@@ -7,7 +7,7 @@ const debugState: PlayerState = {
   clickLevel: 10000,
   clickMultiUpgradeCount: 0,
   gold: 100,
-  dotLevel: 50,
+  dotLevel: 50000,
   dotMultiUpgradeCount: 3,
 
   // Never changes

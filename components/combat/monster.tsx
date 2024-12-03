@@ -113,8 +113,6 @@ export default function Monster({ children }: PropsWithChildren) {
         delta -= TICK_TIME
       }
 
-      // Todo: if tickCount % [frequency] dispatch update last time online
-
       lastFrameTime.current = currentTime - delta
       frameRef.current = requestAnimationFrame(gameLoop)
     },

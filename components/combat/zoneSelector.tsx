@@ -11,6 +11,7 @@ export default function ZoneSelector() {
   function handleZoneChange(e: React.MouseEvent<HTMLDivElement>) {
     const [elementName, deltaSuffix] = e.currentTarget.id.split(".")
     const delta = Number(deltaSuffix) - 1
+    console.log(delta)
     if (delta) {
       dispatch(setFarmZone(delta))
     }
@@ -25,8 +26,10 @@ export default function ZoneSelector() {
         <div
           key={zoneIndex}
           id={`zone-delta.${zoneIndex}`}
-          className="h-14 w-full bg-white border border-black"
-          onClick={handleZoneChange}></div>
+          className="flex justify-center h-14 w-full text-black bg-white border border-black"
+          onClick={handleZoneChange}>
+          {`Zone ${currentZone - zoneIndex + 1}`}
+        </div>
       ))}
     </div>
   )
