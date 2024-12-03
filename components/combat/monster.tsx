@@ -28,7 +28,10 @@ import {
 import {
   incrementStageNumber,
   incrementZoneNumber,
+  selectFarmZoneNumber,
+  selectIsFarming,
   selectStage,
+  selectZoneInFocus,
   selectZoneMonsters,
   selectZoneNumber,
 } from "../../redux/zoneSlice"
@@ -55,6 +58,9 @@ export default function Monster({ children }: PropsWithChildren) {
   const zoneLength = ZONE_CONFIG.length
   const currentStage = useAppSelector(selectStage)
   const currentZone = useAppSelector(selectZoneNumber)
+  const farmZone = useAppSelector(selectFarmZoneNumber)
+  const zoneInFocus = useAppSelector(selectZoneInFocus)
+  const isFarming = useAppSelector(selectIsFarming)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
   const monsters = useAppSelector(selectZoneMonsters)
 
@@ -149,6 +155,7 @@ export default function Monster({ children }: PropsWithChildren) {
   }
 
   useEffect(() => {
+    // Add logic for stage completion when isFarming is set
     if (!monsterAlive) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
@@ -166,6 +173,15 @@ export default function Monster({ children }: PropsWithChildren) {
       dispatch(spawnMonster(nextMonster))
     }
   }, [monsterAlive])
+
+  useEffect(() => {
+    // On isFarming flag change transition to or from farming
+    if (isFarming && currentZone !== zoneInFocus) {
+      // Load monster from farming zone and zone number and length data
+    } else {
+      // Transition back to current stage
+    }
+  }, [isFarming])
 
   return (
     <>

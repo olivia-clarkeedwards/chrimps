@@ -3,7 +3,6 @@ import type { RootState } from "./store"
 import { EnemyState } from "../models/monsters"
 import { Zone } from "../gameconfig/zone"
 import { getMonster } from "../gameconfig/monster"
-import { BaseZone } from "../models/zones"
 
 interface ZoneState {
   currentZoneNumber: number
@@ -11,9 +10,10 @@ interface ZoneState {
   monsters: EnemyState[]
   nextStageIndex: number
   isFarming: boolean
-  farmZone: null | BaseZone
+  farmZone: null | EnemyState[]
   farmZoneNumber: null | number
   farmZoneLength: null | number
+  zoneInFocus: number
 }
 
 const firstZone = new Zone(1)
@@ -29,6 +29,8 @@ const initialState: ZoneState = {
   farmZone: null,
   farmZoneNumber: null,
   farmZoneLength: null,
+  // Display logic
+  zoneInFocus: 1,
 }
 
 // Todo: implement return to zone action
@@ -38,20 +40,22 @@ export const zoneSlice = createSlice({
   reducers: {
     incrementZoneNumber: (state) => {
       state.currentZoneNumber++
+      state.zoneInFocus++
       const nextZone = new Zone(state.currentZoneNumber)
       state.monsters = nextZone.monsters
       state.nextStageIndex = 1
       console.log(state.monsters)
-      return
     },
     incrementStageNumber: (state) => {
       state.nextStageIndex++
     },
     setFarmZone(state, action: PayloadAction<number>) {
       const zoneNumber = state.currentZoneNumber - action.payload
+      if (zoneNumber === state.farmZoneNumber || zoneNumber === state.currentZoneNumber) return
       const thisFarmZone = new Zone(zoneNumber, true)
       state.farmZoneNumber = zoneNumber
-      state.farmZone = thisFarmZone
+      state.zoneInFocus = zoneNumber
+      state.farmZone = thisFarmZone.monsters
       state.isFarming = true
     },
     setMonsters(state, action: PayloadAction<EnemyState[]>) {
@@ -72,5 +76,8 @@ export const selectZoneNumber = (state: RootState) => state.zone.currentZoneNumb
 export const selectCurrentZoneLength = (state: RootState) => state.zone.currentZoneLength
 export const selectZoneMonsters = (state: RootState) => state.zone.monsters
 export const selectStage = (state: RootState) => state.zone.nextStageIndex
+export const selectIsFarming = (state: RootState) => state.zone.isFarming
+export const selectZoneInFocus = (state: RootState) => state.zone.zoneInFocus
+export const selectFarmZoneNumber = (state: RootState) => state.zone.farmZoneNumber
 
 export default zoneSlice.reducer
