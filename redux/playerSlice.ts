@@ -10,7 +10,6 @@ const debugState: PlayerState = {
   dotLevel: 50000,
   dotMultiUpgradeCount: 3,
 
-  // Never changes
   startDate: performance.timeOrigin,
 }
 

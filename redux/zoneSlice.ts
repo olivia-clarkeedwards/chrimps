@@ -10,9 +10,10 @@ interface ZoneState {
   monsters: EnemyState[]
   nextStageIndex: number
   isFarming: boolean
-  farmZone: null | EnemyState[]
-  farmZoneNumber: null | number
-  farmZoneLength: null | number
+  farmZoneMonsters: null | EnemyState[]
+  farmZoneNumber: number
+  farmZoneLength: number
+  farmStageIndex: number
   zoneInFocus: number
 }
 
@@ -26,9 +27,10 @@ const initialState: ZoneState = {
   nextStageIndex: 1,
   // Farming zone data
   isFarming: false,
-  farmZone: null,
-  farmZoneNumber: null,
-  farmZoneLength: null,
+  farmZoneMonsters: null,
+  farmZoneNumber: 1,
+  farmZoneLength: 30,
+  farmStageIndex: 1,
   // Display logic
   zoneInFocus: 1,
 }
@@ -38,7 +40,8 @@ export const zoneSlice = createSlice({
   name: "zone",
   initialState,
   reducers: {
-    incrementZoneNumber: (state) => {
+    zoneComplete: (state) => {
+      // Add logic for are we farming?
       state.currentZoneNumber++
       state.zoneInFocus++
       const nextZone = new Zone(state.currentZoneNumber)
@@ -47,7 +50,11 @@ export const zoneSlice = createSlice({
       console.log(state.monsters)
     },
     incrementStageNumber: (state) => {
-      state.nextStageIndex++
+      if (state.zoneInFocus === state.currentZoneNumber) {
+        state.nextStageIndex++
+      } else {
+        state.farmStageIndex++
+      }
     },
     setFarmZone(state, action: PayloadAction<number>) {
       const zoneNumber = state.currentZoneNumber - action.payload
@@ -55,8 +62,13 @@ export const zoneSlice = createSlice({
       const thisFarmZone = new Zone(zoneNumber, true)
       state.farmZoneNumber = zoneNumber
       state.zoneInFocus = zoneNumber
-      state.farmZone = thisFarmZone.monsters
+      state.farmZoneMonsters = thisFarmZone.monsters
       state.isFarming = true
+    },
+    refreshFarmZone: (state) => {
+      const thisFarmZone = new Zone(state.farmZoneNumber)
+      state.farmStageIndex = 1
+      state.farmZoneMonsters = thisFarmZone.monsters
     },
     setMonsters(state, action: PayloadAction<EnemyState[]>) {
       state.monsters = action.payload
@@ -70,14 +82,17 @@ export const zoneSlice = createSlice({
   },
 })
 
-export const { incrementZoneNumber, incrementStageNumber, setFarmZone, setMonsters, setZoneLength } = zoneSlice.actions
+export const { zoneComplete, incrementStageNumber, setFarmZone, refreshFarmZone, setMonsters, setZoneLength } =
+  zoneSlice.actions
 
 export const selectZoneNumber = (state: RootState) => state.zone.currentZoneNumber
 export const selectCurrentZoneLength = (state: RootState) => state.zone.currentZoneLength
 export const selectZoneMonsters = (state: RootState) => state.zone.monsters
 export const selectStage = (state: RootState) => state.zone.nextStageIndex
 export const selectIsFarming = (state: RootState) => state.zone.isFarming
+export const selectFarmZoneMonsters = (state: RootState) => state.zone.farmZoneMonsters
 export const selectZoneInFocus = (state: RootState) => state.zone.zoneInFocus
 export const selectFarmZoneNumber = (state: RootState) => state.zone.farmZoneNumber
+export const selectFarmStage = (state: RootState) => state.zone.farmStageIndex
 
 export default zoneSlice.reducer

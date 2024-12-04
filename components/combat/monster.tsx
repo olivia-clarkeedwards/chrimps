@@ -20,25 +20,31 @@ import {
   increaseTotalClickDamageDealt,
   increaseTotalDotDamageDealt,
   incrementClickCount,
+  incrementHighestZone,
   incrementHighestZoneEver,
   incrementKillCount,
   incrementZonesCompleted,
+  selectHighestZone,
   selectHighestZoneEver,
 } from "../../redux/statsSlice"
 import {
   incrementStageNumber,
-  incrementZoneNumber,
+  zoneComplete as zoneComplete,
+  selectFarmZoneMonsters,
   selectFarmZoneNumber,
   selectIsFarming,
   selectStage,
   selectZoneInFocus,
   selectZoneMonsters,
   selectZoneNumber,
+  refreshFarmZone,
+  selectFarmStage,
 } from "../../redux/zoneSlice"
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
 import { FarmToggleIcon } from "../svg/metaIcons"
+import e from "express"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -58,11 +64,14 @@ export default function Monster({ children }: PropsWithChildren) {
   const zoneLength = ZONE_CONFIG.length
   const currentStage = useAppSelector(selectStage)
   const currentZone = useAppSelector(selectZoneNumber)
-  const farmZone = useAppSelector(selectFarmZoneNumber)
+  const farmZoneNumber = useAppSelector(selectFarmZoneNumber)
+  const farmStageNumber = useAppSelector(selectFarmStage)
   const zoneInFocus = useAppSelector(selectZoneInFocus)
   const isFarming = useAppSelector(selectIsFarming)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
+  const highestZone = useAppSelector(selectHighestZone)
   const monsters = useAppSelector(selectZoneMonsters)
+  const farmZoneMonsters = useAppSelector(selectFarmZoneMonsters)
 
   const monsterName = useAppSelector(selectMonsterName)
   const monsterImage = useAppSelector(selectMonsterImage)
@@ -155,32 +164,61 @@ export default function Monster({ children }: PropsWithChildren) {
   }
 
   useEffect(() => {
-    // Add logic for stage completion when isFarming is set
     if (!monsterAlive) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
-      let nextMonster: EnemyState
+      let nextMonster: undefined | EnemyState
+      const stageNumber = zoneInFocus === currentZone ? currentStage : farmStageNumber
 
-      if (currentStage === zoneLength) {
-        dispatch(incrementZonesCompleted())
-        currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
-        dispatch(incrementZoneNumber())
-        nextMonster = selectZoneMonsters(store.getState())[0]
+      if (stageNumber === zoneLength) {
+        // If highest zone this run
+        if (highestZone === currentZone) {
+          dispatch(incrementZonesCompleted())
+          dispatch(incrementHighestZone())
+          currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
+          nextMonster = selectZoneMonsters(store.getState())[0]
+
+          // If we are not unlocking a new zone
+        } else if (isFarming) {
+          dispatch(refreshFarmZone())
+          const farmZoneMonsters = selectFarmZoneMonsters(store.getState())
+          if (farmZoneMonsters) nextMonster = farmZoneMonsters[0]
+        } else {
+          throw "Logic error during highest zone transition"
+        }
+
+        dispatch(zoneComplete())
+
+        // Ordinary case; no zone transition
       } else {
         dispatch(incrementStageNumber())
-        nextMonster = monsters[currentStage]
+        nextMonster = monsters[stageNumber]
       }
-      dispatch(spawnMonster(nextMonster))
+
+      // Spawn the next monster
+      if (!nextMonster) {
+        throw "The next monster is undefined"
+      } else {
+        dispatch(spawnMonster(nextMonster))
+      }
     }
   }, [monsterAlive])
 
   useEffect(() => {
-    // On isFarming flag change transition to or from farming
+    // On isFarming, transition to or from farming
+    let nextMonster: EnemyState
     if (isFarming && currentZone !== zoneInFocus) {
       // Load monster from farming zone and zone number and length data
+      if (farmZoneMonsters) {
+        nextMonster = farmZoneMonsters[farmZoneNumber]
+      } else {
+        throw "Failed to initialise farming zone"
+      }
     } else {
       // Transition back to current stage
+      nextMonster = monsters[currentStage]
     }
+    dispatch(spawnMonster(nextMonster))
   }, [isFarming])
 
   return (
