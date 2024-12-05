@@ -34,7 +34,7 @@ import {
   selectFarmZoneNumber,
   selectIsFarming,
   selectStage,
-  selectZoneInFocus,
+  selectZoneInView,
   selectZoneMonsters,
   selectZoneNumber,
   refreshFarmZone,
@@ -66,7 +66,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const currentZone = useAppSelector(selectZoneNumber)
   const farmZoneNumber = useAppSelector(selectFarmZoneNumber)
   const farmStageNumber = useAppSelector(selectFarmStage)
-  const zoneInFocus = useAppSelector(selectZoneInFocus)
+  const zoneInView = useAppSelector(selectZoneInView)
   const isFarming = useAppSelector(selectIsFarming)
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
   const highestZone = useAppSelector(selectHighestZone)
@@ -168,17 +168,28 @@ export default function Monster({ children }: PropsWithChildren) {
       dispatch(incrementKillCount())
       dispatch(increaseGold(monsterValue))
       let nextMonster: undefined | EnemyState
-      const stageNumber = zoneInFocus === currentZone ? currentStage : farmStageNumber
 
+      const isProgressing = zoneInView === currentZone
+      const stageNumber = isProgressing ? currentStage : farmStageNumber
+
+      // End of zone
       if (stageNumber === zoneLength) {
         // If highest zone this run
-        if (highestZone === currentZone) {
+        if (isProgressing) {
+          dispatch(zoneComplete())
           dispatch(incrementZonesCompleted())
           dispatch(incrementHighestZone())
           currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
           nextMonster = selectZoneMonsters(store.getState())[0]
 
-          // If we are not unlocking a new zone
+          // If farming is toggled, continue on this zone
+          if (isFarming) {
+            dispatch(refreshFarmZone())
+            const farmZoneMonsters = selectFarmZoneMonsters(store.getState())
+            if (farmZoneMonsters) nextMonster = farmZoneMonsters[0]
+          }
+
+          // If we are not unlocking a new zone with farming toggled
         } else if (isFarming) {
           dispatch(refreshFarmZone())
           const farmZoneMonsters = selectFarmZoneMonsters(store.getState())
@@ -187,12 +198,14 @@ export default function Monster({ children }: PropsWithChildren) {
           throw "Logic error during highest zone transition"
         }
 
-        dispatch(zoneComplete())
-
         // Ordinary case; no zone transition
       } else {
         dispatch(incrementStageNumber())
-        nextMonster = monsters[stageNumber]
+        if (isFarming && farmZoneMonsters) {
+          nextMonster = farmZoneMonsters[stageNumber]
+        } else {
+          nextMonster = monsters[stageNumber]
+        }
       }
 
       // Spawn the next monster
@@ -207,7 +220,7 @@ export default function Monster({ children }: PropsWithChildren) {
   useEffect(() => {
     // On isFarming, transition to or from farming
     let nextMonster: EnemyState
-    if (isFarming && currentZone !== zoneInFocus) {
+    if (isFarming && currentZone !== zoneInView) {
       // Load monster from farming zone and zone number and length data
       if (farmZoneMonsters) {
         nextMonster = farmZoneMonsters[farmZoneNumber]
@@ -225,7 +238,7 @@ export default function Monster({ children }: PropsWithChildren) {
     <>
       <div className="absolute bottom-[16%] text-white">
         Debug: monsterValue: {monsterValue} Stage: {currentStage} Zone: {currentZone}, clickDamage: {clickDamage},
-        dotDamage: {dotDamage}
+        dotDamage: {dotDamage} farmzone: {farmZoneNumber} farmstage: {farmStageNumber} zoneinview: {zoneInView}
       </div>
       <div className="basis-2/12 flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center">
