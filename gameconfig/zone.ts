@@ -1,4 +1,4 @@
-import { Enemy, EnemyState } from "../models/monsters"
+import { EnemyState } from "../models/monsters"
 import { BaseZone, ZoneConfig } from "../models/zones"
 import { getRandomMonster } from "./monster"
 

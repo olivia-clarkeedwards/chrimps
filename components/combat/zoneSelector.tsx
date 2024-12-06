@@ -1,6 +1,6 @@
 import React from "react"
-import clsx from "clsx/lite"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import clsx from "clsx/lite"
 import { selectZoneNumber, zoneSelection } from "../../redux/zoneSlice"
 
 export default function ZoneSelector() {
@@ -10,11 +10,9 @@ export default function ZoneSelector() {
 
   function handleZoneChange(e: React.MouseEvent<HTMLDivElement>) {
     const [elementName, deltaSuffix] = e.currentTarget.id.split(".")
-    const delta = Number(deltaSuffix) - 1
-    console.log(delta)
-    if (delta) {
-      dispatch(zoneSelection(delta))
-    }
+    const zoneDelta = Number(deltaSuffix) - 1
+    dispatch(zoneSelection(zoneDelta))
+
     // Add logic for return to current zone. If stageindex = 1 then we need to call spawnmonster(monster[0])
   }
 

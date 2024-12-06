@@ -1,20 +1,30 @@
 import React from "react"
 import { useAppSelector } from "../../redux/hooks"
-import { selectStage, selectCurrentZoneLength, selectZoneMonsters } from "../../redux/zoneSlice"
+import {
+  selectStage,
+  selectCurrentZoneLength,
+  selectZoneMonsters,
+  selectIsFarming,
+  selectFarmStage,
+  selectFarmZoneMonsters,
+  selectFarmZoneLength,
+} from "../../redux/zoneSlice"
 import clsx from "clsx/lite"
 import { BossIcon, CookieEnjoyerIcon, MoneybagIcon } from "../svg/stageIcons"
 
 export default function ZoneMap() {
-  const zoneLength = useAppSelector(selectCurrentZoneLength)
+  const isFarming = useAppSelector(selectIsFarming)
+  const zoneLength = isFarming ? useAppSelector(selectFarmZoneLength) : useAppSelector(selectCurrentZoneLength)
   const stages = Array.from({ length: zoneLength }, (cur, acc) => acc + 1)
 
-  const currentStage = useAppSelector(selectStage)
-  const monsters = useAppSelector(selectZoneMonsters)
+  const currentStage = isFarming ? useAppSelector(selectFarmStage) : useAppSelector(selectStage)
+  const monsters = isFarming ? useAppSelector(selectFarmZoneMonsters) : useAppSelector(selectZoneMonsters)
+  if (!monsters) throw "Failed to retrieve monsters for zone"
 
   const getIcon = (stageNumber: number): JSX.Element | undefined => {
     const monster = monsters[stageNumber]
     switch (monster.kind) {
-      case "special":
+      case "rare":
         if (monster.name === "Treasure Goblin") return MoneybagIcon()
         break
       case "boss":
@@ -33,10 +43,13 @@ export default function ZoneMap() {
             className={clsx(
               "flex relative h-8 w-16 border-2 border-gray-300 flex items-center justify-center",
               stageIndex < currentStage && "bg-islam",
-              stageIndex === currentStage && stageIndex !== zoneLength && " bg-yellow-500",
+              stageIndex === currentStage && stageIndex !== zoneLength && "bg-yellow-500",
+
               stageIndex > currentStage && stageIndex !== zoneLength && "bg-gray-800",
-              stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
-              stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
+              !isFarming && stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
+              !isFarming && stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
+              isFarming && stageIndex === zoneLength && "bg-gray-800",
+              isFarming && stageIndex === currentStage && stageIndex === zoneLength && "bg-yellow-500",
             )}>
             <div className="flex bg-gradient-to-tr from-white/30 to-blue-700/20 w-full h-full items-center justify-center">
               <div className="w-7 fill-white">{getIcon(stageIndex - 1)}</div>

@@ -12,7 +12,7 @@ export interface Enemy {
 
 export interface MonsterType {
   name: string
-  kind: "regular" | "special" | "boss"
+  kind: "regular" | "rare" | "special" | "boss"
   healthMulti: number
   goldMulti?: number
   imagePath: string

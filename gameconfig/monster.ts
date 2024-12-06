@@ -26,10 +26,10 @@ const MONSTER_VARIATIONS: MonsterType[] = [
 const BOSS_VARIATIONS: MonsterType[] = [
   { name: "Tooth", kind: "boss", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" },
 ]
-const SPECIAL_VARIATIONS: MonsterType[] = [
+const RARE_VARIATIONS: MonsterType[] = [
   {
     name: "Treasure Goblin",
-    kind: "special",
+    kind: "rare",
     healthMulti: 0.5,
     goldMulti: 20,
     imagePath: "/monsters/ph-treasure-monster.webp",
@@ -79,14 +79,14 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1, isBoss = false
     randomMonster =
       regularSpawnChance > randomValue
         ? MONSTER_VARIATIONS[Math.floor(Math.random() * MONSTER_VARIATIONS.length)]
-        : SPECIAL_VARIATIONS[Math.floor(Math.random() * SPECIAL_VARIATIONS.length)]
+        : RARE_VARIATIONS[Math.floor(Math.random() * RARE_VARIATIONS.length)]
   }
   const newMonster = serializableMonster(new Monster(randomMonster, zoneNumber, stageNumber, isBoss))
   return newMonster
 }
 
 export function getMonster(monsterName: string, zoneNumber = 1, stageNumber = 1, isBoss = false): EnemyState {
-  const allMonsters = MONSTER_VARIATIONS.concat(BOSS_VARIATIONS, SPECIAL_VARIATIONS)
+  const allMonsters = MONSTER_VARIATIONS.concat(BOSS_VARIATIONS, RARE_VARIATIONS)
   for (const monster of allMonsters) {
     if (monster.name === monsterName) return serializableMonster(new Monster(monster, zoneNumber, stageNumber, isBoss))
   }
