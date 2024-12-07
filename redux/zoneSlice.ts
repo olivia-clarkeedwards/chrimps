@@ -12,7 +12,7 @@ interface ZoneState {
   nextStageIndex: number
   isFarming: boolean
   farmZoneMonsters: null | EnemyState[]
-  farmZoneNumber: number
+  farmZoneNumber: null | number
   farmZoneLength: number
   farmStageIndex: number
   zoneInView: number
@@ -29,7 +29,7 @@ const initialState: ZoneState = {
   // Farming zone data
   isFarming: false,
   farmZoneMonsters: null,
-  farmZoneNumber: 1,
+  farmZoneNumber: null,
   farmZoneLength: 30,
   farmStageIndex: 1,
   // Display logic
@@ -66,7 +66,6 @@ export const zoneSlice = createSlice({
     },
     zoneSelection(state, action: PayloadAction<number>) {
       const zoneNumber = state.currentZoneNumber - action.payload
-      console.log("1")
 
       if (zoneNumber === state.zoneInView) {
         return
@@ -83,6 +82,7 @@ export const zoneSlice = createSlice({
       }
     },
     refreshFarmZone: (state) => {
+      if (!state.farmZoneNumber) throw "Failed to initialise farm zone number"
       const thisFarmZone = new Zone(state.farmZoneNumber, true)
       state.farmStageIndex = 1
       state.farmZoneMonsters = thisFarmZone.monsters

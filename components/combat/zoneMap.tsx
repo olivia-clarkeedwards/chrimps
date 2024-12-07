@@ -4,7 +4,6 @@ import {
   selectStage,
   selectCurrentZoneLength,
   selectZoneMonsters,
-  selectIsFarming,
   selectFarmStage,
   selectFarmZoneMonsters,
   selectFarmZoneLength,

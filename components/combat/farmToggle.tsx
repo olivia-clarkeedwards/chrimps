@@ -18,20 +18,21 @@ export default function FarmToggle() {
   useEffect(() => {
     if (!hasTransitioned) {
       if (currentZone > 4) {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           setHasTransitioned(true)
         }, 1000)
+        return () => clearTimeout(timeout)
       }
     }
-  }, [currentZone, hasTransitioned])
+  }, [currentZone])
 
   return (
     <div
       className={clsx(
-        "absolute right-2 w-8 h-8 -rotate-45 border border-4 rounded-full opacity-0 ",
-        currentZone > 4 && "transition-opacity duration-1000 opacity-100",
+        "absolute right-2 w-8 h-8 -rotate-45 border border-4 rounded-full opacity-0",
+        !hasTransitioned ? "transition-opacity duration-1000" : "transition-none",
+        currentZone > 4 && "opacity-100",
         isFarming ? "fill-gray-500 border-gray-500 opacity-60" : "fill-white border-white",
-        hasTransitioned && "transition-none",
       )}
       onClick={handleFarmToggle}>
       {FarmToggleIcon()}
