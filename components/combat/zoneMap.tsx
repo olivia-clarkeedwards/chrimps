@@ -8,19 +8,21 @@ import {
   selectFarmStage,
   selectFarmZoneMonsters,
   selectFarmZoneLength,
+  selectZoneInView,
+  selectFarmZoneNumber,
 } from "../../redux/zoneSlice"
 import clsx from "clsx/lite"
 import { BossIcon, CookieEnjoyerIcon, MoneybagIcon } from "../svg/stageIcons"
 
 export default function ZoneMap() {
-  const isFarming = useAppSelector(selectIsFarming)
+  const isFarmZone = useAppSelector(selectZoneInView) === useAppSelector(selectFarmZoneNumber)
   const farmZoneMonsters = useAppSelector(selectFarmZoneMonsters)
-  const zoneLength = isFarming ? useAppSelector(selectFarmZoneLength) : useAppSelector(selectCurrentZoneLength)
+  const zoneLength = isFarmZone ? useAppSelector(selectFarmZoneLength) : useAppSelector(selectCurrentZoneLength)
   const stages = Array.from({ length: zoneLength }, (cur, acc) => acc + 1)
 
-  const currentStage = isFarming && farmZoneMonsters ? useAppSelector(selectFarmStage) : useAppSelector(selectStage)
+  const currentStage = isFarmZone && farmZoneMonsters ? useAppSelector(selectFarmStage) : useAppSelector(selectStage)
   const monsters =
-    isFarming && farmZoneMonsters ? useAppSelector(selectFarmZoneMonsters) : useAppSelector(selectZoneMonsters)
+    isFarmZone && farmZoneMonsters ? useAppSelector(selectFarmZoneMonsters) : useAppSelector(selectZoneMonsters)
   if (!monsters) throw "Failed to retrieve monsters for zone"
 
   const getIcon = (stageNumber: number): JSX.Element | undefined => {
@@ -48,10 +50,10 @@ export default function ZoneMap() {
               stageIndex === currentStage && stageIndex !== zoneLength && "bg-yellow-500",
 
               stageIndex > currentStage && stageIndex !== zoneLength && "bg-gray-800",
-              !isFarming && stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
-              !isFarming && stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
-              isFarming && farmZoneMonsters && stageIndex === zoneLength && "bg-gray-800",
-              isFarming &&
+              !isFarmZone && stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
+              !isFarmZone && stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
+              isFarmZone && farmZoneMonsters && stageIndex === zoneLength && "bg-gray-800",
+              isFarmZone &&
                 farmZoneMonsters &&
                 stageIndex === currentStage &&
                 stageIndex === zoneLength &&

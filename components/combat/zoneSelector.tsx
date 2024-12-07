@@ -13,7 +13,6 @@ export default function ZoneSelector() {
     const zoneDelta = Number(deltaSuffix) - 1
     dispatch(zoneSelection(zoneDelta))
   }
-  // Todo: Toggling progression finishes current zone as expected but displays next zone immediately
   // Todo: Vary size
   // Todo: Vary opacity
   // Todo: Opacity gradient
