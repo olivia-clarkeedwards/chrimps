@@ -184,13 +184,17 @@ export default function Monster({ children }: PropsWithChildren) {
           dispatch(incrementHighestZone())
           currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
 
-          if (isFarming) dispatch(refreshFarmZone())
+          // Highest zone & farming toggled; zone transition in place
+          if (isFarming) {
+            const newFarmZoneMonsters = selectFarmZoneMonsters(store.getState())
+            if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
+          }
 
           // If farming or not farming when not highest zone
-        } else if (zoneInView < currentZone && isFarming) {
+        } else if (zoneInView < currentZone && isFarming && farmZoneMonsters) {
           dispatch(refreshFarmZone())
-          const farmZoneMonsters = selectFarmZoneMonsters(store.getState())
-          if (farmZoneMonsters) nextMonster = farmZoneMonsters[0]
+          const newFarmZoneMonsters = selectFarmZoneMonsters(store.getState())
+          if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
         } else if (zoneInView < currentZone && !isFarming) {
           dispatch(setZoneInView(currentZone))
         } else {
@@ -215,10 +219,10 @@ export default function Monster({ children }: PropsWithChildren) {
   useEffect(() => {
     // On zoneInView change, transition to or from farming
     let nextMonster: undefined | EnemyState
-    if (currentZone === zoneInView) {
-      nextMonster = monsters[0]
-    } else if (farmZoneNumber === zoneInView && farmZoneMonsters) {
+    if (farmZoneNumber === zoneInView && farmZoneMonsters) {
       nextMonster = farmZoneMonsters[0]
+    } else if (currentZone === zoneInView) {
+      nextMonster = monsters[0]
     }
     if (nextMonster) {
       dispatch(spawnMonster(nextMonster))
@@ -236,7 +240,6 @@ export default function Monster({ children }: PropsWithChildren) {
       <div className="basis-2/12 flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center">
           <div className="">{monsterName}</div>
-
           <FarmToggle />
         </div>
         <div className="text-left inline-block min-w-[100px] pl-[2.5rem]">{children}</div>
