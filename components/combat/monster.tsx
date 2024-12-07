@@ -173,9 +173,9 @@ export default function Monster({ children }: PropsWithChildren) {
       const isProgressing = zoneInView === currentZone
       const stageNumber = isProgressing ? currentStage : farmStageNumber
 
-      // End of zone
+      // Zone transition
       if (stageNumber === zoneLength) {
-        // If highest zone this run
+        // When highest zone
         if (isProgressing) {
           dispatch(zoneComplete())
           dispatch(incrementZonesCompleted())
@@ -183,33 +183,35 @@ export default function Monster({ children }: PropsWithChildren) {
           currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
           nextMonster = selectZoneMonsters(store.getState())[0]
 
-          // If farming is toggled, continue on this zone
           if (isFarming) {
             dispatch(refreshFarmZone())
             const farmZoneMonsters = selectFarmZoneMonsters(store.getState())
             if (farmZoneMonsters) nextMonster = farmZoneMonsters[0]
           }
 
-          // If we are not unlocking a new zone with farming toggled
-        } else if (isFarming) {
+          // If farming or not farming when not highest zone
+        } else if (zoneInView < currentZone && isFarming) {
           dispatch(refreshFarmZone())
           const farmZoneMonsters = selectFarmZoneMonsters(store.getState())
           if (farmZoneMonsters) nextMonster = farmZoneMonsters[0]
+        } else if (zoneInView < currentZone && !isFarming) {
+          nextMonster = monsters[currentStage]
+          dispatch(spawnMonster(nextMonster))
         } else {
           throw "Logic error during highest zone transition"
         }
 
-        // Ordinary case; no zone transition
+        // Stage transition
       } else {
         dispatch(incrementStageNumber())
-        if (isFarming && farmZoneMonsters) {
+        if (zoneInView < currentZone && farmZoneMonsters) {
           nextMonster = farmZoneMonsters[stageNumber]
         } else {
           nextMonster = monsters[stageNumber]
         }
       }
 
-      // Spawn the next monster
+      // Finally, spawn the next monster
       if (!nextMonster) {
         throw "The next monster is undefined"
       } else {

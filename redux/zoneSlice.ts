@@ -3,6 +3,7 @@ import type { RootState } from "./store"
 import { EnemyState } from "../models/monsters"
 import { Zone } from "../gameconfig/zone"
 import { getMonster } from "../gameconfig/monster"
+import e from "express"
 
 interface ZoneState {
   currentZoneNumber: number
@@ -41,13 +42,19 @@ export const zoneSlice = createSlice({
   initialState,
   reducers: {
     zoneComplete: (state) => {
+      const thisZone = state.currentZoneNumber
+      state.currentZoneNumber++
+      const nextZone = new Zone(state.currentZoneNumber)
+      state.monsters = nextZone.monsters
+      state.nextStageIndex = 1
       if (!state.isFarming) {
-        state.currentZoneNumber++
         state.zoneInView++
-        const nextZone = new Zone(state.currentZoneNumber)
-        state.monsters = nextZone.monsters
-        state.nextStageIndex = 1
-        console.log(state.monsters)
+      } else {
+        const thisFarmZone = new Zone(thisZone, true)
+        state.farmZoneNumber = thisZone
+        state.farmStageIndex = 1
+        state.zoneInView = thisZone
+        state.farmZoneMonsters = thisFarmZone.monsters
       }
     },
     incrementStageNumber: (state) => {
@@ -83,7 +90,7 @@ export const zoneSlice = createSlice({
     setMonsters(state, action: PayloadAction<EnemyState[]>) {
       state.monsters = action.payload
     },
-    toggleFarming(state, action: PayloadAction<boolean>) {
+    toggleFarming: (state) => {
       state.isFarming = !state.isFarming
       // if (state.isFarming === false) state.zoneInFocus = state.currentZoneNumber
     },
@@ -93,8 +100,15 @@ export const zoneSlice = createSlice({
   },
 })
 
-export const { zoneComplete, incrementStageNumber, zoneSelection, refreshFarmZone, setMonsters, setZoneLength } =
-  zoneSlice.actions
+export const {
+  zoneComplete,
+  incrementStageNumber,
+  zoneSelection,
+  refreshFarmZone,
+  setMonsters,
+  toggleFarming,
+  setZoneLength,
+} = zoneSlice.actions
 
 export const selectZoneNumber = (state: RootState) => state.zone.currentZoneNumber
 export const selectCurrentZoneLength = (state: RootState) => state.zone.currentZoneLength

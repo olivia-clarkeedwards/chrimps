@@ -14,11 +14,13 @@ import { BossIcon, CookieEnjoyerIcon, MoneybagIcon } from "../svg/stageIcons"
 
 export default function ZoneMap() {
   const isFarming = useAppSelector(selectIsFarming)
+  const farmZoneMonsters = useAppSelector(selectFarmZoneMonsters)
   const zoneLength = isFarming ? useAppSelector(selectFarmZoneLength) : useAppSelector(selectCurrentZoneLength)
   const stages = Array.from({ length: zoneLength }, (cur, acc) => acc + 1)
 
-  const currentStage = isFarming ? useAppSelector(selectFarmStage) : useAppSelector(selectStage)
-  const monsters = isFarming ? useAppSelector(selectFarmZoneMonsters) : useAppSelector(selectZoneMonsters)
+  const currentStage = isFarming && farmZoneMonsters ? useAppSelector(selectFarmStage) : useAppSelector(selectStage)
+  const monsters =
+    isFarming && farmZoneMonsters ? useAppSelector(selectFarmZoneMonsters) : useAppSelector(selectZoneMonsters)
   if (!monsters) throw "Failed to retrieve monsters for zone"
 
   const getIcon = (stageNumber: number): JSX.Element | undefined => {
@@ -48,8 +50,12 @@ export default function ZoneMap() {
               stageIndex > currentStage && stageIndex !== zoneLength && "bg-gray-800",
               !isFarming && stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
               !isFarming && stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
-              isFarming && stageIndex === zoneLength && "bg-gray-800",
-              isFarming && stageIndex === currentStage && stageIndex === zoneLength && "bg-yellow-500",
+              isFarming && farmZoneMonsters && stageIndex === zoneLength && "bg-gray-800",
+              isFarming &&
+                farmZoneMonsters &&
+                stageIndex === currentStage &&
+                stageIndex === zoneLength &&
+                "bg-yellow-500",
             )}>
             <div className="flex bg-gradient-to-tr from-white/30 to-blue-700/20 w-full h-full items-center justify-center">
               <div className="w-7 fill-white">{getIcon(stageIndex - 1)}</div>
