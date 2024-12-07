@@ -51,11 +51,6 @@ import e from "express"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
-  const tickCount = useRef(0)
-  const lastFrameTime = useRef(performance.now())
-  const frameRef = useRef<number>()
-  const TICK_RATE = 20
-  const TICK_TIME = 1000 / TICK_RATE
 
   const clickLevel = useAppSelector(selectClickLevel)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
@@ -80,6 +75,12 @@ export default function Monster({ children }: PropsWithChildren) {
   const monsterImage = useAppSelector(selectMonsterImage)
   const monsterValue = useAppSelector(selectMonsterGoldValue)
   const monsterAlive = useAppSelector(selectMonsterAlive)
+
+  const tickCount = useRef(0)
+  const lastFrameTime = useRef(performance.now())
+  const frameRef = useRef<number>()
+  const TICK_RATE = 20
+  const TICK_TIME = 1000 / TICK_RATE
 
   const checkAchievements = useCallback(() => {
     if (clickLevel > 5) {
