@@ -12,10 +12,8 @@ export default function ZoneSelector() {
     const [elementName, deltaSuffix] = e.currentTarget.id.split(".")
     const zoneDelta = Number(deltaSuffix) - 1
     dispatch(zoneSelection(zoneDelta))
-
-    // Add logic for return to current zone. If stageindex = 1 then we need to call spawnmonster(monster[0])
   }
-
+  // Todo: Toggling progression finishes current zone as expected but displays next zone immediately
   // Todo: Vary size
   // Todo: Vary opacity
   // Todo: Opacity gradient

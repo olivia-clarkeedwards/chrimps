@@ -39,6 +39,7 @@ import {
   selectZoneNumber,
   refreshFarmZone,
   selectFarmStage,
+  setZoneInView,
 } from "../../redux/zoneSlice"
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
@@ -46,6 +47,7 @@ import { EnemyState } from "../../models/monsters"
 import { FarmToggleIcon } from "../svg/metaIcons"
 import clsx from "clsx/lite"
 import FarmToggle from "./farmToggle"
+import e from "express"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -181,13 +183,8 @@ export default function Monster({ children }: PropsWithChildren) {
           dispatch(incrementZonesCompleted())
           dispatch(incrementHighestZone())
           currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
-          nextMonster = selectZoneMonsters(store.getState())[0]
 
-          if (isFarming) {
-            dispatch(refreshFarmZone())
-            const farmZoneMonsters = selectFarmZoneMonsters(store.getState())
-            if (farmZoneMonsters) nextMonster = farmZoneMonsters[0]
-          }
+          if (isFarming) dispatch(refreshFarmZone())
 
           // If farming or not farming when not highest zone
         } else if (zoneInView < currentZone && isFarming) {
@@ -195,8 +192,7 @@ export default function Monster({ children }: PropsWithChildren) {
           const farmZoneMonsters = selectFarmZoneMonsters(store.getState())
           if (farmZoneMonsters) nextMonster = farmZoneMonsters[0]
         } else if (zoneInView < currentZone && !isFarming) {
-          nextMonster = monsters[currentStage]
-          dispatch(spawnMonster(nextMonster))
+          dispatch(setZoneInView(currentZone))
         } else {
           throw "Logic error during highest zone transition"
         }
@@ -210,32 +206,26 @@ export default function Monster({ children }: PropsWithChildren) {
           nextMonster = monsters[stageNumber]
         }
       }
+      if (nextMonster) dispatch(spawnMonster(nextMonster))
 
       // Finally, spawn the next monster
-      if (!nextMonster) {
-        throw "The next monster is undefined"
-      } else {
-        dispatch(spawnMonster(nextMonster))
-      }
     }
   }, [monsterAlive])
 
   useEffect(() => {
-    // On isFarming, transition to or from farming
-    let nextMonster: EnemyState
-    if (isFarming && currentZone !== zoneInView) {
-      // Load monster from farming zone and zone number and length data
-      if (farmZoneMonsters) {
-        nextMonster = farmZoneMonsters[farmZoneNumber]
-      } else {
-        throw "Failed to initialise farming zone"
-      }
-    } else {
-      // Transition back to current stage
-      nextMonster = monsters[currentStage]
+    // On zoneInView change, transition to or from farming
+    let nextMonster: undefined | EnemyState
+    if (currentZone === zoneInView) {
+      nextMonster = monsters[0]
+    } else if (farmZoneNumber === zoneInView && farmZoneMonsters) {
+      nextMonster = farmZoneMonsters[0]
     }
-    dispatch(spawnMonster(nextMonster))
-  }, [isFarming])
+    if (nextMonster) {
+      dispatch(spawnMonster(nextMonster))
+    } else {
+      throw "Monster undefined during zone transition"
+    }
+  }, [zoneInView])
 
   return (
     <>
