@@ -26,9 +26,9 @@ export default function ZoneSelector() {
         return (
           <div
             className={clsx(
-              "flex h-14 w-full border-4 border-black",
+              "flex h-14 w-full border-4",
               scaleSteps[zoneIndex - 1],
-              zoneInView === thisZoneNumber && "border-yellow-500 bg-opacity-100",
+              zoneInView === thisZoneNumber ? "border-yellow-500 bg-opacity-100" : "border-gray-800",
             )}>
             <div
               key={zoneIndex}
