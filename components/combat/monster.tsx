@@ -44,10 +44,7 @@ import {
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
-import { FarmToggleIcon } from "../svg/metaIcons"
-import clsx from "clsx/lite"
 import FarmToggle from "./farmToggle"
-import e from "express"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()

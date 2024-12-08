@@ -17,7 +17,8 @@ export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAfforda
   useEffect(() => {
     if (!hidden && !shouldMount) {
       setShouldMount(true)
-      setTimeout(() => setShimmer(true), 400)
+      const timeout = setTimeout(() => setShimmer(true), 400)
+      return () => clearTimeout(timeout)
     }
   }, [hidden])
 
