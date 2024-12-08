@@ -93,7 +93,7 @@ export default function UpgradeIndex() {
   }
 
   return (
-    <div className="">
+    <div>
       <UpgradePane
         config={UPGRADE_CONFIG.click}
         damage={clickDamage}
@@ -108,20 +108,6 @@ export default function UpgradeIndex() {
         onUpgrade={handleUpgrade}
         onLevelUp={handleLevelUp}
       />
-
-      <div className="flex w-full items-start justify-between align-start py-4 px-4 border-b-2 border-amber-950">
-        <div className="flex flex-col w-32 items-center">
-          <div>Placeholder</div>
-          <div className="self-center">dmg#</div>
-          <div className="flex">icon</div>
-        </div>
-        <button
-          id="placeholder"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-          onClick={handleLevelUp}>
-          Placeholder
-        </button>
-      </div>
     </div>
   )
 }
