@@ -15,27 +15,31 @@ export default function ZoneSelector() {
     dispatch(zoneSelection(zoneDelta))
   }
 
-  const opacitySteps = ["opacity-100", "opacity-85", "opacity-70", "opacity-55", "opacity-40"]
+  const opacitySteps = ["opacity-100", "opacity-90", "opacity-80", "opacity-70", "opacity-60"]
   const scaleSteps = ["scale-100", "scale-95", "scale-90", "scale-85", "scale-80"]
 
   return (
-    <div className="flex flex-row-reverse w-full gap-2 py-2 px-4">
+    <div className="flex justify-around flex-row-reverse md:my-2 lg:mt-4 md:mb-10 md:mx-8 lg:mx-12 border-2 rounded-xl border-white bg-black bg-opacity-30 w-full gap-2 py-2 px-4">
       {selectedZones.map((zoneIndex) => {
         const thisZoneNumber = currentZone - zoneIndex + 1
 
         return (
           <div
+            key={`outer.${zoneIndex}`}
+            id={`zone-delta.${zoneIndex}`}
             className={clsx(
-              "flex h-14 w-full border-4",
+              "flex h-16 w-[7.111rem] border-4",
               scaleSteps[zoneIndex - 1],
-              zoneInView === thisZoneNumber ? "border-yellow-500 bg-opacity-100" : "border-gray-800",
-            )}>
+              zoneInView === thisZoneNumber ? "border-yellow-500" : "border-gray-800",
+            )}
+            onClick={handleZoneChange}>
             <div
-              key={zoneIndex}
-              id={`zone-delta.${zoneIndex}`}
-              className={clsx("flex justify-center h-full w-full text-black bg-white", opacitySteps[zoneIndex - 1])}
-              onClick={handleZoneChange}>
-              {`Zone ${thisZoneNumber}`}
+              key={`inner.${zoneIndex}`}
+              className={clsx(
+                "flex justify-center h-full w-full bg-[url('/icons/meadow.jpg')] bg-no-repeat bg-cover text-black text-xl",
+                opacitySteps[zoneIndex - 1],
+              )}>
+              {`${thisZoneNumber}`}
             </div>
           </div>
         )

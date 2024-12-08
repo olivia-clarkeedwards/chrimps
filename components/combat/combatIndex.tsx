@@ -23,7 +23,7 @@ export default function Combat() {
   }, [zone, shouldMount])
 
   return (
-    <div className="flex flex-col justify-center min-h-[92svh] md:min-h-[80svh] text-white basis-4/5 md:basis-2/5 bg-gradient-to-b from-purple-800 via-purple-900 to-violet-950">
+    <div className="flex flex-col justify-center min-h-[92svh] md:min-h-[89svh] text-white basis-4/5 md:basis-2/5 bg-gradient-to-b from-purple-800 via-purple-900 to-violet-950">
       {zone > 4 && (
         <div className={clsx("flex basis-1/6 transition-opacity opacity-0 duration-1000", fadeIn && "opacity-100")}>
           <ZoneSelector />
