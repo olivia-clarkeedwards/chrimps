@@ -7,6 +7,10 @@ export default {
       colors: {
         islam: "#009000",
       },
+      scale: {
+        "85": ".85",
+        "80": ".80",
+      },
     },
   },
   plugins: [],
