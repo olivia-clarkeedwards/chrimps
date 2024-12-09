@@ -1,12 +1,12 @@
 import React from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import clsx from "clsx/lite"
-import { selectZoneInView, selectZoneNumber, zoneSelection } from "../../redux/zoneSlice"
+import { selectZoneState, zoneSelection } from "../../redux/zoneSlice"
 
 export default function ZoneSelector() {
   const dispatch = useAppDispatch()
-  const currentZone = useAppSelector(selectZoneNumber)
-  const zoneInView = useAppSelector(selectZoneInView)
+  const { currentZoneNumber: currentZone, zoneInView } = useAppSelector(selectZoneState)
+
   const selectedZones = Array.from({ length: 5 }, (cur, acc) => acc + 1)
 
   function handleZoneChange(e: React.MouseEvent<HTMLDivElement>) {

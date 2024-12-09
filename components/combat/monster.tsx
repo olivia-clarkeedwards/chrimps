@@ -28,17 +28,10 @@ import {
   selectHighestZoneEver,
 } from "../../redux/statsSlice"
 import {
+  selectZoneState,
   incrementStageNumber,
-  zoneComplete as zoneComplete,
-  selectFarmZoneMonsters,
-  selectFarmZoneNumber,
-  selectIsFarming,
-  selectStage,
-  selectZoneInView,
-  selectZoneMonsters,
-  selectZoneNumber,
+  zoneComplete,
   refreshFarmZone,
-  selectFarmStage,
   setZoneInView,
 } from "../../redux/zoneSlice"
 import { ZONE_CONFIG } from "../../gameconfig/zone"
@@ -57,16 +50,19 @@ export default function Monster({ children }: PropsWithChildren) {
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
 
   const zoneLength = ZONE_CONFIG.length
-  const currentStage = useAppSelector(selectStage)
-  const currentZone = useAppSelector(selectZoneNumber)
-  const farmZoneNumber = useAppSelector(selectFarmZoneNumber)
-  const farmStageNumber = useAppSelector(selectFarmStage)
-  const zoneInView = useAppSelector(selectZoneInView)
-  const isFarming = useAppSelector(selectIsFarming)
+  const {
+    currentZoneNumber: currentZone,
+    zoneMonsters,
+    stageNumber: currentStage,
+    isFarming,
+    farmZoneMonsters,
+    farmZoneNumber,
+    farmStageNumber,
+    zoneInView,
+  } = useAppSelector(selectZoneState)
+
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
   const highestZone = useAppSelector(selectHighestZone)
-  const monsters = useAppSelector(selectZoneMonsters)
-  const farmZoneMonsters = useAppSelector(selectFarmZoneMonsters)
 
   const monsterName = useAppSelector(selectMonsterName)
   const monsterImage = useAppSelector(selectMonsterImage)
@@ -184,14 +180,14 @@ export default function Monster({ children }: PropsWithChildren) {
 
           // Highest zone & farming toggled; zone transition in place
           if (isFarming) {
-            const newFarmZoneMonsters = selectFarmZoneMonsters(store.getState())
+            const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
             if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
           }
 
           // If farming or not farming when not highest zone
         } else if (zoneInView < currentZone && isFarming && farmZoneMonsters) {
           dispatch(refreshFarmZone())
-          const newFarmZoneMonsters = selectFarmZoneMonsters(store.getState())
+          const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
           if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
         } else if (zoneInView < currentZone && !isFarming) {
           dispatch(setZoneInView(currentZone))
@@ -205,7 +201,7 @@ export default function Monster({ children }: PropsWithChildren) {
         if (zoneInView < currentZone && farmZoneMonsters) {
           nextMonster = farmZoneMonsters[stageNumber]
         } else {
-          nextMonster = monsters[stageNumber]
+          nextMonster = zoneMonsters[stageNumber]
         }
       }
       if (nextMonster) dispatch(spawnMonster(nextMonster))
@@ -220,7 +216,7 @@ export default function Monster({ children }: PropsWithChildren) {
     if (farmZoneNumber === zoneInView && farmZoneMonsters) {
       nextMonster = farmZoneMonsters[0]
     } else if (currentZone === zoneInView) {
-      nextMonster = monsters[0]
+      nextMonster = zoneMonsters[0]
     }
     if (nextMonster) {
       dispatch(spawnMonster(nextMonster))

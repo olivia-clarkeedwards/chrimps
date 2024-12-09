@@ -7,7 +7,7 @@ import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { Upgrade } from "../../../models/upgrades"
 import { PlayerState } from "../../../models/player"
 import LevelUpButton from "./levelUpButton"
-import { selectZoneNumber } from "../../../redux/zoneSlice"
+import { selectZoneState } from "../../../redux/zoneSlice"
 
 interface UpgradePaneProps {
   config: Upgrade
@@ -27,7 +27,7 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   const cost = config.levelUpCost(upgradeLevel)
   const gold = useAppSelector(selectGold)
   const canAffordLevelUp = gold >= cost
-  const zone = useAppSelector(selectZoneNumber)
+  const { currentZoneNumber } = useAppSelector(selectZoneState)
 
   const [shouldMount, setShouldMount] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
@@ -35,12 +35,12 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   const isNotClick = upgradeName !== "click"
 
   useEffect(() => {
-    if (zone >= config.visibleAtZone && !shouldMount) {
+    if (currentZoneNumber >= config.visibleAtZone && !shouldMount) {
       setShouldMount(true)
       const timeout = setTimeout(() => setIsVisible(true), 350)
       return () => clearTimeout(timeout)
     }
-  }, [zone, config.visibleAtZone, shouldMount])
+  }, [currentZoneNumber, config.visibleAtZone, shouldMount])
 
   if (!shouldMount && isNotClick) return null
 

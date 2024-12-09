@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react"
-import clsx from "clsx/lite"
 import { FarmToggleIcon } from "../svg/metaIcons"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { selectIsFarming, selectZoneNumber, toggleFarming } from "../../redux/zoneSlice"
+import { selectZoneState, toggleFarming } from "../../redux/zoneSlice"
+import clsx from "clsx/lite"
 
 export default function FarmToggle() {
   const dispatch = useAppDispatch()
   const [hasTransitioned, setHasTransitioned] = useState(false)
 
-  const isFarming = useAppSelector(selectIsFarming)
-  const currentZone = useAppSelector(selectZoneNumber)
+  const { isFarming, currentZoneNumber: currentZone } = useAppSelector(selectZoneState)
 
   function handleFarmToggle(e: React.MouseEvent<HTMLDivElement>) {
     dispatch(toggleFarming())
