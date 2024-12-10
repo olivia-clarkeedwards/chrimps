@@ -10,10 +10,11 @@ export default {
         islam: "#009000",
       },
       fontFamily: {
-        sans: ["AudioWide", ...defaultTheme.fontFamily.sans],
+        sans: ["Sigmar", ...defaultTheme.fontFamily.sans],
       },
       cursor: {
         fancy: "url(/icons/pointerhand.png) 16 16, pointer",
+        dagger: "url(/icons/dagger64.png) 16 16, pointer",
       },
       scale: {
         "85": ".85",

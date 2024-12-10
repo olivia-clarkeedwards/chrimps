@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
-
 /* Links */
 a {
   text-decoration: none;
@@ -15,7 +13,7 @@ a {
 /* Reset */
 body {
   margin: 0;
-  font-family: "AudioWide", sans-serif;
+  font-family: "Sigmar", sans-serif;
 }
 * {
   box-sizing: border-box;
