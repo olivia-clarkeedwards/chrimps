@@ -242,13 +242,13 @@ export default function Monster({ children }: PropsWithChildren) {
         </div>
         <div className="w-full text-center items-center justify-center">{children}</div>
       </div>
-      <div className="flex items-end h-[32rem] flex-auto" onClick={handleClick}>
+      <button className="flex items-end h-[32rem] flex-auto hover:scale-[1.01] cursor-fancy" onClick={handleClick}>
         <img
-          className="max-h-full h-full w-full object-contain pointer-events-none"
+          className="max-h-full h-full w-full object-contain pointer-events-none  transition-transform"
           src={monsterImage}
           alt={monsterName}
         />
-      </div>
+      </button>
     </>
   )
 }

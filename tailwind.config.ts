@@ -12,6 +12,9 @@ export default {
       fontFamily: {
         sans: ["AudioWide", ...defaultTheme.fontFamily.sans],
       },
+      cursor: {
+        fancy: "url(/icons/pointerhand.png) 16 16, pointer",
+      },
       scale: {
         "85": ".85",
         "80": ".80",
