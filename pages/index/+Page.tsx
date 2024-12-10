@@ -13,11 +13,11 @@ export default function Page() {
       <Provider store={store}>
         <div className="fixed inset-0 select-none bg-yellow-500 h-full">
           <div className="h-full w-full overflow-y-scroll">
-            <div className="lg:flex-1/10">
+            <div className="h-20">
               <MainNavigationMenu />
             </div>
-            <div className="flex w-full lg:flex-9/10">
-              <div className="flex w-full lg:flex-row  flex-col-reverse h-full">
+            <div className="flex flex-1 w-full">
+              <div className="flex w-full flex-col-reverse lg:flex-row justify-around h-full">
                 <Panel />
                 <Combat />
               </div>

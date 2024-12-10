@@ -1,3 +1,5 @@
+import defaultTheme from "tailwindcss/defaultTheme"
+
 import type { Config } from "tailwindcss"
 
 export default {
@@ -6,6 +8,9 @@ export default {
     extend: {
       colors: {
         islam: "#009000",
+      },
+      fontFamily: {
+        sans: ["AudioWide", ...defaultTheme.fontFamily.sans],
       },
       scale: {
         "85": ".85",

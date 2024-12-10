@@ -240,7 +240,7 @@ export default function Monster({ children }: PropsWithChildren) {
           <div className="">{monsterName}</div>
           <FarmToggle />
         </div>
-        <div className="text-left inline-block min-w-[100px] pl-[2.5rem]">{children}</div>
+        <div className="w-full text-center items-center justify-center">{children}</div>
       </div>
       <div className="flex items-end h-[32rem] flex-auto" onClick={handleClick}>
         <img
