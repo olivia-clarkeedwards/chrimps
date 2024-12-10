@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useEffect, useRef } from "react"
+import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   increaseGold,
@@ -231,11 +231,11 @@ export default function Monster({ children }: PropsWithChildren) {
 
   return (
     <>
-      <div className="absolute bottom-[16%] text-white">
+      {/* <div className="absolute bottom-[16%] text-white">
         Debug: monsterValue: {monsterValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage: {clickDamage}{" "}
         dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}
-      </div>
-      <div className="basis-2/12 flex flex-col w-full items-center">
+      </div> */}
+      <div className="flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center">
           <div className="">{monsterName}</div>
           <FarmToggle />

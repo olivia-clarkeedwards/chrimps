@@ -38,32 +38,30 @@ export default function ZoneMap() {
   }
 
   return (
-    <div className="flex basis-3/12 md:basis-2/12 items-end opacity-100">
-      <div className="flex w-[20rem] md:w-[40rem] lg:w-[40rem] mb-1 md:m-2 flex-wrap-reverse content-start border-2 border-gray-300 box-content z-10">
-        {stages.map((stageIndex) => (
-          <div
-            key={stageIndex}
-            className={clsx(
-              "flex relative h-8 w-16 border-2 border-gray-300 flex items-center justify-center",
-              stageIndex < currentStage && "bg-islam",
-              stageIndex === currentStage && stageIndex !== zoneLength && "bg-yellow-500",
+    <div className="grid grid-cols-10 gap-1 w-full h-30 scale-x-[-1]">
+      {stages.reverse().map((stageIndex) => (
+        <div
+          key={stageIndex}
+          className={clsx(
+            "flex relative h-8 w-full border-2 border-gray-300 items-center justify-center rounded-md",
+            stageIndex < currentStage && "bg-islam",
+            stageIndex === currentStage && stageIndex !== zoneLength && "bg-yellow-500",
 
-              stageIndex > currentStage && stageIndex !== zoneLength && "bg-gray-800",
-              !isFarmZone && stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
-              !isFarmZone && stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
-              isFarmZone && farmZoneMonsters && stageIndex === zoneLength && "bg-gray-800",
-              isFarmZone &&
-                farmZoneMonsters &&
-                stageIndex === currentStage &&
-                stageIndex === zoneLength &&
-                "bg-yellow-500",
-            )}>
-            <div className="flex bg-gradient-to-tr from-white/30 to-blue-700/20 w-full h-full items-center justify-center">
-              <div className="w-7 fill-white">{getIcon(stageIndex - 1)}</div>
-            </div>
+            stageIndex > currentStage && stageIndex !== zoneLength && "bg-gray-800",
+            !isFarmZone && stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
+            !isFarmZone && stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
+            isFarmZone && farmZoneMonsters && stageIndex === zoneLength && "bg-gray-800",
+            isFarmZone &&
+              farmZoneMonsters &&
+              stageIndex === currentStage &&
+              stageIndex === zoneLength &&
+              "bg-yellow-500",
+          )}>
+          <div className="flex bg-gradient-to-tr from-white/30 to-blue-700/20 w-full h-full items-center justify-center">
+            <div className="w-7 fill-white">{getIcon(stageIndex - 1)}</div>
           </div>
-        ))}
-      </div>{" "}
+        </div>
+      ))}
     </div>
   )
 }
