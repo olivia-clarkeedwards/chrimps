@@ -1,20 +1,39 @@
 export function MainNavigationMenu() {
   return (
-    <div className="flex flex-wrap justify-between bg-gray-900 text-white p-4 h-full">
-      <div className="flex gap-2">
+    <div className="flex flex-wrap justify-between items-center bg-gray-900 text-white h-full">
+      <div className="flex gap-2 items-center">
         <button
           className="m-2 py-4 px-8 text-center uppercase transition duration-500 bg-gradient-to-r from-red-500 via-orange-400 to-red-500 text-white rounded-lg block border-0 font-bold shadow-lg cursor-pointer select-none hover:bg-right-center active:transform active:scale-95"
           role="button">
-          Button 87
+          Home
         </button>
-        <button className="py-2 px-4 rounded-xl hover:shadow-slate-600/70 hover:shadow-lg">Home</button>
-        <button className="py-2 px-4 rounded-xl hover:shadow-slate-600/70 hover:shadow-lg">Combat</button>
-        <button className="py-2 px-4 rounded-xl hover:shadow-slate-600/70 hover:shadow-lg">Inventory</button>
-        <button className="py-2 px-4 rounded-xl hover:shadow-slate-600/70 hover:shadow-lg">Settings</button>
+        <button
+          className="m-2 py-4 px-8 text-center uppercase transition duration-500 bg-gradient-to-r from-red-500 via-orange-400 to-red-500 text-white rounded-lg block border-0 font-bold shadow-lg cursor-pointer select-none hover:bg-right-center active:transform active:scale-95"
+          role="button">
+          Combat
+        </button>
+        <button
+          className="m-2 py-4 px-8 text-center uppercase transition duration-500 bg-gradient-to-r from-red-500 via-orange-400 to-red-500 text-white rounded-lg block border-0 font-bold shadow-lg cursor-pointer select-none hover:bg-right-center active:transform active:scale-95"
+          role="button">
+          Inventory
+        </button>
+        <button
+          className="m-2 py-4 px-8 text-center uppercase transition duration-500 bg-gradient-to-r from-red-500 via-orange-400 to-red-500 text-white rounded-lg block border-0 font-bold shadow-lg cursor-pointer select-none hover:bg-right-center active:transform active:scale-95"
+          role="button">
+          Settings
+        </button>
       </div>
       <div className="flex">
-        <button className="py-2 px-4 rounded-xl hover:shadow-slate-600/70 hover:shadow-lg">Save</button>
-        <button className="py-2 px-4 rounded-xl hover:shadow-slate-600/70 hover:shadow-lg">Load</button>
+        <button
+          className="m-2 py-4 px-8 text-center uppercase transition duration-500 bg-gradient-to-r from-red-500 via-orange-400 to-red-500 text-white rounded-lg block border-0 font-bold shadow-lg cursor-pointer select-none hover:bg-right-center active:transform active:scale-95"
+          role="button">
+          Save
+        </button>
+        <button
+          className="m-2 py-4 px-8 text-center uppercase transition duration-500 bg-gradient-to-r from-red-500 via-orange-400 to-red-500 text-white rounded-lg block border-0 font-bold shadow-lg cursor-pointer select-none hover:bg-right-center active:transform active:scale-95"
+          role="button">
+          Load
+        </button>
       </div>
     </div>
   )
