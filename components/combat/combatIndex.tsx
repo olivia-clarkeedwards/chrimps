@@ -14,12 +14,11 @@ export default function Combat() {
   const [fadeIn, setFadeIn] = useState(false)
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout
     if (currentZoneNumber > 4 && !shouldMount) {
       setShouldMount(true)
-      setTimeout(() => setFadeIn(true), 350)
+      const timeout = setTimeout(() => setFadeIn(true), 350)
+      return () => clearTimeout(timeout)
     }
-    return () => clearTimeout(timeoutId)
   }, [currentZoneNumber, shouldMount])
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import clsx from "clsx/lite"
 import { useAppSelector } from "../../../redux/hooks"
-import { selectGold } from "../../../redux/playerSlice"
+import { selectCanAfford } from "../../../redux/playerSlice"
 import MultiplierUpgrade from "./multiplierUpgrade"
 import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { Upgrade } from "../../../models/upgrades"
@@ -24,9 +24,11 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
 
   const upgradeLevel = useAppSelector((state) => state.player[thisLevelUp])
   const multiUpgradeCount = useAppSelector((state) => state.player[thisMultiUpgradeCount])
-  const cost = config.levelUpCost(upgradeLevel)
-  const gold = useAppSelector(selectGold)
-  const canAffordLevelUp = gold >= cost
+  const levelUpCost = config.levelUpCost(upgradeLevel)
+  const canAffordLevelUp = useAppSelector(selectCanAfford(levelUpCost))
+  const canAffordMultiUpgrade = useAppSelector(
+    selectCanAfford(UPGRADE_CONFIG.calcMultiCost(config.elementId, multiUpgradeCount)),
+  )
   const { currentZoneNumber } = useAppSelector(selectZoneState)
 
   const [shouldMount, setShouldMount] = useState(false)
@@ -63,7 +65,7 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
               onClick={onUpgrade}
               icon={icon}
               hidden={i === 0 ? upgradeLevel < 10 : multiUpgradeCount < i}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost(config.elementId, multiUpgradeCount)}
+              isAffordable={canAffordMultiUpgrade}
               isPurchased={multiUpgradeCount > i}
             />
           ))}
@@ -73,7 +75,7 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
         id={upgradeName}
         onClick={onLevelUp}
         currentLevel={upgradeLevel}
-        levelUpCost={cost}
+        levelUpCost={levelUpCost}
         isAffordable={canAffordLevelUp}
       />
     </div>

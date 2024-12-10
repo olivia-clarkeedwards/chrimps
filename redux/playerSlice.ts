@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { PlayerState } from "../models/player"
@@ -58,11 +58,13 @@ export const {
   incrementDotMultiUpgradeCount,
 } = playerSlice.actions
 
+export const selectGold = (state: RootState) => state.player.gold
 export const selectClickLevel = (state: RootState) => state.player.clickLevel
 export const selectClickMultiUpgradeCount = (state: RootState) => state.player.clickMultiUpgradeCount
-export const selectGold = (state: RootState) => state.player.gold
 export const selectDotLevel = (state: RootState) => state.player.dotLevel
 export const selectDotMultiUpgradeCount = (state: RootState) => state.player.dotMultiUpgradeCount
 export const selectStartDate = (state: RootState) => state.player.startDate
+
+export const selectCanAfford = (cost: number) => (state: RootState) => selectGold(state) >= cost
 
 export default playerSlice.reducer
