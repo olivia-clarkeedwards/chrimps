@@ -42,7 +42,7 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
       const timeout = setTimeout(() => setIsVisible(true), 350)
       return () => clearTimeout(timeout)
     }
-  }, [currentZoneNumber, config.visibleAtZone, shouldMount])
+  }, [currentZoneNumber, config.visibleAtZone])
 
   if (!shouldMount && isNotClick) return null
 
