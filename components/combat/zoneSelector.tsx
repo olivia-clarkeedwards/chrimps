@@ -5,7 +5,7 @@ import { selectZoneState, zoneSelection } from "../../redux/zoneSlice"
 
 export default function ZoneSelector() {
   const dispatch = useAppDispatch()
-  const { currentZoneNumber: currentZone, zoneInView } = useAppSelector(selectZoneState)
+  const { currentZoneNumber, zoneInView } = useAppSelector(selectZoneState)
 
   const selectedZones = Array.from({ length: 5 }, (cur, acc) => acc + 1)
 
@@ -21,7 +21,7 @@ export default function ZoneSelector() {
   return (
     <div className="flex justify-around flex-row-reverse md:my-2 lg:mt-4 md:mb-10 md:mx-8 lg:mx-12 border-2 rounded-xl border-white bg-black bg-opacity-30 w-full gap-2 py-2 px-4">
       {selectedZones.map((zoneIndex) => {
-        const thisZoneNumber = currentZone - zoneIndex + 1
+        const thisZoneNumber = currentZoneNumber - zoneIndex + 1
 
         return (
           <div

@@ -8,7 +8,7 @@ export default function FarmToggle() {
   const dispatch = useAppDispatch()
   const [hasTransitioned, setHasTransitioned] = useState(false)
 
-  const { isFarming, currentZoneNumber: currentZone } = useAppSelector(selectZoneState)
+  const { isFarming, currentZoneNumber } = useAppSelector(selectZoneState)
 
   function handleFarmToggle(e: React.MouseEvent<HTMLDivElement>) {
     dispatch(toggleFarming())
@@ -16,14 +16,14 @@ export default function FarmToggle() {
 
   useEffect(() => {
     if (!hasTransitioned) {
-      if (currentZone > 4) {
+      if (currentZoneNumber > 4) {
         const timeout = setTimeout(() => {
           setHasTransitioned(true)
         }, 1000)
         return () => clearTimeout(timeout)
       }
     }
-  }, [currentZone])
+  }, [currentZoneNumber])
 
   return (
     // Todo: migrate to tailwind 4.0 and use radial gradients for circular buttons
@@ -31,7 +31,7 @@ export default function FarmToggle() {
       className={clsx(
         "absolute flex items-center justify-center w-10 h-10 right-2 top-1 bg-gradient-to-tr from-yellow-400/20 to-yellow-400 rounded-full opacity-0",
         !hasTransitioned ? "transition-opacity duration-1000" : "transition-none",
-        currentZone > 4 && "opacity-100",
+        currentZoneNumber > 4 && "opacity-100",
       )}>
       <div
         className={clsx(
