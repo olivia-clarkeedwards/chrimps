@@ -37,12 +37,12 @@ export default function UpgradeIndex() {
     click: {
       cost: clickLevelUpCost,
       canAfford: useAppSelector(selectCanAfford(clickLevelUpCost)),
-      action: incrementDotLevel(),
+      action: incrementClickLevel(),
     },
     dot: {
       cost: dotLevelUpCost,
       canAfford: useAppSelector(selectCanAfford(dotLevelUpCost)),
-      action: incrementClickLevel(),
+      action: incrementDotLevel(),
     },
   }
 
