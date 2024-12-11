@@ -33,37 +33,29 @@ export default function UpgradeIndex() {
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
   const { currentZoneNumber } = useAppSelector(selectZoneState)
 
-  const canAffordClickLevelUp = useAppSelector(selectCanAfford(clickLevelUpCost))
-  const canAffordDotLevelUp = useAppSelector(selectCanAfford(dotLevelUpCost))
-  const LevelUpCosts = {
+  const LevelUp = {
     click: {
-      levelUpCost: clickLevelUpCost,
+      cost: clickLevelUpCost,
+      canAfford: useAppSelector(selectCanAfford(clickLevelUpCost)),
+      action: incrementDotLevel(),
     },
     dot: {
-      levelUpCost: dotLevelUpCost,
+      cost: dotLevelUpCost,
+      canAfford: useAppSelector(selectCanAfford(dotLevelUpCost)),
+      action: incrementClickLevel(),
     },
   }
 
   function onLevelup(e: React.MouseEvent<HTMLButtonElement>) {
     const levelUpId = e.currentTarget.id as LevelUpID
 
-    const cost = LevelUpCosts[levelUpId].levelUpCost
+    const { cost, canAfford, action } = LevelUp[levelUpId]
 
-    switch (levelUpId) {
-      case "click":
-        if (canAffordClickLevelUp) {
-          dispatch(incrementClickLevel())
-          dispatch(decreaseGold(cost))
-        }
-        break
-      case "dot":
-        if (canAffordDotLevelUp) {
-          dispatch(incrementDotLevel())
-          dispatch(decreaseGold(cost))
-        }
-        break
-      default:
-        throw new Error(`Unexpected levelup target ${levelUpId}`)
+    if (canAfford) {
+      dispatch(action)
+      dispatch(decreaseGold(cost))
+    } else {
+      throw new Error(`Unexpected levelup target ${levelUpId}`)
     }
   }
 
