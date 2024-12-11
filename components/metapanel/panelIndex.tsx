@@ -9,16 +9,11 @@ export default function Panel() {
 
   return (
     <div
-      className={clsx(
-        // Base
-        "flex flex-col w-full max-w-[60%] p-4 rounded-3xl relative flex-3/5 m-2 shadow-panel",
-        // Mobile
-        // "bg-gradient-to-tr from-amber-400 via-orange-500 to-purple-950",
-        // // Large
-        "lg:bg-gradient-to-br lg:from-orange-400 lg:via-orange-500 lg:to-purple-700",
-      )}>
+      className={`"flex flex-col w-full lg:max-w-[55%] py-4 px-8 m-2 rounded-3xl relative flex-3/5  
+      shadow-panel bg-gradient-to-br from-orange-400 via-orange-500 to-purple-700`}>
       <GoldCoinCounter gold={gold} />
       <UpgradeIndex />
+      {/* <Sphere /> */}
     </div>
   )
 }

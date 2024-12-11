@@ -237,7 +237,7 @@ export default function Monster({ children }: PropsWithChildren) {
       </div> */}
       <div className="flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center">
-          <div className="">{monsterName}</div>
+          <div className="tracking-widest text-lg">{monsterName}</div>
           <FarmToggle />
         </div>
         <div className="w-full text-center items-center justify-center">{children}</div>

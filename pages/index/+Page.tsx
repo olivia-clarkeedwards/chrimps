@@ -17,7 +17,7 @@ export default function Page() {
               <MainNavigationMenu />
             </div>
             <div className="flex flex-1 w-full">
-              <div className="flex w-full flex-col-reverse lg:flex-row justify-around h-full">
+              <div className="flex w-full flex-col-reverse lg:flex-row justify-center h-full">
                 <Panel />
                 <Combat />
               </div>

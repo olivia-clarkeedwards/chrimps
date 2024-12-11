@@ -25,6 +25,7 @@ export default {
           "inset 5px 5px 13px #fb923c, inset -5px -5px 13px #2e1065, -5px -5px 5px rgb(251 146 60), 3px 5px 25px #2e1065",
         combat: "inset 5px 5px 13px #7e22ce, inset -5px -5px 13px #2e1065",
         panel: "inset 5px 5px 13px #fb923c, inset -5px -5px 13px #2e1065",
+        "zone-pocket": "inset 8px 8px 16px #31104c,inset -8px -8px 16px #7f28c2",
       },
       borderRadius: {
         nm: "61px",
