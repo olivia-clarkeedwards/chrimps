@@ -13,7 +13,7 @@ interface UpgradePaneProps {
   config: Upgrade
   damage: number
   multiIcons: JSX.Element[]
-  onUpgrade: (e: React.MouseEvent<HTMLDivElement>) => void
+  onUpgrade: (e: React.MouseEvent<HTMLDivElement>, hidden: boolean, cost: number, isAffordable: boolean) => void
   onLevelUp: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
@@ -62,9 +62,10 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
             <MultiplierUpgrade
               key={upgradeName + i}
               id={`${upgradeName}-multi.${i + 1}`}
-              onClick={onUpgrade}
+              onUpgrade={onUpgrade}
               icon={icon}
               hidden={i === 0 ? upgradeLevel < 10 : multiUpgradeCount < i}
+              cost={UPGRADE_CONFIG.calcMultiCost(config.elementId, i)}
               isAffordable={canAffordMultiUpgrade}
               isPurchased={multiUpgradeCount > i}
             />

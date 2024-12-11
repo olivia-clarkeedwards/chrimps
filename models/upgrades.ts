@@ -1,6 +1,6 @@
 export type UpgradeId = "click-multi" | "dot-multi"
 export type CostKey = "clickMultiCosts" | "dotMultiCosts"
-export type levelUpID = "click" | "dot"
+export type LevelUpID = "click" | "dot"
 
 export interface UpgradeElement {
   upgradeId: UpgradeId
@@ -11,7 +11,7 @@ export interface Upgrade {
   visibleAtZone: number
   elementId: UpgradeId
   costKey: CostKey
-  costs: number[]
+  MultiCosts: number[]
   levelUpCost: (currentLevel: number) => number
 }
 export interface UpgradeConfig {

@@ -12,17 +12,17 @@ import {
   selectDotMultiUpgradeCount,
   incrementDotMultiUpgradeCount,
   incrementDotLevel,
+  selectCanAfford,
 } from "../../../redux/playerSlice"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/clickIcons"
 import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
-import { levelUpID, UpgradeId } from "../../../models/upgrades"
+import { LevelUpID, UpgradeId } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"
 import { selectZoneState } from "../../../redux/zoneSlice"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
 
-  const gold = useAppSelector(selectGold)
   const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
   const clickLevel = useAppSelector(selectClickLevel)
   const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
@@ -33,8 +33,8 @@ export default function UpgradeIndex() {
   const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
   const { currentZoneNumber } = useAppSelector(selectZoneState)
 
-  const canAffordClickLevelUp = gold >= clickLevelUpCost
-  const canAffordDotLevelUp = gold >= dotLevelUpCost
+  const canAffordClickLevelUp = useAppSelector(selectCanAfford(clickLevelUpCost))
+  const canAffordDotLevelUp = useAppSelector(selectCanAfford(dotLevelUpCost))
   const LevelUpCosts = {
     click: {
       levelUpCost: clickLevelUpCost,
@@ -44,8 +44,8 @@ export default function UpgradeIndex() {
     },
   }
 
-  function handleLevelUp(e: React.MouseEvent<HTMLButtonElement>) {
-    const levelUpId = e.currentTarget.id as levelUpID
+  function onLevelup(e: React.MouseEvent<HTMLButtonElement>) {
+    const levelUpId = e.currentTarget.id as LevelUpID
 
     const cost = LevelUpCosts[levelUpId].levelUpCost
 
@@ -67,28 +67,23 @@ export default function UpgradeIndex() {
     }
   }
 
-  function handleUpgrade(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
+  function onUpgrade(
+    e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>,
+    hidden: boolean,
+    cost: number,
+    isAffordable: boolean,
+  ) {
     const [upgradeId, purchasedUpgradeLevel] = e.currentTarget.id.split(".")
-    const upgradeCount = upgradeId === "click-multi" ? clickMultiUpgradeCount : dotMultiUpgradeCount
+    const upgradeActions = {
+      "click-multi": incrementClickMultiUpgradeCount(),
+      "dot-multi": incrementDotMultiUpgradeCount(),
+    }
 
-    const cost = UPGRADE_CONFIG.calcMultiCost(upgradeId as UpgradeId, upgradeCount)
-
-    // This logic should soon be made generic
-    switch (upgradeId) {
-      case "click-multi":
-        if (gold >= cost && Number(purchasedUpgradeLevel) > clickMultiUpgradeCount) {
-          dispatch(incrementClickMultiUpgradeCount())
-          dispatch(decreaseGold(cost))
-        }
-        break
-      case "dot-multi":
-        if (gold >= cost && Number(purchasedUpgradeLevel) > dotMultiUpgradeCount) {
-          dispatch(incrementDotMultiUpgradeCount())
-          dispatch(decreaseGold(cost))
-        }
-        break
-      default:
-        throw new Error(`Unexpected upgrade target ${upgradeId}`)
+    if (isAffordable && !hidden) {
+      dispatch(upgradeActions[upgradeId as keyof typeof upgradeActions])
+      dispatch(decreaseGold(cost))
+    } else {
+      throw new Error(`Unexpected upgrade target ${upgradeId}`)
     }
   }
 
@@ -98,15 +93,15 @@ export default function UpgradeIndex() {
         config={UPGRADE_CONFIG.click}
         damage={clickDamage}
         multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
-        onUpgrade={handleUpgrade}
-        onLevelUp={handleLevelUp}
+        onUpgrade={onUpgrade}
+        onLevelUp={onLevelup}
       />
       <UpgradePane
         config={UPGRADE_CONFIG.dot}
         damage={dotDamage}
         multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
-        onUpgrade={handleUpgrade}
-        onLevelUp={handleLevelUp}
+        onUpgrade={onUpgrade}
+        onLevelUp={onLevelup}
       />
     </div>
   )
