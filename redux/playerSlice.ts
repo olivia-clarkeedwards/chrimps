@@ -16,7 +16,7 @@ const debugState: PlayerState = {
 const initialState: PlayerState = {
   clickLevel: 1,
   clickMultiUpgradeCount: 0,
-  gold: 1,
+  gold: 12313241412,
   dotLevel: 0,
   dotMultiUpgradeCount: 0,
 
@@ -26,7 +26,7 @@ const initialState: PlayerState = {
 
 export const playerSlice = createSlice({
   name: "player",
-  initialState: debugState,
+  initialState: initialState,
   reducers: {
     increaseGold(state, action: PayloadAction<number>) {
       state.gold += action.payload

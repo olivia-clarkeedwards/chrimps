@@ -1,9 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { EnemyState } from "../models/monsters"
 import { Zone } from "../gameconfig/zone"
 import { getMonster } from "../gameconfig/monster"
-import e from "express"
 
 interface ZoneState {
   currentZoneNumber: number
@@ -114,17 +113,17 @@ export const {
   setZoneInView,
 } = zoneSlice.actions
 
-export const selectZoneState = (state: RootState) => ({
-  currentZoneNumber: state.zone.currentZoneNumber,
-  currentZoneLength: state.zone.currentZoneLength,
-  zoneMonsters: state.zone.monsters,
-  stageNumber: state.zone.nextStageIndex,
-  isFarming: state.zone.isFarming,
-  farmZoneMonsters: state.zone.farmZoneMonsters,
-  farmZoneNumber: state.zone.farmZoneNumber,
-  farmZoneLength: state.zone.farmZoneLength,
-  farmStageNumber: state.zone.farmStageIndex,
-  zoneInView: state.zone.zoneInView,
-})
+export const selectZoneState = createSelector([(state) => state.zone], (zone) => ({
+  currentZoneNumber: zone.currentZoneNumber,
+  currentZoneLength: zone.currentZoneLength,
+  zoneMonsters: zone.monsters,
+  stageNumber: zone.nextStageIndex,
+  isFarming: zone.isFarming,
+  farmZoneMonsters: zone.farmZoneMonsters,
+  farmZoneNumber: zone.farmZoneNumber,
+  farmZoneLength: zone.farmZoneLength,
+  farmStageNumber: zone.farmStageIndex,
+  zoneInView: zone.zoneInView,
+}))
 
 export default zoneSlice.reducer
