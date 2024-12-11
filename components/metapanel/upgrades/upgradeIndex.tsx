@@ -93,7 +93,21 @@ export default function UpgradeIndex() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
+      <UpgradePane
+        config={UPGRADE_CONFIG.click}
+        damage={clickDamage}
+        multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
+        onUpgrade={handleUpgrade}
+        onLevelUp={handleLevelUp}
+      />
+      <UpgradePane
+        config={UPGRADE_CONFIG.click}
+        damage={clickDamage}
+        multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
+        onUpgrade={handleUpgrade}
+        onLevelUp={handleLevelUp}
+      />
       <UpgradePane
         config={UPGRADE_CONFIG.click}
         damage={clickDamage}

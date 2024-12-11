@@ -20,6 +20,15 @@ export default {
         "85": ".85",
         "80": ".80",
       },
+      boxShadow: {
+        nm: "5px 5px 13px #92400e, -5px -5px 13px rgb(251 146 60 / var(--tw-bg-opacity))",
+      },
+      borderRadius: {
+        nm: "61px",
+      },
+      gradientColorStops: {
+        nm: "linear-gradient(145deg, orange, purple)",
+      },
     },
   },
   plugins: [],
