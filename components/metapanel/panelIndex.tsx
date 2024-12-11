@@ -11,7 +11,7 @@ export default function Panel() {
     <div
       className={clsx(
         // Base
-        "flex w-full max-w-2/3 flex-col p-4 rounded-3xl relative flex-3/5 m-2 shadow-nm",
+        "flex w-full max-w-2/3 flex-col p-4 rounded-3xl relative flex-3/5 m-2 shadow-panel",
         // Mobile
         // "bg-gradient-to-tr from-amber-400 via-orange-500 to-purple-950",
         // // Large
