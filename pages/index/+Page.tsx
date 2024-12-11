@@ -13,7 +13,7 @@ export default function Page() {
       <Provider store={store}>
         <div className="fixed inset-0 select-none bg-yellow-500 h-full cursor-fancy">
           <div className="h-full w-full overflow-y-scroll">
-            <div className="h-20">
+            <div className="min-h-20">
               <MainNavigationMenu />
             </div>
             <div className="flex flex-1 w-full">
