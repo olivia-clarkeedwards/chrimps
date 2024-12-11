@@ -47,7 +47,8 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   return (
     <div
       className={clsx(
-        "flex w-full items-start justify-between align-start py-4 px-4 border-amber-950 transition-opacity duration-1000 border-2 rounded-md",
+        `flex w-full items-start justify-between align-start py-4 px-4 border-amber-800 border-px ring ring-amber-600
+        bg-gradient-to-br shadow-lg bg-orange-400 from-orange-400 to-orange-800/70 transition-opacity duration-1000 border-2 rounded-md`,
         // upgradeName === "click" ? "border-y-2" : "border-b-2",
         isVisible && isNotClick && "opacity-100",
         !isVisible && isNotClick && "opacity-0",
