@@ -1,13 +1,13 @@
 export function MainNavigationMenu() {
   return (
-    <div className="flex flex-wrap justify-between items-center bg-gray-900 text-white h-full px-3">
-      <div className="flex gap-3 items-center">
+    <div className="flex flex-wrap gap-4 justify-between items-center bg-gray-900 text-white h-full px-3 py-2">
+      <div className="flex flex-wrap gap-3 items-center">
         <NavigationLinkButton text="Home" linkTo="" />
         <NavigationLinkButton text="Combat" linkTo="/combat" />
         <NavigationLinkButton text="Inventory" linkTo="/inventory" />
         <NavigationLinkButton text="Settings" linkTo="/settings" />
       </div>
-      <div className="flex gap-3 items-center">
+      <div className="flex flex-wrap gap-3 items-center">
         <NavigationLinkButton text="Save" linkTo="/save" />
         <NavigationLinkButton text="Load" linkTo="/load" />
       </div>
