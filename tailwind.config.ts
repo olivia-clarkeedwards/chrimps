@@ -21,7 +21,10 @@ export default {
         "80": ".80",
       },
       boxShadow: {
-        nm: "5px 5px 13px #92400e, -5px -5px 13px rgb(251 146 60 / var(--tw-bg-opacity))",
+        upgrade:
+          "inset 5px 5px 13px #fb923c, inset -5px -5px 13px #2e1065, -5px -5px 5px rgb(251 146 60), 3px 5px 25px #2e1065",
+        combat: "inset 5px 5px 13px #7e22ce, inset -5px -5px 13px #2e1065",
+        panel: "inset 5px 5px 13px #fb923c, inset -5px -5px 13px #2e1065",
       },
       borderRadius: {
         nm: "61px",
