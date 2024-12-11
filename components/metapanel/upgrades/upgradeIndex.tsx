@@ -101,7 +101,7 @@ export default function UpgradeIndex() {
         onUpgrade={handleUpgrade}
         onLevelUp={handleLevelUp}
       />
-      <UpgradePane
+      {/* <UpgradePane
         config={UPGRADE_CONFIG.click}
         damage={clickDamage}
         multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
@@ -114,7 +114,7 @@ export default function UpgradeIndex() {
         multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
         onUpgrade={handleUpgrade}
         onLevelUp={handleLevelUp}
-      />
+      /> */}
       <UpgradePane
         config={UPGRADE_CONFIG.dot}
         damage={dotDamage}
