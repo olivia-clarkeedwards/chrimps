@@ -2,6 +2,7 @@ import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { PlayerState } from "../models/player"
+import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 
 const debugState: PlayerState = {
   clickLevel: 10000,
@@ -66,8 +67,15 @@ export const selectPlayerState = createSelector([(state) => state.player], (play
   startDate: player.startDate,
 }))
 
+export const selectClickLevel = (state: RootState) => state.player.clickLevel
 export const selectGold = (state: RootState) => state.player.gold
-
 export const selectCanAfford = (cost: number) => (state: RootState) => selectGold(state) >= cost
+
+export const selectClickDamage = (state: RootState) =>
+  playerCalc.clickDamage(state.player.clickLevel, state.player.clickMultiUpgradeCount)
+export const selectDotDamage = (state: RootState) =>
+  playerCalc.dotDamage(state.player.dotLevel, state.player.dotMultiUpgradeCount)
+export const selectClickLevelUpCost = (state: RootState) => UPGRADE_CONFIG.click.levelUpCost(state.player.clickLevel)
+export const selectDotLevelUpCost = (state: RootState) => UPGRADE_CONFIG.dot.levelUpCost(state.player.dotLevel)
 
 export default playerSlice.reducer

@@ -1,21 +1,7 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import {
-  increaseGold,
-  selectClickLevel,
-  selectClickMultiUpgradeCount,
-  selectDotLevel,
-  selectDotMultiUpgradeCount,
-} from "../../redux/playerSlice"
-import { playerCalc } from "../../gameconfig/upgrades"
-import {
-  selectMonsterAlive,
-  selectMonsterGoldValue,
-  selectMonsterImage,
-  selectMonsterName,
-  spawnMonster,
-  takeDamage,
-} from "../../redux/monsterSlice"
+import { increaseGold, selectClickDamage, selectDotDamage, selectPlayerState } from "../../redux/playerSlice"
+import { selectMonsterState, spawnMonster, takeDamage } from "../../redux/monsterSlice"
 import {
   increaseTotalClickDamageDealt,
   increaseTotalDotDamageDealt,
@@ -24,7 +10,6 @@ import {
   incrementHighestZoneEver,
   incrementKillCount,
   incrementZonesCompleted,
-  selectHighestZone,
   selectHighestZoneEver,
 } from "../../redux/statsSlice"
 import {
@@ -42,12 +27,9 @@ import FarmToggle from "./farmToggle"
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
 
-  const clickLevel = useAppSelector(selectClickLevel)
-  const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
-  const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
-  const dotLevel = useAppSelector(selectDotLevel)
-  const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
-  const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
+  const { clickLevel } = useAppSelector(selectPlayerState)
+  const clickDamage = useAppSelector(selectClickDamage)
+  const dotDamage = useAppSelector(selectDotDamage)
 
   const zoneLength = ZONE_CONFIG.length
   const {
@@ -60,14 +42,9 @@ export default function Monster({ children }: PropsWithChildren) {
     farmStageNumber,
     zoneInView,
   } = useAppSelector(selectZoneState)
-
   const highestZoneEver = useAppSelector(selectHighestZoneEver)
-  const highestZone = useAppSelector(selectHighestZone)
 
-  const monsterName = useAppSelector(selectMonsterName)
-  const monsterImage = useAppSelector(selectMonsterImage)
-  const monsterValue = useAppSelector(selectMonsterGoldValue)
-  const monsterAlive = useAppSelector(selectMonsterAlive)
+  const { monsterName, monsterGoldValue, monsterImage, monsterAlive } = useAppSelector(selectMonsterState)
 
   const tickCount = useRef(0)
   const lastFrameTime = useRef(performance.now())
@@ -163,7 +140,7 @@ export default function Monster({ children }: PropsWithChildren) {
   useEffect(() => {
     if (!monsterAlive) {
       dispatch(incrementKillCount())
-      dispatch(increaseGold(monsterValue))
+      dispatch(increaseGold(monsterGoldValue))
       let nextMonster: undefined | EnemyState
 
       const isProgressing = zoneInView === currentZone
@@ -192,7 +169,7 @@ export default function Monster({ children }: PropsWithChildren) {
         } else if (zoneInView < currentZone && !isFarming) {
           dispatch(setZoneInView(currentZone))
         } else {
-          throw "Logic error during highest zone transition"
+          throw new Error("Logic error during highest zone transition")
         }
 
         // Stage transition
@@ -221,15 +198,15 @@ export default function Monster({ children }: PropsWithChildren) {
     if (nextMonster) {
       dispatch(spawnMonster(nextMonster))
     } else {
-      throw "Monster undefined during zone transition"
+      throw new Error("Monster undefined during zone transition")
     }
   }, [zoneInView])
 
   return (
     <>
       <div className="absolute bottom-[16%] text-white">
-        Debug: monsterValue: {monsterValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage: {clickDamage}{" "}
-        dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}
+        Debug: monsterGoldValue: {monsterGoldValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage:{" "}
+        {clickDamage} dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}
       </div>
       <div className="basis-2/12 flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center">

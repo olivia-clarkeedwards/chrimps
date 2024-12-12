@@ -76,4 +76,6 @@ export const selectStatsState = createSelector([(state) => state.stats], (stats)
   highestZone: stats.highestZone,
 }))
 
+export const selectHighestZoneEver = (state: RootState) => state.stats.highestZoneEver
+
 export default statsSlice.reducer

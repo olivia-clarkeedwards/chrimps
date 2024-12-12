@@ -22,7 +22,7 @@ export default function ZoneMap() {
 
   const currentStage = isFarmZone && farmZoneMonsters ? farmStageNumber : stageNumber
   const monsters = isFarmZone && farmZoneMonsters ? farmZoneMonsters : zoneMonsters
-  if (!monsters) throw "Failed to retrieve monsters for zone"
+  if (!monsters) throw new Error("Failed to retrieve monsters for zone")
 
   const getIcon = (stageNumber: number): JSX.Element | undefined => {
     const monster = monsters[stageNumber]

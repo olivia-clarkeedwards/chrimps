@@ -4,32 +4,26 @@ import {
   decreaseGold,
   incrementClickLevel,
   incrementClickMultiUpgradeCount,
-  selectClickLevel,
-  selectClickMultiUpgradeCount,
-  selectDotLevel,
-  selectDotMultiUpgradeCount,
   incrementDotMultiUpgradeCount,
   incrementDotLevel,
   selectCanAfford,
+  selectClickDamage,
+  selectDotDamage,
+  selectClickLevelUpCost,
+  selectDotLevelUpCost,
 } from "../../../redux/playerSlice"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/clickIcons"
-import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
+import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { LevelUpID } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"
-import { selectZoneState } from "../../../redux/zoneSlice"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
 
-  const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
-  const clickLevel = useAppSelector(selectClickLevel)
-  const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
-  const dotLevel = useAppSelector(selectDotLevel)
-  const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
-  const clickLevelUpCost = UPGRADE_CONFIG.click.levelUpCost(clickLevel)
-  const dotLevelUpCost = UPGRADE_CONFIG.dot.levelUpCost(dotLevel)
-  const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
-  const { currentZoneNumber } = useAppSelector(selectZoneState)
+  const clickDamage = useAppSelector(selectClickDamage)
+  const dotDamage = useAppSelector(selectDotDamage)
+  const clickLevelUpCost = useAppSelector(selectClickLevelUpCost)
+  const dotLevelUpCost = useAppSelector(selectDotLevelUpCost)
 
   const LevelUp = {
     click: {

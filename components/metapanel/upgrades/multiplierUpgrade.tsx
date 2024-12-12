@@ -4,7 +4,7 @@ import clsx from "clsx/lite"
 interface MultiplierProps {
   id: string
   icon: JSX.Element
-  onUpgrade: (e: React.MouseEvent<HTMLDivElement>, hidden: boolean, cost: number, isAffordable: boolean) => void
+  onClick: (e: React.MouseEvent<HTMLDivElement>, hidden: boolean, cost: number, isAffordable: boolean) => void
   cost: number
   isAffordable: boolean
   isPurchased: boolean
@@ -14,7 +14,7 @@ interface MultiplierProps {
 export default function MultiplierUpgrade({
   id,
   icon,
-  onUpgrade,
+  onClick: onUpgrade,
   hidden,
   cost,
   isAffordable,

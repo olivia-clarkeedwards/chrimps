@@ -24,3 +24,13 @@ export interface PlayerCalc {
   clickDamage: (clickLevel: number, clickMulti: number) => number
   dotDamage: (dotLevel: number, dotMulti: number) => number
 }
+
+export type UpgradeKey = "click" | "dot"
+
+export type UpgradeProps = {
+  [key in UpgradeKey]: {
+    level: number
+    upgradeCount: number
+    levelUpCost: number
+  }
+}
