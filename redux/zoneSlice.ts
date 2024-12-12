@@ -91,7 +91,6 @@ export const zoneSlice = createSlice({
     },
     toggleFarming: (state) => {
       state.isFarming = !state.isFarming
-      // if (state.isFarming === false) state.zoneInFocus = state.currentZoneNumber
     },
     setZoneLength(state, action: PayloadAction<number>) {
       state.currentZoneLength = action.payload
@@ -125,5 +124,8 @@ export const selectZoneState = createSelector([(state) => state.zone], (zone) =>
   farmStageNumber: zone.farmStageIndex,
   zoneInView: zone.zoneInView,
 }))
+
+export const selectCurrentZoneNumber = (state: RootState) => state.zone.currentZoneNumber
+export const selectIsFarming = (state: RootState) => state.zone.isFarming
 
 export default zoneSlice.reducer

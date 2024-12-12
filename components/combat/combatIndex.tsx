@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { selectZoneState } from "../../redux/zoneSlice"
+import { selectCurrentZoneNumber, selectZoneState } from "../../redux/zoneSlice"
 import Healthbar from "./healthbar"
 import Monster from "./monster"
 import ZoneMap from "./zoneMap"
@@ -8,7 +8,7 @@ import ZoneSelector from "./zoneSelector"
 import clsx from "clsx/lite"
 
 export default function Combat() {
-  const { currentZoneNumber } = useAppSelector(selectZoneState)
+  const currentZoneNumber = useAppSelector(selectCurrentZoneNumber)
 
   const [shouldMount, setShouldMount] = useState(false)
   const [fadeIn, setFadeIn] = useState(false)

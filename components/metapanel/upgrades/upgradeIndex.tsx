@@ -1,11 +1,9 @@
 import React from "react"
-import clsx from "clsx/lite"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import {
   decreaseGold,
   incrementClickLevel,
   incrementClickMultiUpgradeCount,
-  selectGold,
   selectClickLevel,
   selectClickMultiUpgradeCount,
   selectDotLevel,
@@ -16,7 +14,7 @@ import {
 } from "../../../redux/playerSlice"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/clickIcons"
 import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
-import { LevelUpID, UpgradeId } from "../../../models/upgrades"
+import { LevelUpID } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"
 import { selectZoneState } from "../../../redux/zoneSlice"
 

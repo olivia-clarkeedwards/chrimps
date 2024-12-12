@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { getMonster, getRandomMonster } from "../gameconfig/monster"
@@ -28,11 +28,14 @@ export const monsterSlice = createSlice({
 
 export const { takeDamage, spawnMonster, monsterDied } = monsterSlice.actions
 
-export const selectMonsterName = (state: RootState) => state.monster.name
-export const selectMonsterLevel = (state: RootState) => state.monster.level
+export const monsterState = createSelector([(state) => state.monster], (monster) => ({
+  monsterName: monster.name,
+  monsterLevel: monster.level,
+  monsterGoldValue: monster.goldValue,
+  monsterAlive: monster.alive,
+  monsterImage: monster.image,
+}))
+
 export const selectMonsterHealth = (state: RootState) => state.monster.health
-export const selectMonsterGoldValue = (state: RootState) => state.monster.goldValue
-export const selectMonsterAlive = (state: RootState) => state.monster.alive
-export const selectMonsterImage = (state: RootState) => state.monster.image
 
 export default monsterSlice.reducer
