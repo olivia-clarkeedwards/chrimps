@@ -1,15 +1,13 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { increaseGold, selectClickDamage, selectDotDamage, selectPlayerState } from "../../redux/playerSlice"
-import { selectMonsterState, spawnMonster, takeDamage } from "../../redux/monsterSlice"
+import { selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
 import {
   increaseTotalClickDamageDealt,
   increaseTotalDotDamageDealt,
   incrementClickCount,
-  incrementHighestZone,
-  incrementHighestZoneEver,
+  incrementFarmZonesCompleted,
   incrementKillCount,
-  incrementZonesCompleted,
   selectHighestZoneEver,
 } from "../../redux/statsSlice"
 import {
@@ -85,7 +83,6 @@ export default function Monster({ children }: PropsWithChildren) {
     if (dotDamage) {
       const damageThisTick = dotDamage / 20
       dispatch(increaseTotalDotDamageDealt(damageThisTick))
-      dispatch(takeDamage(damageThisTick))
     }
   }, [dotDamage])
 
@@ -133,7 +130,6 @@ export default function Monster({ children }: PropsWithChildren) {
   function handleClick() {
     dispatch(incrementClickCount())
     dispatch(increaseTotalClickDamageDealt(clickDamage))
-    dispatch(takeDamage(clickDamage))
     // Goto !monsterAlive useEffect if monster died
   }
 
@@ -151,28 +147,25 @@ export default function Monster({ children }: PropsWithChildren) {
         // When highest zone
         if (isProgressing) {
           dispatch(zoneComplete())
-          dispatch(incrementZonesCompleted())
-          dispatch(incrementHighestZone())
-          currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
-
           // Highest zone & farming toggled; zone transition in place
           if (isFarming) {
             const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
             if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
           }
 
-          // If farming or not farming when not highest zone
-        } else if (zoneInView < currentZone && isFarming && farmZoneMonsters) {
-          dispatch(refreshFarmZone())
-          const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
-          if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
-        } else if (zoneInView < currentZone && !isFarming) {
-          dispatch(setZoneInView(currentZone))
-        } else {
-          throw new Error("Logic error during highest zone transition")
-        }
+          // When farming and farming is toggled, continue; else goto zoneInView useEffect block
+        } else if (zoneInView < currentZone) {
+          dispatch(incrementFarmZonesCompleted())
+          if (isFarming && farmZoneMonsters) {
+            dispatch(refreshFarmZone())
+            const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
+            if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
+          } else if (!isFarming) {
+            dispatch(setZoneInView(currentZone))
+          } else throw new Error("Logic error during farm zone transition")
+        } else throw new Error("Logic error during highest zone transition")
 
-        // Stage transition
+        // Stage transition case
       } else {
         dispatch(incrementStageNumber())
         if (zoneInView < currentZone && farmZoneMonsters) {
@@ -181,9 +174,8 @@ export default function Monster({ children }: PropsWithChildren) {
           nextMonster = zoneMonsters[stageNumber]
         }
       }
+      // Spawn the next monster when we didn't jump to zoneInView transition
       if (nextMonster) dispatch(spawnMonster(nextMonster))
-
-      // Finally, spawn the next monster
     }
   }, [monsterAlive])
 
@@ -197,9 +189,7 @@ export default function Monster({ children }: PropsWithChildren) {
     }
     if (nextMonster) {
       dispatch(spawnMonster(nextMonster))
-    } else {
-      throw new Error("Monster undefined during zone transition")
-    }
+    } else throw new Error("Monster undefined during zone transition")
   }, [zoneInView])
 
   return (
