@@ -6,7 +6,7 @@ import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 
 const debugState: PlayerState = {
   clickLevel: 10000,
-  clickMultiUpgradeCount: 0,
+  clickMultiUpgradeCount: 3,
   gold: 100,
   dotLevel: 50000,
   dotMultiUpgradeCount: 3,
@@ -17,7 +17,7 @@ const debugState: PlayerState = {
 const initialState: PlayerState = {
   clickLevel: 1,
   clickMultiUpgradeCount: 0,
-  gold: 12313241412,
+  gold: 1,
   dotLevel: 0,
   dotMultiUpgradeCount: 0,
 
@@ -47,6 +47,9 @@ export const playerSlice = createSlice({
     incrementDotMultiUpgradeCount: (state) => {
       state.dotMultiUpgradeCount++
     },
+    setDebugState: (state) => {
+      return (state = debugState)
+    },
   },
 })
 
@@ -57,6 +60,7 @@ export const {
   incrementClickMultiUpgradeCount,
   incrementDotLevel,
   incrementDotMultiUpgradeCount,
+  setDebugState,
 } = playerSlice.actions
 
 export const selectPlayerState = createSelector([(state) => state.player], (player) => ({
