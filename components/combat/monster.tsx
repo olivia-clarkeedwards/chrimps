@@ -40,7 +40,6 @@ export default function Monster({ children }: PropsWithChildren) {
     farmStageNumber,
     zoneInView,
   } = useAppSelector(selectZoneState)
-  const highestZoneEver = useAppSelector(selectHighestZoneEver)
 
   const { monsterName, monsterGoldValue, monsterImage, monsterAlive } = useAppSelector(selectMonsterState)
 
