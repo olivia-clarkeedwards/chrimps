@@ -52,7 +52,7 @@ export default function Monster({ children }: PropsWithChildren) {
 
   const tickCount = useRef(0)
   const lastFrameTime = useRef(performance.now())
-  const frameRef = useRef<number>()
+  const frameTime = useRef<number>()
   const TICK_RATE = 20
   const TICK_TIME = 1000 / TICK_RATE
 
@@ -106,7 +106,7 @@ export default function Monster({ children }: PropsWithChildren) {
       }
 
       lastFrameTime.current = currentTime - delta
-      frameRef.current = requestAnimationFrame(gameLoop)
+      frameTime.current = requestAnimationFrame(gameLoop)
     },
     [dealDamageOverTime, runTasks],
   )
@@ -114,11 +114,11 @@ export default function Monster({ children }: PropsWithChildren) {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        if (frameRef.current) cancelAnimationFrame(frameRef.current)
+        if (frameTime.current) cancelAnimationFrame(frameTime.current)
       } else {
         // The setTimeout seems to prevent extra loops between document hidden and document visible
         setTimeout(() => {
-          frameRef.current = requestAnimationFrame(gameLoop)
+          frameTime.current = requestAnimationFrame(gameLoop)
         }, 0)
       }
     }
@@ -127,9 +127,9 @@ export default function Monster({ children }: PropsWithChildren) {
   }, [dealDamageOverTime, runTasks])
 
   useEffect(() => {
-    frameRef.current = requestAnimationFrame(gameLoop)
+    frameTime.current = requestAnimationFrame(gameLoop)
     return () => {
-      if (frameRef.current) cancelAnimationFrame(frameRef.current)
+      if (frameTime.current) cancelAnimationFrame(frameTime.current)
     }
   }, [gameLoop])
 
