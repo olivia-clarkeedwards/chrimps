@@ -29,9 +29,17 @@ interface GoldConfig {
   healthMultiBonus: number
 }
 
+interface BossConfig {
+  extraLevels: 20
+  plasmaExpoGrowth: number
+  plasmaLinGrowth: number
+  plasmaValue: (zoneNumber: number) => number
+}
+
 export interface BaseMonsterConfig {
   health: HealthConfig
   gold: GoldConfig
+  boss: BossConfig
   regularSpawnChance: number
 }
 

@@ -1,4 +1,3 @@
-import e from "express"
 import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig, EnemyState } from "../models/monsters"
 import { ZONE_CONFIG } from "./zone"
 
@@ -11,6 +10,14 @@ const MONSTER_CONFIG: BaseMonsterConfig = {
   gold: {
     healthDivisor: 4,
     healthMultiBonus: 1.5,
+  },
+  boss: {
+    extraLevels: 20,
+    plasmaExpoGrowth: 1.2,
+    plasmaLinGrowth: 1.3,
+    plasmaValue: function (zoneNumber) {
+      return Math.round(Math.pow(this.plasmaExpoGrowth, zoneNumber - 1 * this.plasmaLinGrowth))
+    },
   },
   regularSpawnChance: 0.97,
   // attack etc.

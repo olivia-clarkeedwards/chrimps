@@ -12,3 +12,7 @@ export function serialize(classInstance) {
   }
   return serialized
 }
+
+function getAdditivePrice(atLevel, prestigeUpgrade) {
+  return (((atLevel - 1) * atLevel) / 2) * prestigeUpgrade.additiveInc + prestigeUpgrade.priceBase * atLevel
+}
