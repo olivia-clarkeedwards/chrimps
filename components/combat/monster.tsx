@@ -1,6 +1,12 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { increaseGold, selectClickDamage, selectDotDamage, selectPlayerState } from "../../redux/playerSlice"
+import {
+  increaseGold,
+  increasePlasma,
+  selectClickDamage,
+  selectDotDamage,
+  selectPlayerState,
+} from "../../redux/playerSlice"
 import { selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
 import {
   increaseTotalClickDamageDealt,
@@ -25,7 +31,7 @@ import FarmToggle from "./farmToggle"
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
 
-  const { clickLevel } = useAppSelector(selectPlayerState)
+  const { clickLevel, plasma } = useAppSelector(selectPlayerState)
   const clickDamage = useAppSelector(selectClickDamage)
   const dotDamage = useAppSelector(selectDotDamage)
 
@@ -41,7 +47,8 @@ export default function Monster({ children }: PropsWithChildren) {
     zoneInView,
   } = useAppSelector(selectZoneState)
 
-  const { monsterName, monsterGoldValue, monsterImage, monsterAlive } = useAppSelector(selectMonsterState)
+  const { monsterName, monsterGoldValue, monsterPlasmaValue, monsterImage, monsterAlive } =
+    useAppSelector(selectMonsterState)
 
   const tickCount = useRef(0)
   const lastFrameTime = useRef(performance.now())
@@ -146,6 +153,8 @@ export default function Monster({ children }: PropsWithChildren) {
         // When highest zone
         if (isProgressing) {
           dispatch(zoneComplete())
+          if (currentZone > 9) dispatch(increasePlasma(monsterPlasmaValue))
+
           // Highest zone & farming toggled; zone transition in place
           if (isFarming) {
             const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
@@ -195,7 +204,8 @@ export default function Monster({ children }: PropsWithChildren) {
     <>
       <div className="absolute bottom-[16%] text-white">
         Debug: monsterGoldValue: {monsterGoldValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage:{" "}
-        {clickDamage} dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}
+        {clickDamage} dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}{" "}
+        plasma: {plasma}
       </div>
       <div className="basis-2/12 flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center">

@@ -8,6 +8,7 @@ export interface Enemy {
   health: number
   goldValue: number
   image: string
+  plasma?: number
 }
 
 export interface MonsterType {

@@ -35,6 +35,7 @@ export const selectMonsterState = createSelector([(state) => state.monster], (mo
   monsterName: monster.name,
   monsterLevel: monster.level,
   monsterGoldValue: monster.goldValue,
+  monsterPlasmaValue: monster?.plasma,
   monsterImage: monster.image,
   monsterAlive: monster.alive,
 }))

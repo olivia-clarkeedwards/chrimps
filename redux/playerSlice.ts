@@ -78,6 +78,7 @@ export const selectPlayerState = createSelector([(state) => state.player], (play
   clickMultiUpgradeCount: player.clickMultiUpgradeCount,
   dotLevel: player.dotLevel,
   dotMultiUpgradeCount: player.dotMultiUpgradeCount,
+  plasma: player.plasma,
   startDate: player.startDate,
 }))
 

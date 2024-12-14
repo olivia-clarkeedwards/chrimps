@@ -62,6 +62,7 @@ class Monster extends BaseMonster implements Enemy {
   health
   image
   goldValue
+  plasma?: number
 
   constructor(config: MonsterType, zoneNumber: number, stageNumber: number, isBoss: boolean) {
     super(zoneNumber, stageNumber, isBoss)
@@ -73,6 +74,7 @@ class Monster extends BaseMonster implements Enemy {
     const goldMulti = (config.goldMulti ??= 1)
     const { healthDivisor, healthMultiBonus } = MONSTER_CONFIG.gold
     this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (healthMulti * healthMultiBonus) * goldMulti)
+    if (isBoss) this.plasma = MONSTER_CONFIG.boss.plasmaValue(zoneNumber)
   }
 }
 
@@ -82,6 +84,7 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1, isBoss = false
     randomMonster = BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
   } else {
     const randomValue = Math.random()
+    // Special monster bonus to be implemented via an upgrade system; currently does nothing
     const regularSpawnChance = MONSTER_CONFIG.regularSpawnChance * Math.pow(0.99, specialMonsterBonus)
     randomMonster =
       regularSpawnChance > randomValue
@@ -108,6 +111,7 @@ function serializableMonster(monster: Monster): EnemyState {
     health: monster.health,
     goldValue: monster.goldValue,
     image: monster.image,
+    plasma: monster?.plasma,
   }
   return serializable
 }
