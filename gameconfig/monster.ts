@@ -52,7 +52,7 @@ class BaseMonster implements BaseEnemy {
 
   constructor(zoneNumber: number, stageNumber: number, isBoss: boolean) {
     this.level = (zoneNumber - 1) * ZONE_CONFIG.length + stageNumber
-    if (isBoss) this.level += 20
+    if (isBoss) this.level += MONSTER_CONFIG.boss.extraLevels
   }
 }
 
