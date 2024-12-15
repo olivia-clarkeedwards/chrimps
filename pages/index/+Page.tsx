@@ -5,15 +5,18 @@ import Panel from "../../components/metapanel/panelIndex"
 import Combat from "../../components/combat/combatIndex"
 import { store } from "../../redux/store"
 import { Provider } from "react-redux"
+import { NavigationMenu } from "../../components/combat/nav/navigation"
 
 export default function Page() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <div className="flex-col min-h-screen lg:h-screen select-none">
-          <div className="lg:h-[10%]"></div>
+        <div className="flex-col min-h-screen lg:h-screen select-none bg-gradient-to-b from-purple-800 via-purple-900 to-violet-950">
+          <div className="lg:h-[10%]">
+            <NavigationMenu />
+          </div>
           <div className="flex lg:h-[90%]">
-            <div className="flex w-full lg:flex-row flex-col flex-col-reverse lg:border-t-2 border-yellow-500">
+            <div className="flex w-full lg:flex-row flex-col-reverse ">
               <Panel />
               <Combat />
             </div>
