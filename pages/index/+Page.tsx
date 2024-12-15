@@ -17,17 +17,17 @@ export default function Page() {
               <MainNavigationMenu />
             </div>
             <div className="flex flex-1 w-full">
-              <div className="flex w-full flex-col-reverse lg:flex-row justify-center h-full">
+              <div className="flex w-full flex-col-reverse lg:flex-row justify-around h-full">
                 <Panel />
                 <Combat />
                 {/* //active abilities? */}
-                {/* <div className=" w-[20%]">
+                <div className=" w-[20%]">
                   <div className="bg-yellow-400 rounded-lg m-2 h-20"></div>
                   <div className="bg-yellow-400 rounded-lg m-2 h-20"></div>
                   <div className="bg-yellow-400 rounded-lg m-2 h-20"></div>
                   <div className="bg-yellow-400 rounded-lg m-2 h-20"></div>
                   <div className="bg-yellow-400 rounded-lg m-2 h-20"></div>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>

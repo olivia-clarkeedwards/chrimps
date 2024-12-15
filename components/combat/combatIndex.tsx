@@ -30,7 +30,7 @@ export default function Combat() {
   }, [currentZoneNumber])
 
   return (
-    <div className="flex flex-col justify-center min-h-[92svh] md:min-h-[89svh] text-white basis-4/5 md:basis-2/5 bg-gradient-to-b from-purple-800 via-purple-900 to-violet-950">
+    <div className={`flex w-full lg:max-w-[55%] flex-col justify-center h-full p-8 rounded-3xl m-2 text-white`}>
       {currentZoneNumber > 4 && (
         <div className={clsx("flex basis-1/6 transition-opacity opacity-0 duration-1000", fadeIn && "opacity-100")}>
           <ZoneSelector />

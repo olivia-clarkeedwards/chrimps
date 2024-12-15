@@ -38,44 +38,26 @@ export default function ZoneMap() {
   }
 
   return (
-    <div className="grid grid-cols-10 gap-1 w-full h-30 scale-x-[-1]">
+    <div className="bg-gray-300 rounded grid grid-cols-10 w-full h-30 scale-x-[-1]">
       {stages.reverse().map((stageIndex) => (
         <div
           key={stageIndex}
           className={clsx(
-            "flex relative h-8 w-full items-center justify-center rounded-md",
-            // stageIndex < currentStage && "bg-islam",
-            // stageIndex === currentStage && stageIndex !== zoneLength && "bg-yellow-500",
-
-            // stageIndex > currentStage && stageIndex !== zoneLength && "bg-gray-800",
-            // !isFarmZone && stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
-            // !isFarmZone && stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
-            // isFarmZone && farmZoneMonsters && stageIndex === zoneLength && "bg-gray-800",
-            // isFarmZone &&
-            //   farmZoneMonsters &&
-            //   stageIndex === currentStage &&
-            //   stageIndex === zoneLength &&
-            //   "bg-yellow-500",
+            "flex relative h-8 w-full border-2 border-gray-300 items-center justify-center rounded",
+            stageIndex < currentStage && "bg-islam",
+            stageIndex === currentStage && stageIndex !== zoneLength && "bg-yellow-500",
+            stageIndex > currentStage && stageIndex !== zoneLength && "bg-gray-800",
+            !isFarmZone && stageIndex === zoneLength && stageIndex !== currentStage && "bg-red-600",
+            !isFarmZone && stageIndex === zoneLength && stageIndex === currentStage && "bg-orange-400",
+            isFarmZone && farmZoneMonsters && stageIndex === zoneLength && "bg-gray-800",
+            isFarmZone &&
+              farmZoneMonsters &&
+              stageIndex === currentStage &&
+              stageIndex === zoneLength &&
+              "bg-yellow-500",
           )}>
-          <div className="flex bg-purple-900 shadow-zone-pocket rounded-md w-full h-full items-center justify-center">
-            <Sphere
-              color={
-                stageIndex < currentStage
-                  ? "green"
-                  : (stageIndex === currentStage && stageIndex !== zoneLength) ||
-                      (isFarmZone && farmZoneMonsters && stageIndex === currentStage && stageIndex === zoneLength)
-                    ? "yellow"
-                    : (stageIndex > currentStage && stageIndex !== zoneLength) ||
-                        (isFarmZone && farmZoneMonsters && stageIndex === zoneLength)
-                      ? "grey"
-                      : !isFarmZone && stageIndex === zoneLength && stageIndex !== currentStage
-                        ? "red"
-                        : !isFarmZone && stageIndex === zoneLength && stageIndex === currentStage
-                          ? "orange"
-                          : "grey"
-              }
-              icon={getIcon(stageIndex - 1)}
-            />
+          <div className="flex bg-gradient-to-tr from-white/30 to-blue-700/20 w-full h-full items-center justify-center">
+            <div className="w-7 fill-white">{getIcon(stageIndex - 1)}</div>
           </div>
         </div>
       ))}
