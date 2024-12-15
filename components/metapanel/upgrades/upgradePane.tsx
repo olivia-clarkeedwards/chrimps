@@ -1,33 +1,52 @@
 import React, { useEffect, useState } from "react"
-import clsx from "clsx/lite"
 import { useAppSelector } from "../../../redux/hooks"
-import { selectGold } from "../../../redux/playerSlice"
+import {
+  selectCanAfford,
+  selectClickLevelUpCost,
+  selectDotLevelUpCost,
+  selectPlayerState,
+} from "../../../redux/playerSlice"
 import MultiplierUpgrade from "./multiplierUpgrade"
 import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
-import { Upgrade } from "../../../models/upgrades"
-import { PlayerState } from "../../../models/player"
+import { Upgrade, UpgradeKey, UpgradeProps } from "../../../models/upgrades"
 import LevelUpButton from "./levelUpButton"
-import { selectZoneNumber } from "../../../redux/zoneSlice"
+import { selectCurrentZoneNumber } from "../../../redux/zoneSlice"
+import clsx from "clsx/lite"
 
 interface UpgradePaneProps {
   config: Upgrade
   damage: number
   multiIcons: JSX.Element[]
-  onUpgrade: (e: React.MouseEvent<HTMLDivElement>) => void
+  onUpgrade: (e: React.MouseEvent<HTMLDivElement>, hidden: boolean, cost: number, isAffordable: boolean) => void
   onLevelUp: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onLevelUp }: UpgradePaneProps) {
   const [upgradeName] = config.elementId.split("-")
-  const thisLevelUp = `${upgradeName}Level` as keyof PlayerState
-  const thisMultiUpgradeCount = `${upgradeName}MultiUpgradeCount` as keyof PlayerState
+  const thisUpgradeName = upgradeName as UpgradeKey
 
-  const upgradeLevel = useAppSelector((state) => state.player[thisLevelUp])
-  const multiUpgradeCount = useAppSelector((state) => state.player[thisMultiUpgradeCount])
-  const cost = config.levelUpCost(upgradeLevel)
-  const gold = useAppSelector(selectGold)
-  const canAffordLevelUp = gold >= cost
-  const zone = useAppSelector(selectZoneNumber)
+  const { clickLevel, clickMultiUpgradeCount, dotLevel, dotMultiUpgradeCount } = useAppSelector(selectPlayerState)
+
+  const upgradeProps: UpgradeProps = {
+    click: {
+      level: clickLevel,
+      upgradeCount: clickMultiUpgradeCount,
+      levelUpCost: useAppSelector(selectClickLevelUpCost),
+    },
+    dot: {
+      level: dotLevel,
+      upgradeCount: dotMultiUpgradeCount,
+      levelUpCost: useAppSelector(selectDotLevelUpCost),
+    },
+  }
+  const thisUpgradeProps = upgradeProps[thisUpgradeName]
+
+  const canAffordLevelUp = useAppSelector(selectCanAfford(thisUpgradeProps.levelUpCost))
+  const canAffordMultiUpgrade = useAppSelector(
+    selectCanAfford(UPGRADE_CONFIG.calcMultiCost(config.elementId, thisUpgradeProps.upgradeCount)),
+  )
+
+  const currentZoneNumber = useAppSelector(selectCurrentZoneNumber)
 
   const [shouldMount, setShouldMount] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
@@ -35,12 +54,12 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   const isNotClick = upgradeName !== "click"
 
   useEffect(() => {
-    if (zone >= config.visibleAtZone && !shouldMount) {
+    if (currentZoneNumber >= config.visibleAtZone && !shouldMount) {
       setShouldMount(true)
       const timeout = setTimeout(() => setIsVisible(true), 350)
       return () => clearTimeout(timeout)
     }
-  }, [zone, config.visibleAtZone, shouldMount])
+  }, [currentZoneNumber, config.visibleAtZone])
 
   if (!shouldMount && isNotClick) return null
 
@@ -60,12 +79,13 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
           {multiIcons.map((icon, i) => (
             <MultiplierUpgrade
               key={upgradeName + i}
-              id={`${upgradeName}-multi.${i + 1}`}
+              id={`${config.elementId}.${i + 1}`}
               onClick={onUpgrade}
               icon={icon}
-              hidden={i === 0 ? upgradeLevel < 10 : multiUpgradeCount < i}
-              isAffordable={gold >= UPGRADE_CONFIG.calcMultiCost(config.elementId, multiUpgradeCount)}
-              isPurchased={multiUpgradeCount > i}
+              hidden={i === 0 ? thisUpgradeProps.level < 10 : thisUpgradeProps.upgradeCount < i}
+              cost={thisUpgradeProps.levelUpCost}
+              isAffordable={canAffordMultiUpgrade}
+              isPurchased={thisUpgradeProps.upgradeCount > i}
             />
           ))}
         </div>
@@ -73,8 +93,8 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
       <LevelUpButton
         id={upgradeName}
         onClick={onLevelUp}
-        currentLevel={upgradeLevel}
-        levelUpCost={cost}
+        currentLevel={thisUpgradeProps.level}
+        levelUpCost={thisUpgradeProps.levelUpCost}
         isAffordable={canAffordLevelUp}
       />
     </div>

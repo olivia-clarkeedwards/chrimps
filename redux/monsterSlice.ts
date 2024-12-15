@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSelector, createSlice, isAnyOf } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
-import { getMonster, getRandomMonster } from "../gameconfig/monster"
+import { getMonster } from "../gameconfig/monster"
 import { EnemyState } from "../models/monsters"
+import { increaseTotalClickDamageDealt, increaseTotalDotDamageDealt } from "./statsSlice"
 
 interface EnemyThatDies extends EnemyState {
   alive: boolean
@@ -14,9 +15,6 @@ export const monsterSlice = createSlice({
   name: "monster",
   initialState,
   reducers: {
-    takeDamage(state, action: PayloadAction<number>) {
-      state.health - action.payload < 1 ? (state.alive = false) : (state.health -= action.payload)
-    },
     spawnMonster(state, action: PayloadAction<EnemyState>) {
       return { ...action.payload, alive: true }
     },
@@ -24,15 +22,24 @@ export const monsterSlice = createSlice({
       state.alive = false
     },
   },
+  extraReducers(builder) {
+    builder.addMatcher(isAnyOf(increaseTotalClickDamageDealt, increaseTotalDotDamageDealt), (state, action) => {
+      state.health - action.payload < 1 ? (state.alive = false) : (state.health -= action.payload)
+    })
+  },
 })
 
-export const { takeDamage, spawnMonster, monsterDied } = monsterSlice.actions
+export const { spawnMonster, monsterDied } = monsterSlice.actions
 
-export const selectMonsterName = (state: RootState) => state.monster.name
-export const selectMonsterLevel = (state: RootState) => state.monster.level
+export const selectMonsterState = createSelector([(state) => state.monster], (monster) => ({
+  monsterName: monster.name,
+  monsterLevel: monster.level,
+  monsterGoldValue: monster.goldValue,
+  monsterPlasmaValue: monster?.plasma,
+  monsterImage: monster.image,
+  monsterAlive: monster.alive,
+}))
+
 export const selectMonsterHealth = (state: RootState) => state.monster.health
-export const selectMonsterGoldValue = (state: RootState) => state.monster.goldValue
-export const selectMonsterAlive = (state: RootState) => state.monster.alive
-export const selectMonsterImage = (state: RootState) => state.monster.image
 
 export default monsterSlice.reducer

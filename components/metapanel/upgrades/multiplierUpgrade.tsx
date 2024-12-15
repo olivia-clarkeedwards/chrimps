@@ -4,13 +4,22 @@ import clsx from "clsx/lite"
 interface MultiplierProps {
   id: string
   icon: JSX.Element
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void
+  onClick: (e: React.MouseEvent<HTMLDivElement>, hidden: boolean, cost: number, isAffordable: boolean) => void
+  cost: number
   isAffordable: boolean
   isPurchased: boolean
   hidden: boolean
 }
 
-export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAffordable, isPurchased }: MultiplierProps) {
+export default function MultiplierUpgrade({
+  id,
+  icon,
+  onClick: onUpgrade,
+  hidden,
+  cost,
+  isAffordable,
+  isPurchased,
+}: MultiplierProps) {
   const [shouldMount, setShouldMount] = useState(false)
   const [shimmer, setShimmer] = useState(false)
 
@@ -36,7 +45,7 @@ export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAfforda
         "before:z-30",
         shimmer && "before:bg-[position:150%_0]",
       )}
-      onClick={onClick}>
+      onClick={(e) => onUpgrade(e, hidden, cost, isAffordable)}>
       <div
         className={clsx(
           // Base

@@ -2,43 +2,25 @@ import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   increaseGold,
-  selectClickLevel,
-  selectClickMultiUpgradeCount,
-  selectDotLevel,
-  selectDotMultiUpgradeCount,
+  increasePlasma,
+  selectClickDamage,
+  selectDotDamage,
+  selectPlayerState,
 } from "../../redux/playerSlice"
-import { playerCalc } from "../../gameconfig/upgrades"
-import {
-  selectMonsterAlive,
-  selectMonsterGoldValue,
-  selectMonsterImage,
-  selectMonsterName,
-  spawnMonster,
-  takeDamage,
-} from "../../redux/monsterSlice"
+import { selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
 import {
   increaseTotalClickDamageDealt,
   increaseTotalDotDamageDealt,
   incrementClickCount,
-  incrementHighestZone,
-  incrementHighestZoneEver,
+  incrementFarmZonesCompleted,
   incrementKillCount,
-  incrementZonesCompleted,
-  selectHighestZone,
   selectHighestZoneEver,
 } from "../../redux/statsSlice"
 import {
+  selectZoneState,
   incrementStageNumber,
-  zoneComplete as zoneComplete,
-  selectFarmZoneMonsters,
-  selectFarmZoneNumber,
-  selectIsFarming,
-  selectStage,
-  selectZoneInView,
-  selectZoneMonsters,
-  selectZoneNumber,
+  zoneComplete,
   refreshFarmZone,
-  selectFarmStage,
   setZoneInView,
 } from "../../redux/zoneSlice"
 import { ZONE_CONFIG } from "../../gameconfig/zone"
@@ -49,33 +31,28 @@ import FarmToggle from "./farmToggle"
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
 
-  const clickLevel = useAppSelector(selectClickLevel)
-  const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
-  const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
-  const dotLevel = useAppSelector(selectDotLevel)
-  const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
-  const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
+  const { clickLevel, plasma } = useAppSelector(selectPlayerState)
+  const clickDamage = useAppSelector(selectClickDamage)
+  const dotDamage = useAppSelector(selectDotDamage)
 
   const zoneLength = ZONE_CONFIG.length
-  const currentStage = useAppSelector(selectStage)
-  const currentZone = useAppSelector(selectZoneNumber)
-  const farmZoneNumber = useAppSelector(selectFarmZoneNumber)
-  const farmStageNumber = useAppSelector(selectFarmStage)
-  const zoneInView = useAppSelector(selectZoneInView)
-  const isFarming = useAppSelector(selectIsFarming)
-  const highestZoneEver = useAppSelector(selectHighestZoneEver)
-  const highestZone = useAppSelector(selectHighestZone)
-  const monsters = useAppSelector(selectZoneMonsters)
-  const farmZoneMonsters = useAppSelector(selectFarmZoneMonsters)
+  const {
+    currentZoneNumber: currentZone,
+    zoneMonsters,
+    stageNumber: currentStage,
+    isFarming,
+    farmZoneMonsters,
+    farmZoneNumber,
+    farmStageNumber,
+    zoneInView,
+  } = useAppSelector(selectZoneState)
 
-  const monsterName = useAppSelector(selectMonsterName)
-  const monsterImage = useAppSelector(selectMonsterImage)
-  const monsterValue = useAppSelector(selectMonsterGoldValue)
-  const monsterAlive = useAppSelector(selectMonsterAlive)
+  const { monsterName, monsterGoldValue, monsterPlasmaValue, monsterImage, monsterAlive } =
+    useAppSelector(selectMonsterState)
 
   const tickCount = useRef(0)
   const lastFrameTime = useRef(performance.now())
-  const frameRef = useRef<number>()
+  const frameTime = useRef<number>()
   const TICK_RATE = 20
   const TICK_TIME = 1000 / TICK_RATE
 
@@ -112,7 +89,6 @@ export default function Monster({ children }: PropsWithChildren) {
     if (dotDamage) {
       const damageThisTick = dotDamage / 20
       dispatch(increaseTotalDotDamageDealt(damageThisTick))
-      dispatch(takeDamage(damageThisTick))
     }
   }, [dotDamage])
 
@@ -130,7 +106,7 @@ export default function Monster({ children }: PropsWithChildren) {
       }
 
       lastFrameTime.current = currentTime - delta
-      frameRef.current = requestAnimationFrame(gameLoop)
+      frameTime.current = requestAnimationFrame(gameLoop)
     },
     [dealDamageOverTime, runTasks],
   )
@@ -138,11 +114,11 @@ export default function Monster({ children }: PropsWithChildren) {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        if (frameRef.current) cancelAnimationFrame(frameRef.current)
+        if (frameTime.current) cancelAnimationFrame(frameTime.current)
       } else {
         // The setTimeout seems to prevent extra loops between document hidden and document visible
         setTimeout(() => {
-          frameRef.current = requestAnimationFrame(gameLoop)
+          frameTime.current = requestAnimationFrame(gameLoop)
         }, 0)
       }
     }
@@ -151,23 +127,22 @@ export default function Monster({ children }: PropsWithChildren) {
   }, [dealDamageOverTime, runTasks])
 
   useEffect(() => {
-    frameRef.current = requestAnimationFrame(gameLoop)
+    frameTime.current = requestAnimationFrame(gameLoop)
     return () => {
-      if (frameRef.current) cancelAnimationFrame(frameRef.current)
+      if (frameTime.current) cancelAnimationFrame(frameTime.current)
     }
   }, [gameLoop])
 
   function handleClick() {
     dispatch(incrementClickCount())
     dispatch(increaseTotalClickDamageDealt(clickDamage))
-    dispatch(takeDamage(clickDamage))
     // Goto !monsterAlive useEffect if monster died
   }
 
   useEffect(() => {
     if (!monsterAlive) {
       dispatch(incrementKillCount())
-      dispatch(increaseGold(monsterValue))
+      dispatch(increaseGold(monsterGoldValue))
       let nextMonster: undefined | EnemyState
 
       const isProgressing = zoneInView === currentZone
@@ -178,39 +153,37 @@ export default function Monster({ children }: PropsWithChildren) {
         // When highest zone
         if (isProgressing) {
           dispatch(zoneComplete())
-          dispatch(incrementZonesCompleted())
-          dispatch(incrementHighestZone())
-          currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
+          if (currentZone > 9) dispatch(increasePlasma(monsterPlasmaValue))
 
           // Highest zone & farming toggled; zone transition in place
           if (isFarming) {
-            const newFarmZoneMonsters = selectFarmZoneMonsters(store.getState())
+            const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
             if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
           }
 
-          // If farming or not farming when not highest zone
-        } else if (zoneInView < currentZone && isFarming && farmZoneMonsters) {
-          dispatch(refreshFarmZone())
-          const newFarmZoneMonsters = selectFarmZoneMonsters(store.getState())
-          if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
-        } else if (zoneInView < currentZone && !isFarming) {
-          dispatch(setZoneInView(currentZone))
-        } else {
-          throw "Logic error during highest zone transition"
-        }
+          // When farming and farming is toggled, continue; else goto zoneInView useEffect block
+        } else if (zoneInView < currentZone) {
+          dispatch(incrementFarmZonesCompleted())
+          if (isFarming && farmZoneMonsters) {
+            dispatch(refreshFarmZone())
+            const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
+            if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
+          } else if (!isFarming) {
+            dispatch(setZoneInView(currentZone))
+          } else throw new Error("Logic error during farm zone transition")
+        } else throw new Error("Logic error during highest zone transition")
 
-        // Stage transition
+        // Stage transition case
       } else {
         dispatch(incrementStageNumber())
         if (zoneInView < currentZone && farmZoneMonsters) {
           nextMonster = farmZoneMonsters[stageNumber]
         } else {
-          nextMonster = monsters[stageNumber]
+          nextMonster = zoneMonsters[stageNumber]
         }
       }
+      // Spawn the next monster when we didn't jump to zoneInView transition
       if (nextMonster) dispatch(spawnMonster(nextMonster))
-
-      // Finally, spawn the next monster
     }
   }, [monsterAlive])
 
@@ -220,21 +193,20 @@ export default function Monster({ children }: PropsWithChildren) {
     if (farmZoneNumber === zoneInView && farmZoneMonsters) {
       nextMonster = farmZoneMonsters[0]
     } else if (currentZone === zoneInView) {
-      nextMonster = monsters[0]
+      nextMonster = zoneMonsters[0]
     }
     if (nextMonster) {
       dispatch(spawnMonster(nextMonster))
-    } else {
-      throw "Monster undefined during zone transition"
-    }
+    } else throw new Error("Monster undefined during zone transition")
   }, [zoneInView])
 
   return (
     <>
-      {/* <div className="absolute bottom-[16%] text-white">
-        Debug: monsterValue: {monsterValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage: {clickDamage}{" "}
-        dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}
-      </div> */}
+      <div className="absolute bottom-[16%] text-white">
+        Debug: monsterGoldValue: {monsterGoldValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage:{" "}
+        {clickDamage} dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}{" "}
+        plasma: {plasma}
+      </div>
       <div className="flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center">
           <div className="tracking-widest text-lg">{monsterName}</div>

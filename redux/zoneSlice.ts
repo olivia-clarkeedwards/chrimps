@@ -1,9 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { EnemyState } from "../models/monsters"
 import { Zone } from "../gameconfig/zone"
 import { getMonster } from "../gameconfig/monster"
-import e from "express"
 
 interface ZoneState {
   currentZoneNumber: number
@@ -13,8 +12,8 @@ interface ZoneState {
   isFarming: boolean
   farmZoneMonsters: null | EnemyState[]
   farmZoneNumber: null | number
-  farmZoneLength: number
   farmStageIndex: number
+  farmZoneLength: number
   zoneInView: number
 }
 
@@ -30,8 +29,8 @@ const initialState: ZoneState = {
   isFarming: false,
   farmZoneMonsters: null,
   farmZoneNumber: null,
-  farmZoneLength: 30,
   farmStageIndex: 1,
+  farmZoneLength: 30,
   // Display logic
   zoneInView: 1,
 }
@@ -92,7 +91,6 @@ export const zoneSlice = createSlice({
     },
     toggleFarming: (state) => {
       state.isFarming = !state.isFarming
-      // if (state.isFarming === false) state.zoneInFocus = state.currentZoneNumber
     },
     setZoneLength(state, action: PayloadAction<number>) {
       state.currentZoneLength = action.payload
@@ -114,15 +112,20 @@ export const {
   setZoneInView,
 } = zoneSlice.actions
 
-export const selectZoneNumber = (state: RootState) => state.zone.currentZoneNumber
-export const selectCurrentZoneLength = (state: RootState) => state.zone.currentZoneLength
-export const selectZoneMonsters = (state: RootState) => state.zone.monsters
-export const selectStage = (state: RootState) => state.zone.nextStageIndex
+export const selectZoneState = createSelector([(state) => state.zone], (zone) => ({
+  currentZoneNumber: zone.currentZoneNumber,
+  currentZoneLength: zone.currentZoneLength,
+  zoneMonsters: zone.monsters,
+  stageNumber: zone.nextStageIndex,
+  isFarming: zone.isFarming,
+  farmZoneMonsters: zone.farmZoneMonsters,
+  farmZoneNumber: zone.farmZoneNumber,
+  farmZoneLength: zone.farmZoneLength,
+  farmStageNumber: zone.farmStageIndex,
+  zoneInView: zone.zoneInView,
+}))
+
+export const selectCurrentZoneNumber = (state: RootState) => state.zone.currentZoneNumber
 export const selectIsFarming = (state: RootState) => state.zone.isFarming
-export const selectFarmZoneMonsters = (state: RootState) => state.zone.farmZoneMonsters
-export const selectZoneInView = (state: RootState) => state.zone.zoneInView
-export const selectFarmZoneLength = (state: RootState) => state.zone.farmZoneLength
-export const selectFarmZoneNumber = (state: RootState) => state.zone.farmZoneNumber
-export const selectFarmStage = (state: RootState) => state.zone.farmStageIndex
 
 export default zoneSlice.reducer

@@ -1,28 +1,28 @@
 import React from "react"
 import { useAppSelector } from "../../redux/hooks"
-import {
-  selectStage,
-  selectCurrentZoneLength,
-  selectZoneMonsters,
-  selectFarmStage,
-  selectFarmZoneMonsters,
-  selectFarmZoneLength,
-  selectZoneInView,
-  selectFarmZoneNumber,
-} from "../../redux/zoneSlice"
+import { selectZoneState } from "../../redux/zoneSlice"
 import clsx from "clsx/lite"
 import { BossIcon, CookieEnjoyerIcon, MoneybagIcon } from "../svg/stageIcons"
 
 export default function ZoneMap() {
-  const isFarmZone = useAppSelector(selectZoneInView) === useAppSelector(selectFarmZoneNumber)
-  const farmZoneMonsters = useAppSelector(selectFarmZoneMonsters)
-  const zoneLength = isFarmZone ? useAppSelector(selectFarmZoneLength) : useAppSelector(selectCurrentZoneLength)
+  const {
+    currentZoneLength,
+    zoneMonsters,
+    stageNumber,
+    farmZoneMonsters,
+    farmZoneNumber,
+    farmZoneLength,
+    farmStageNumber,
+    zoneInView,
+  } = useAppSelector(selectZoneState)
+
+  const isFarmZone = zoneInView === farmZoneNumber
+  const zoneLength = isFarmZone ? farmZoneLength : currentZoneLength
   const stages = Array.from({ length: zoneLength }, (cur, acc) => acc + 1)
 
-  const currentStage = isFarmZone && farmZoneMonsters ? useAppSelector(selectFarmStage) : useAppSelector(selectStage)
-  const monsters =
-    isFarmZone && farmZoneMonsters ? useAppSelector(selectFarmZoneMonsters) : useAppSelector(selectZoneMonsters)
-  if (!monsters) throw "Failed to retrieve monsters for zone"
+  const currentStage = isFarmZone && farmZoneMonsters ? farmStageNumber : stageNumber
+  const monsters = isFarmZone && farmZoneMonsters ? farmZoneMonsters : zoneMonsters
+  if (!monsters) throw new Error("Failed to retrieve monsters for zone")
 
   const getIcon = (stageNumber: number): JSX.Element | undefined => {
     const monster = monsters[stageNumber]

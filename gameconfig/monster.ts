@@ -1,4 +1,3 @@
-import e from "express"
 import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig, EnemyState } from "../models/monsters"
 import { ZONE_CONFIG } from "./zone"
 
@@ -11,6 +10,14 @@ const MONSTER_CONFIG: BaseMonsterConfig = {
   gold: {
     healthDivisor: 4,
     healthMultiBonus: 1.5,
+  },
+  boss: {
+    extraLevels: 20,
+    plasmaExpoGrowth: 1.2,
+    plasmaLinGrowth: 1.3,
+    plasmaValue: function (zoneNumber) {
+      return Math.round(Math.pow(this.plasmaExpoGrowth, zoneNumber - 1 * this.plasmaLinGrowth))
+    },
   },
   regularSpawnChance: 0.97,
   // attack etc.
@@ -45,7 +52,7 @@ class BaseMonster implements BaseEnemy {
 
   constructor(zoneNumber: number, stageNumber: number, isBoss: boolean) {
     this.level = (zoneNumber - 1) * ZONE_CONFIG.length + stageNumber
-    if (isBoss) this.level += 20
+    if (isBoss) this.level += MONSTER_CONFIG.boss.extraLevels
   }
 }
 
@@ -55,6 +62,7 @@ class Monster extends BaseMonster implements Enemy {
   health
   image
   goldValue
+  plasma?: number
 
   constructor(config: MonsterType, zoneNumber: number, stageNumber: number, isBoss: boolean) {
     super(zoneNumber, stageNumber, isBoss)
@@ -66,6 +74,7 @@ class Monster extends BaseMonster implements Enemy {
     const goldMulti = (config.goldMulti ??= 1)
     const { healthDivisor, healthMultiBonus } = MONSTER_CONFIG.gold
     this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (healthMulti * healthMultiBonus) * goldMulti)
+    if (isBoss) this.plasma = MONSTER_CONFIG.boss.plasmaValue(zoneNumber)
   }
 }
 
@@ -75,6 +84,7 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1, isBoss = false
     randomMonster = BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
   } else {
     const randomValue = Math.random()
+    // Special monster bonus to be implemented via an upgrade system; currently does nothing
     const regularSpawnChance = MONSTER_CONFIG.regularSpawnChance * Math.pow(0.99, specialMonsterBonus)
     randomMonster =
       regularSpawnChance > randomValue
@@ -101,6 +111,7 @@ function serializableMonster(monster: Monster): EnemyState {
     health: monster.health,
     goldValue: monster.goldValue,
     image: monster.image,
+    plasma: monster?.plasma,
   }
   return serializable
 }
