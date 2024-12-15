@@ -9,7 +9,7 @@ export default function Panel() {
 
   return (
     <div
-      className={`"flex flex-col w-full lg:max-w-[55%] py-4 px-8 m-2 rounded-3xl relative flex-3/5  
+      className={`"flex flex-col w-full lg:max-w-[45%] py-4 px-8 m-2 rounded-3xl relative flex-3/5  
       shadow-panel bg-gradient-to-br from-orange-400 via-orange-500 to-purple-700`}>
       <GoldCoinCounter gold={gold} />
       <UpgradeIndex />

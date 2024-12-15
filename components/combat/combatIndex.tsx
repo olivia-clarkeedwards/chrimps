@@ -17,15 +17,13 @@ export default function Combat() {
     let timeoutId: NodeJS.Timeout
     if (zone > 4 && !shouldMount) {
       setShouldMount(true)
-      setTimeout(() => setFadeIn(true), 350)
+      timeoutId = setTimeout(() => setFadeIn(true), 350)
     }
     return () => clearTimeout(timeoutId)
   }, [zone, shouldMount])
 
   return (
-    <div
-      className={`flex w-full lg:max-w-[40%] flex-col justify-center h-full p-8 rounded-3xl m-2 text-white 
-        shadow-combat bg-gradient-to-br from-purple-500 via-purple-700 to-green-950`}>
+    <div className={`flex w-full lg:max-w-[55%] flex-col justify-center h-full p-8 rounded-3xl m-2 text-white`}>
       {zone > 4 && (
         <div className={clsx("flex basis-1/6 transition-opacity opacity-0 duration-1000", fadeIn && "opacity-100")}>
           <ZoneSelector />

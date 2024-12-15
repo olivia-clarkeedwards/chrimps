@@ -27,6 +27,7 @@ const initialState: PlayerState = {
 export const playerSlice = createSlice({
   name: "player",
   initialState: initialState,
+  // initialState: debugState,
   reducers: {
     increaseGold(state, action: PayloadAction<number>) {
       state.gold += action.payload

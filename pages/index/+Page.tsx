@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <div className="fixed inset-0 select-none bg-yellow-500 h-full cursor-fancy">
+        <div className="fixed inset-0 select-none bg-purple-700 bg-gradient-to-br from-purple-500 via-purple-700 to-green-950 h-full cursor-fancy">
           <div className="h-full w-full overflow-y-scroll">
             <div className="min-h-20">
               <MainNavigationMenu />
