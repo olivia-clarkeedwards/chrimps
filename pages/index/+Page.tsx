@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <div className="flex-col min-h-screen lg:h-screen select-none bg-gradient-to-b from-purple-800 via-purple-900 to-violet-950">
+        <div className="cursor-hand flex-col min-h-screen lg:h-screen select-none bg-gradient-to-b from-purple-800 via-purple-900 to-violet-950">
           <div className="lg:h-[10%]">
             <NavigationMenu />
           </div>
