@@ -9,7 +9,7 @@ import clsx from "clsx/lite"
 import { setDebugState } from "../../redux/playerSlice"
 import { CookieEnjoyerIcon } from "../svg/stageIcons"
 
-export default function Combat() {
+export default function CombatIndex() {
   const dispatch = useAppDispatch()
   const currentZoneNumber = useAppSelector(selectCurrentZoneNumber)
 

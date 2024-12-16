@@ -4,7 +4,7 @@ import { useAppSelector } from "../../redux/hooks"
 import UpgradeIndex from "./upgrades/upgradeIndex"
 import clsx from "clsx/lite"
 
-export default function Panel() {
+export default function PanelIndex() {
   const gold = useAppSelector(selectGold)
 
   return (
