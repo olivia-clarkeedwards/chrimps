@@ -7,6 +7,7 @@ import clsx from "clsx"
 export default function Healthbar() {
   const monsterHealth = useAppSelector(selectMonsterHealth)
   const monsterMaxHealth = useAppSelector(selectMonsterMaxHealth)
+  const { dotLevel } = useAppSelector(selectPlayerState)
 
   const targetHealth = useRef((monsterHealth / monsterMaxHealth) * 100)
   const interpRate = 5
@@ -38,12 +39,27 @@ export default function Healthbar() {
     }
   }, [monsterHealth, monsterMaxHealth])
 
+  let decimals = {}
+  if (!dotLevel) {
+    decimals = { minimumFractionDigits: 0, maximumFractionDigits: 1 }
+  } else {
+    decimals = { minimumFractionDigits: 1, maximumFractionDigits: 1 }
+  }
+
+  const healthText =
+    monsterHealth < 100
+      ? monsterHealth.toLocaleString(undefined, { ...decimals })
+      : monsterHealth.toLocaleString(undefined, { maximumFractionDigits: 0 })
+
   return (
-    <div className="relative h-8 w-48 border border-black">
-      <div className="relative h-full" style={{ width: `${Math.max(0, Math.min(100, width))}%` }}>
-        <div className={clsx("h-full bg-gradient-to-b from-hpgreen to-darkgreen rounded-sm transform-gpu")}></div>
-        <div className="absolute h-3/4 bottom-0 w-full bg-gradient-to-b from-white/0 via-white/80 to-white/20 z-10"></div>
+    <>
+      <div className="pl-24">{healthText}</div>
+      <div className="relative h-8 w-48 border border-black">
+        <div className="relative h-full" style={{ width: `${Math.max(0, Math.min(100, width))}%` }}>
+          <div className={clsx("h-full bg-gradient-to-b from-hpgreen to-darkgreen rounded-sm transform-gpu")}></div>
+          <div className="absolute h-3/4 bottom-0 w-full bg-gradient-to-b from-white/0 via-white/80 to-white/20 z-10"></div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
