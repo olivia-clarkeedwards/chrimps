@@ -53,7 +53,7 @@ export default function Healthbar() {
 
   return (
     <>
-      <div className="pl-24">{healthText}</div>
+      <div className="text-center">{healthText}</div>
       <div className="relative h-8 w-48 border border-black">
         <div className="relative h-full" style={{ width: `${Math.max(0, Math.min(100, width))}%` }}>
           <div className={clsx("h-full bg-gradient-to-b from-hpgreen to-darkgreen rounded-sm transform-gpu")}></div>
