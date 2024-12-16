@@ -39,10 +39,11 @@ export default function Healthbar() {
   }, [monsterHealth, monsterMaxHealth])
 
   return (
-    <div className="h-8 w-48 border border-black">
-      <div
-        className={clsx("h-full bg-gradient-to-b rounded-sm from-hpgreen to-darkgreen transform-gpu")}
-        style={{ width: `${Math.max(0, Math.min(100, width))}%` }}></div>
+    <div className="relative h-8 w-48 border border-black">
+      <div className="relative h-full" style={{ width: `${Math.max(0, Math.min(100, width))}%` }}>
+        <div className={clsx("h-full bg-gradient-to-b from-hpgreen to-darkgreen rounded-sm transform-gpu")}></div>
+        <div className="absolute h-3/4 bottom-0 w-full bg-gradient-to-b from-white/0 via-white/80 to-white/20 z-10"></div>
+      </div>
     </div>
   )
 }
