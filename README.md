@@ -17,4 +17,6 @@ Current status: Pre-MVP
 
 ## Credits
 
+Made with styling and layout contributions from [Olivia Grace](https://github.com/olivia-clarkeedwards)
+
 Icons from https://game-icons.net/
