@@ -13,8 +13,10 @@ export default {
         sans: ["Sigmar", ...defaultTheme.fontFamily.sans],
       },
       cursor: {
-        hand: "url(/icons/hand.png) 16 16, pointer",
-        dagger: "url(/icons/dagger.png) 16 16, pointer",
+        // hand: "url(/icons/hand.png) 16 16, pointer",
+        // dagger: "url(/icons/dagger.png) 16 16, pointer",
+        hand: "",
+        dagger: "",
       },
       scale: {
         "85": ".85",

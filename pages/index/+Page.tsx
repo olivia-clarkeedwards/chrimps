@@ -5,7 +5,7 @@ import Panel from "../../components/metapanel/panelIndex"
 import Combat from "../../components/combat/combatIndex"
 import { store } from "../../redux/store"
 import { Provider } from "react-redux"
-import { NavigationMenu } from "../../components/combat/nav/navigation"
+import { NavigationMenu } from "../../components/nav/navigation"
 
 export default function Page() {
   return (
