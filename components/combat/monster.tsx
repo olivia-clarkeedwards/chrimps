@@ -212,7 +212,7 @@ export default function Monster({ children }: PropsWithChildren) {
           <div className="">{monsterName}</div>
           <FarmToggle />
         </div>
-        <div className="text-left inline-block min-w-[100px] pl-[2.5rem]">{children}</div>
+        <div className="">{children}</div>
       </div>
       <button className="flex items-end h-[32rem] flex-auto hover:cursor-dagger" onClick={handleClick}>
         <img

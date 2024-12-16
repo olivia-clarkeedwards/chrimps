@@ -8,23 +8,8 @@ export default function Healthbar() {
   const { dotLevel } = useAppSelector(selectPlayerState)
 
   return (
-    <div className="h-8 w-28 bg-hpgreen">
-      <div></div>
+    <div className="h-8 w-48">
+      <div className="h-full w-full bg-gradient-to-b rounded-sm from-hpgreen to-darkgreen"></div>
     </div>
   )
-
-  // let decimals = {}
-
-  // if (!dotLevel) {
-  //   decimals = { minimumFractionDigits: 0, maximumFractionDigits: 1 }
-  // } else {
-  //   decimals = { minimumFractionDigits: 1, maximumFractionDigits: 1 }
-  // }
-
-  // const healthDisplay =
-  //   monsterHealth < 100
-  //     ? monsterHealth.toLocaleString(undefined, { ...decimals })
-  //     : monsterHealth.toLocaleString(undefined, { maximumFractionDigits: 0 })
-
-  // return <> {healthDisplay}</>
 }
