@@ -1,4 +1,4 @@
-export function Navigation() {
+export default function Navigation() {
   return (
     <div className="flex flex-wrap gap-4 justify-between items-center text-white h-full px-3 py-2">
       <div className="flex flex-wrap gap-3 items-center">
