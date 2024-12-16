@@ -20,13 +20,11 @@ export function NavigationLinkButton({ text, onClick }: NavigationLinkButtonProp
   return (
     <button
       onClick={onClick}
-      style={
-        {
-          "-webkit-text-stroke-color": "black",
-          "-webkit-text-fill-color": "white",
-          "-webkit-text-stroke-width": "1px",
-        } as any
-      }
+      style={{
+        WebkitTextStrokeColor: "black",
+        WebkitTextFillColor: "white",
+        WebkitTextStrokeWidth: "1px",
+      }}
       className="py-3 px-6 cursor-hand tracking-wider text-center uppercase transition duration-200 bg-gradient-to-tr from-red-500 via-orange-400 to-amber-500 text-white rounded-lg block border-0 shadow-lg select-none hover:bg-right-center active:transform active:scale-95 hover:scale-105"
       role="dialog">
       {text}
