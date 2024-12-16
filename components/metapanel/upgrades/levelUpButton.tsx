@@ -19,7 +19,7 @@ export default function LevelUpButton({ id, onClick, currentLevel, levelUpCost, 
           className={clsx(
             // This buttons frame has a nice texture when disabled, need to find way to reproduce it when enabled
             // Base
-            "flex flex-col items-center py-2 px-4 min-w-32 text-white font-bold cursor-hand",
+            "flex flex-col items-center py-2 px-4 min-w-32 text-white cursor-hand",
             "border-2 border-amber-300",
             "transition-all duration-75",
             "shadow-[0_0_8px_0px_rgba(251,191,36,0.9),inset_0_0_4px_-1px_rgba(251,191,36,0.8)]",
