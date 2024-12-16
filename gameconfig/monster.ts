@@ -60,6 +60,7 @@ class Monster extends BaseMonster implements Enemy {
   name
   kind
   health
+  maxHealth
   image
   goldValue
   plasma?: number
@@ -70,6 +71,7 @@ class Monster extends BaseMonster implements Enemy {
     this.kind = config.kind
     const healthMulti = config.healthMulti
     this.health = Math.floor(this.baseHealth * healthMulti)
+    this.maxHealth = this.health
     this.image = config.imagePath
     const goldMulti = (config.goldMulti ??= 1)
     const { healthDivisor, healthMultiBonus } = MONSTER_CONFIG.gold
@@ -109,6 +111,7 @@ function serializableMonster(monster: Monster): EnemyState {
     kind: monster.kind,
     level: monster.level,
     health: monster.health,
+    maxHealth: monster.maxHealth,
     goldValue: monster.goldValue,
     image: monster.image,
     plasma: monster?.plasma,

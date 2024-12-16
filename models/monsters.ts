@@ -5,6 +5,7 @@ export interface BaseEnemy {
 
 export interface Enemy {
   name: string
+  maxHealth: number
   health: number
   goldValue: number
   image: string
