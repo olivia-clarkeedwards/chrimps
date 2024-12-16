@@ -8,6 +8,8 @@ export default {
     extend: {
       colors: {
         islam: "#009000",
+        hpgreen: "00BB27",
+        darkgreen: "11772D",
       },
       fontFamily: {
         sans: ["Sigmar", ...defaultTheme.fontFamily.sans],
