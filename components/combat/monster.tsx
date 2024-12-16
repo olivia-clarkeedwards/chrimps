@@ -208,7 +208,7 @@ export default function Monster({ children }: PropsWithChildren) {
         plasma: {plasma}
       </div>
       <div className="basis-2/12 flex flex-col w-full items-center">
-        <div className="relative flex w-full justify-center">
+        <div className="relative flex w-full justify-center text-2xl">
           <div className="">{monsterName}</div>
           <FarmToggle />
         </div>
