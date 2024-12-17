@@ -10,6 +10,8 @@ export default {
         islam: "#009000",
         hpgreen: "#00BB27",
         darkgreen: "#11772D",
+        gold: "#ffbf00",
+        lightgold: "#ffcf40",
       },
       fontFamily: {
         sans: ["Sigmar", ...defaultTheme.fontFamily.sans],

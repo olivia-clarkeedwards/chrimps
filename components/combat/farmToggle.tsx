@@ -27,20 +27,21 @@ export default function FarmToggle() {
   }, [currentZoneNumber])
 
   return (
-    // Todo: migrate to tailwind 4.0 and use radial gradients for circular buttons
-    <div
-      className={clsx(
-        "absolute flex items-center justify-center w-10 h-10 right-2 top-1 bg-gradient-to-tr from-yellow-400/20 to-yellow-400 rounded-full opacity-0",
-        !hasTransitioned ? "transition-opacity duration-1000" : "transition-none",
-        currentZoneNumber > 4 && "opacity-100",
-      )}>
+    <div className={clsx("w-10 h-10 z-10", isFarming && "bg-black")}>
       <div
         className={clsx(
-          "w-8 h-8 -rotate-45 border border-2 border-[3px] rounded-full",
-          isFarming ? "fill-gray-700 border-gray-700 opacity-60" : "fill-white border-white",
-        )}
-        onClick={handleFarmToggle}>
-        {FarmToggleIcon()}
+          "absolute flex items-center justify-center w-full h-full right-2 top-1 bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-gold via-lightgold to-gold rounded-full opacity-0",
+          !hasTransitioned ? "transition-opacity duration-1000" : "transition-none",
+          currentZoneNumber > 4 && "opacity-100",
+        )}>
+        <div
+          className={clsx(
+            "w-8 h-8 -rotate-45 border border-2 border-[3px] rounded-full",
+            isFarming ? "fill-gray-700 border-gray-700 opacity-60" : "fill-hpgreen border-gray-100",
+          )}
+          onClick={handleFarmToggle}>
+          {FarmToggleIcon()}
+        </div>
       </div>
     </div>
   )
