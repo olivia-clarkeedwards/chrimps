@@ -53,7 +53,7 @@ async function startServer() {
   app.all("*", createHandler(vikeHandler)())
 
   app.listen(port, "0.0.0.0", () => {
-    console.log(`Server listening on http://0.0.0.0:${port}`)
+    console.log(`Server listening on local ip & http://localhost:${port}`)
   })
 
   return app
