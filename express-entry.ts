@@ -30,6 +30,14 @@ async function startServer() {
       await vite.createServer({
         root,
         server: { middlewareMode: true, hmr: { port: hmrPort } },
+        // server: {
+        //   middlewareMode: true,
+        //   hmr: {
+        //     port: hmrPort,
+        //     host: "192.168.1.67",
+        //     clientPort: hmrPort,
+        //   },
+        // },
       })
     ).middlewares
     app.use(viteDevMiddleware)
@@ -55,6 +63,10 @@ async function startServer() {
   app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`)
   })
+
+  // app.listen(port, "192.168.1.67", () => {
+  //   console.log(`Server listening on local ip & http://localhost:${port}`)
+  // })
 
   return app
 }
