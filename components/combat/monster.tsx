@@ -26,7 +26,6 @@ import {
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
-import FarmToggle from "./farmToggle"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -227,7 +226,6 @@ export default function Monster({ children }: PropsWithChildren) {
       <div className="basis-2/12 flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center text-2xl">
           <div className="text-center">{monsterName}</div>
-          <FarmToggle />
         </div>
         <div className="">{children}</div>
       </div>

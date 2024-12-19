@@ -8,13 +8,13 @@ import ZoneSelector from "./zoneSelector"
 import clsx from "clsx/lite"
 import { setDebugState } from "../../redux/playerSlice"
 import { CookieEnjoyerIcon } from "../svg/stageIcons"
+import FarmToggle from "./farmToggle"
 
 export default function CombatIndex() {
   const dispatch = useAppDispatch()
   const currentZoneNumber = useAppSelector(selectCurrentZoneNumber)
 
   function debug() {
-    console.log("click")
     dispatch(setDebugState())
   }
 
@@ -44,6 +44,11 @@ export default function CombatIndex() {
         <div className="absolute top-0 left-0 w-7 h-7 z-20 fill-white" onClick={debug}>
           {CookieEnjoyerIcon()}
         </div>
+        {currentZoneNumber > 4 && (
+          <div className={clsx("transition-opacity opacity-0 duration-300", fadeIn && "opacity-100")}>
+            <FarmToggle />
+          </div>
+        )}
         <Monster>
           <Healthbar />
         </Monster>

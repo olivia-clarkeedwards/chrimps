@@ -6,32 +6,16 @@ import clsx from "clsx/lite"
 
 export default function FarmToggle() {
   const dispatch = useAppDispatch()
-  const [hasTransitioned, setHasTransitioned] = useState(false)
-
-  const currentZoneNumber = useAppSelector(selectCurrentZoneNumber)
   const isFarming = useAppSelector(selectIsFarming)
 
   function handleFarmToggle(e: React.MouseEvent<HTMLDivElement>) {
     dispatch(toggleFarming())
   }
 
-  useEffect(() => {
-    if (!hasTransitioned) {
-      if (currentZoneNumber > 4) {
-        const timeout = setTimeout(() => {
-          setHasTransitioned(true)
-        }, 1000)
-        return () => clearTimeout(timeout)
-      }
-    }
-  }, [currentZoneNumber])
-
   return (
     <div
       className={clsx(
-        "absolute flex items-center justify-center right-2 top-1 -rotate-45 rounded-full w-10 h-10 z-10 opacity-0 bg-gradient-to-tr",
-        !hasTransitioned ? "transition-opacity duration-1000" : "transition-none",
-        currentZoneNumber > 4 && "opacity-100",
+        "absolute flex items-center justify-center right-2 top-1 -rotate-45 rounded-full w-10 h-10 z-10 bg-gradient-to-tr",
         isFarming ? "from-yellow-500/30 via-orange-500/30 to-white/80" : " from-yellow-500 via-orange-500 to-white/80",
       )}>
       <div>
