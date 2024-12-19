@@ -7,7 +7,7 @@ import {
   selectDotDamage,
   selectPlayerState,
 } from "../../redux/playerSlice"
-import { selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
+import { selectMonsterAlive, selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
 import {
   increaseTotalClickDamageDealt,
   increaseTotalDotDamageDealt,
@@ -93,6 +93,17 @@ export default function Monster({ children }: PropsWithChildren) {
   }, [dotDamage])
 
   const onMonsterDeath = () => {
+    const {
+      currentZoneNumber: currentZone,
+      zoneMonsters,
+      stageNumber: currentStage,
+      isFarming,
+      farmZoneMonsters,
+      farmStageNumber,
+      zoneInView,
+    } = selectZoneState(store.getState())
+    const { monsterGoldValue, monsterPlasmaValue } = selectMonsterState(store.getState())
+
     dispatch(incrementKillCount())
     dispatch(increaseGold(monsterGoldValue))
     let nextMonster: undefined | EnemyState
@@ -148,6 +159,10 @@ export default function Monster({ children }: PropsWithChildren) {
         tickCount.current++
         dealDamageOverTime()
         runTasks()
+
+        const monsterDied = selectMonsterAlive(store.getState()) === false
+        if (monsterDied) onMonsterDeath()
+
         delta -= TICK_TIME
       }
 

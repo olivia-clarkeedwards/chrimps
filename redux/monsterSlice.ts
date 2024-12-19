@@ -42,5 +42,6 @@ export const selectMonsterState = createSelector([(state) => state.monster], (mo
 
 export const selectMonsterHealth = (state: RootState) => state.monster.health
 export const selectMonsterMaxHealth = (state: RootState) => state.monster.maxHealth
+export const selectMonsterAlive = (state: RootState) => state.monster.alive
 
 export default monsterSlice.reducer
