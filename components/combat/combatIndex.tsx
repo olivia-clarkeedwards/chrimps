@@ -41,7 +41,7 @@ export default function CombatIndex() {
         </div>
       )}
       <div className="basis-5/6 flex flex-col items-center relative">
-        <div className="absolute top-0 left-0 w-7 h-7 z-20 fill-white" onClick={debug}>
+        <div className="absolute top-0 left-0 w-7 h-7 z-20 opacity-10 fill-white" onClick={debug}>
           {CookieEnjoyerIcon()}
         </div>
         {currentZoneNumber > 4 && (

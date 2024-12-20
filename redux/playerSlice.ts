@@ -9,7 +9,7 @@ const debugState: PlayerState = {
   clickMultiUpgradeCount: 3,
   dotLevel: 50000,
   dotMultiUpgradeCount: 3,
-  gold: 100,
+  gold: 1000000,
   plasma: 1000000,
 
   startDate: performance.timeOrigin,
@@ -56,7 +56,11 @@ export const playerSlice = createSlice({
       state.plasma -= action.payload
     },
     setDebugState: (state) => {
-      return (state = debugState)
+      if (state.plasma < 1000000) {
+        return (state = debugState)
+      } else {
+        return (state = { ...initialState, gold: 1000000 })
+      }
     },
   },
 })
