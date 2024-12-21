@@ -30,7 +30,7 @@ export default function CombatIndex() {
   }, [currentZoneNumber])
 
   return (
-    <div className="flex flex-col justify-center min-h-[99svh] md:min-h-[89svh] text-white basis-7/12 md:basis-2/5 overflow-y-auto">
+    <div className="flex flex-col justify-center min-h-[99svh] md:min-h-[89svh] text-white basis-7/12 md:basis-2/5 min-h-0 overflow-y-auto">
       {currentZoneNumber > 4 && (
         <div
           className={clsx(
