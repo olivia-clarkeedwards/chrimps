@@ -38,8 +38,8 @@ export default function ZoneMap() {
   }
 
   return (
-    <div className="flex basis-3/12 md:basis-2/12 items-end opacity-100">
-      <div className="flex w-[20rem] md:w-[40rem] lg:w-[40rem] mb-1 md:m-2 flex-wrap-reverse content-start border-2 border-gray-300 box-content z-10">
+    <div className="flex items-end opacity-100">
+      <div className="flex w-[20rem] border-2 md:w-[32rem] md:border-0 lg:w-[20rem] lg:border-2 xl:w-[32rem] xl:border-0 2xl:w-[40rem] 2xl:border-2 mb-2 flex-wrap-reverse content-start border-gray-300 box-content z-10">
         {stages.map((stageIndex) => (
           <div
             key={stageIndex}

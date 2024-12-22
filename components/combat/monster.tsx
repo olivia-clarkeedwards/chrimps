@@ -223,15 +223,15 @@ export default function Monster({ children }: PropsWithChildren) {
         {clickDamage} dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}{" "}
         plasma: {plasma}
       </div>
-      <div className="basis-2/12 flex flex-col w-full items-center">
+      <div className="flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center text-2xl">
           <div className="text-center">{monsterName}</div>
         </div>
         <div className="">{children}</div>
       </div>
-      <button className="flex flex-none items-end h-96 lg:h-[32rem] hover:cursor-dagger" onClick={handleClick}>
+      <button className="flex flex-grow items-end h-[28rem] hover:cursor-dagger" onClick={handleClick}>
         <img
-          className="max-h-full h-full w-full object-cover pointer-events-none"
+          className="max-h-full h-full w-full object-cover lg:object-contain pointer-events-none"
           src={monsterImage}
           alt={monsterName}
         />
