@@ -31,7 +31,7 @@ export default function Page() {
       <Provider store={store}>
         <div
           style={appScale}
-          className="cursor-hand flex flex-col-reverse md:flex-col w-screen lg:h-screen select-none bg-gradient-to-b from-purple-800 via-purple-900 to-violet-950">
+          className="cursor-hand flex flex-col-reverse md:flex-col w-screen min-h-[100vh] lg:h-screen select-none bg-gradient-to-b from-purple-800 via-purple-900 to-violet-950">
           <div className="">
             <Navigation />
           </div>
