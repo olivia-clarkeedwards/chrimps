@@ -30,17 +30,22 @@ export default function CombatIndex() {
   }, [currentZoneNumber])
 
   return (
-    <div className="flex flex-col justify-center min-h-[99svh] md:min-h-[89svh] lg:-ml-6 basis-7/12 md:basis-2/5 text-white min-h-0 overflow-y-auto">
+    <div
+      className={clsx(
+        "flex flex-col md:min-h-[89svh] lg:-ml-6 basis-7/12 md:basis-2/5 text-white overflow-y-auto",
+        currentZoneNumber > 4 ? "min-h-[111svh]" : "min-h-[92svh]",
+      )}>
       {currentZoneNumber > 4 && (
         <div
-          className={clsx(
-            "flex basis-1/6 justify-center transition-opacity opacity-0 duration-1000",
-            fadeIn && "opacity-100",
-          )}>
+          className={clsx("flex justify-center transition-opacity opacity-0 duration-1000", fadeIn && "opacity-100")}>
           <ZoneSelector />
         </div>
       )}
-      <div className="basis-5/6 flex flex-col items-center relative overflow-y-auto">
+      <div
+        className={clsx(
+          "flex flex-col h-full items-center relative overflow-y-auto",
+          // currentZoneNumber > 4 ? "basis-5/6" : "basis-auto",
+        )}>
         <div className="absolute top-0 left-0 w-7 h-7 z-20 opacity-10 fill-white" onClick={debug}>
           {CookieEnjoyerIcon()}
         </div>
