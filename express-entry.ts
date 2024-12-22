@@ -64,7 +64,7 @@ async function startServer() {
     console.log(`Server listening on http://localhost:${port}`)
   })
 
-  // app.listen(port, "192.168.1.67", () => {
+  // app.listen(port, "0.0.0.0", () => {
   //   console.log(`Server listening on local ip & http://localhost:${port}`)
   // })
 

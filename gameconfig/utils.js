@@ -3,17 +3,21 @@
 import { useEffect, useState } from "react"
 
 export function useForcedDPI() {
-  const [dpiScale, setDpiScale] = useState(window.devicePixelRatio)
+  const getDPIScale = () => (window.matchMedia("(min-width: 1024px)").matches ? window.devicePixelRatio : 1)
+
+  const [dpiScale, setDpiScale] = useState(getDPIScale)
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
+    const queries = [
+      window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`),
+      window.matchMedia("(min-width: 1024px)"),
+    ]
 
-    const handleChange = () => {
-      setDpiScale(window.devicePixelRatio)
-    }
+    const handleChange = () => setDpiScale(getDPIScale())
 
-    mediaQuery.addEventListener("change", handleChange)
-    return () => mediaQuery.removeEventListener("change", handleChange)
+    queries.forEach((query) => query.addEventListener("change", handleChange))
+
+    return () => queries.forEach((query) => query.removeEventListener("change", handleChange))
   }, [])
 
   return dpiScale

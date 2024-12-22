@@ -26,8 +26,6 @@ export default function Page() {
         }
       : undefined
 
-  console.log(appScale)
-
   return (
     <React.StrictMode>
       <Provider store={store}>
