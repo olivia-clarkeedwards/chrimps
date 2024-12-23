@@ -18,13 +18,7 @@ export default function PanelIndex() {
           <div className="flex items-center shadow-panel-t-1 w-full px-4 py-1.5 text-lg rounded-t-lg bg-gradient-to-b from-amber-400 to-orange-500 text-white">
             Upgrades
           </div>
-          <div
-            className={clsx(
-              "relative w-full px-4 py-1.5 text-sm font-bold rounded-t-lg",
-              "shadow-panel-t-2",
-              "bg-gradient-to-r from-amber-400 to-orange-500",
-              "text-white",
-            )}>
+          <div className="flex items-center shadow-panel-t-1 w-full px-4 py-1.5 text-lg rounded-t-lg bg-gradient-to-b from-amber-400 to-orange-500 text-white">
             Tab 2
           </div>
         </div>
