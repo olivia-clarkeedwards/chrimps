@@ -1,7 +1,6 @@
 import React from "react"
 import UpgradeIndex from "./upgrades/upgradeIndex"
 import clsx from "clsx/lite"
-import Gold from "./gold"
 
 export default function PanelIndex() {
   return (
@@ -14,9 +13,6 @@ export default function PanelIndex() {
         // Large
         "lg:bg-gradient-to-br lg:from-amber-400 lg:via-orange-500 lg:to-purple-950",
       )}>
-      <div id="gold-cont" className="flex flex-none flex-col h-28 items-center relative">
-        <Gold />
-      </div>
       <UpgradeIndex />
     </div>
   )

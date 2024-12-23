@@ -16,6 +16,7 @@ import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/cli
 import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { LevelUpID } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"
+import Gold from "../gold"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
@@ -72,21 +73,26 @@ export default function UpgradeIndex() {
   }
 
   return (
-    <div>
-      <UpgradePane
-        config={UPGRADE_CONFIG.click}
-        damage={clickDamage}
-        multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
-        onUpgrade={onUpgrade}
-        onLevelUp={onLevelup}
-      />
-      <UpgradePane
-        config={UPGRADE_CONFIG.dot}
-        damage={dotDamage}
-        multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
-        onUpgrade={onUpgrade}
-        onLevelUp={onLevelup}
-      />
-    </div>
+    <>
+      <div id="gold-cont" className="flex flex-none flex-col h-28 items-center relative">
+        <Gold />
+      </div>
+      <div>
+        <UpgradePane
+          config={UPGRADE_CONFIG.click}
+          damage={clickDamage}
+          multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
+          onUpgrade={onUpgrade}
+          onLevelUp={onLevelup}
+        />
+        <UpgradePane
+          config={UPGRADE_CONFIG.dot}
+          damage={dotDamage}
+          multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
+          onUpgrade={onUpgrade}
+          onLevelUp={onLevelup}
+        />
+      </div>
+    </>
   )
 }
