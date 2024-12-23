@@ -28,6 +28,9 @@ export default {
         upgrade:
           "inset 5px 5px 13px #fb923c, inset -5px -5px 13px #2e1065, -5px -5px 5px rgb(251 146 60), 3px 5px 25px #2e1065",
         panel: "inset 5px 5px 13px #fb923c, inset -5px -5px 13px #2e1065",
+        "panel-t-1": "inset 0 5px 13px #fb923c",
+        "panel-t-2": "inset 0 5px 13px #2e1065",
+        "panel-xb": "inset 5px 0 13px #fb923c, inset -5px 0 13px #2e1065, inset 0 -5px 13px #2e1065",
       },
       borderRadius: {
         nm: "61px",
