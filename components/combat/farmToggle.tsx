@@ -15,7 +15,7 @@ export default function FarmToggle() {
   return (
     <div
       className={clsx(
-        "absolute flex items-center justify-center right-2 top-1 -rotate-45 rounded-full w-10 h-10 z-10 bg-gradient-to-tr",
+        "absolute flex items-center justify-center right-3 top-1 -rotate-45 rounded-full w-10 h-10 z-10 bg-gradient-to-tr",
         isFarming ? "from-yellow-500/30 via-orange-500/30 to-white/80" : " from-yellow-500 via-orange-500 to-white/80",
       )}>
       <div>

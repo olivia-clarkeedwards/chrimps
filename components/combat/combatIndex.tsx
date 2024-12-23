@@ -39,7 +39,7 @@ export default function CombatIndex() {
       )}
       <div
         className={clsx(
-          "flex flex-col h-full items-center relative overflow-y-auto overflow-x-hidden",
+          "flex flex-col h-full items-center relative overflow-y-auto",
           currentZoneNumber > 4 ? "justify-normal" : "justify-evenly",
         )}>
         <div className="absolute top-0 left-0 w-7 h-7 z-20 opacity-10 fill-white" onClick={debug}>
