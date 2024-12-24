@@ -23,7 +23,7 @@ export interface Upgrade {
 }
 
 export interface PrestigeUpgrade {
-  id: "attack" | "health"
+  id: "damage" | "health"
   basePrice: number
   additiveInc: number
   modifier: number
