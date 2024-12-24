@@ -14,7 +14,8 @@ export default {
         lightgold: "#ffcf40",
       },
       fontFamily: {
-        sans: ["Sigmar", ...defaultTheme.fontFamily.sans],
+        sans: [...defaultTheme.fontFamily.sans],
+        sigmar: ["Sigmar", ...defaultTheme.fontFamily.sans],
       },
       cursor: {
         hand: "url(/icons/hand.png) 0 0, pointer",
