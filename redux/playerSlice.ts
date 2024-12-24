@@ -5,11 +5,12 @@ import { PlayerState } from "../models/player"
 import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 import { setInitElementMap } from "../gameconfig/utils"
 import { UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
+import { statsSlice } from "./statsSlice"
 
 const debugState: PlayerState = {
-  clickLevel: 10000,
+  clickLevel: 500,
   clickMultiUpgradeCount: 3,
-  dotLevel: 50000,
+  dotLevel: 500,
   dotMultiUpgradeCount: 3,
   gold: 1000000,
   plasma: 1000000,
@@ -24,6 +25,8 @@ const debugState: PlayerState = {
   hasInitDotMulti3: false,
 
   startDate: performance.timeOrigin,
+  pDamageUpgradeCount: 10,
+  pHealthUpgradeCount: 10,
 }
 
 const initialState: PlayerState = {
@@ -46,6 +49,8 @@ const initialState: PlayerState = {
   // Preserved between runs
   startDate: performance.timeOrigin,
   plasma: 0,
+  pDamageUpgradeCount: 0,
+  pHealthUpgradeCount: 0,
 }
 
 export const playerSlice = createSlice({
@@ -64,9 +69,6 @@ export const playerSlice = createSlice({
     incrementDotMultiUpgradeCount: (state) => {
       state.dotMultiUpgradeCount++
     },
-    initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel | UpgradeKey>) {
-      setInitElementMap[action.payload](state)
-    },
     increaseGold(state, action: PayloadAction<number>) {
       state.gold += action.payload
     },
@@ -78,6 +80,15 @@ export const playerSlice = createSlice({
     },
     decreasePlasma(state, action: PayloadAction<number>) {
       state.plasma -= action.payload
+    },
+    incrementPDamageUpgradeCount: (state) => {
+      state.pDamageUpgradeCount++
+    },
+    incrementPHealthUpgradeCount: (state) => {
+      state.pHealthUpgradeCount++
+    },
+    initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel | UpgradeKey>) {
+      setInitElementMap[action.payload](state)
     },
     toggleDebugState: (state) => {
       if (state.plasma < 1000000) {
@@ -94,11 +105,13 @@ export const {
   incrementClickMultiUpgradeCount,
   incrementDotLevel,
   incrementDotMultiUpgradeCount,
-  initialiseElement,
   increaseGold,
   decreaseGold,
   increasePlasma,
   decreasePlasma,
+  incrementPDamageUpgradeCount,
+  incrementPHealthUpgradeCount,
+  initialiseElement,
   toggleDebugState,
 } = playerSlice.actions
 
@@ -109,6 +122,11 @@ export const selectPlayerState = createSelector([(state: RootState) => state.pla
   dotMultiUpgradeCount: player.dotMultiUpgradeCount,
   plasma: player.plasma,
   startDate: player.startDate,
+}))
+
+export const selectPrestigeState = createSelector([(state: RootState) => state.player], (player) => ({
+  pDamageUpgradeCount: player.pDamageUpgradeCount,
+  pHealthUpgradeCount: player.pHealthUpgradeCount,
 }))
 
 export const selectInitState = createSelector(
@@ -136,10 +154,20 @@ export const selectClickLevel = (state: RootState) => state.player.clickLevel
 export const selectGold = (state: RootState) => state.player.gold
 export const selectCanAfford = (cost: number) => (state: RootState) => selectGold(state) >= cost
 
+const prestigeDamage = UPGRADE_CONFIG.prestige.find((pUpgrade) => pUpgrade.id === "damage")!.modifier
+
 export const selectClickDamage = (state: RootState) =>
-  playerCalc.clickDamage(state.player.clickLevel, state.player.clickMultiUpgradeCount)
+  playerCalc.clickDamage(
+    state.player.clickLevel,
+    state.player.clickMultiUpgradeCount,
+    1 + state.player.pDamageUpgradeCount * prestigeDamage,
+  )
 export const selectDotDamage = (state: RootState) =>
-  playerCalc.dotDamage(state.player.dotLevel, state.player.dotMultiUpgradeCount)
+  playerCalc.dotDamage(
+    state.player.dotLevel,
+    state.player.dotMultiUpgradeCount,
+    1 + state.player.pDamageUpgradeCount * prestigeDamage,
+  )
 export const selectClickLevelUpCost = (state: RootState) => UPGRADE_CONFIG.click.levelUpCost(state.player.clickLevel)
 export const selectDotLevelUpCost = (state: RootState) => UPGRADE_CONFIG.dot.levelUpCost(state.player.dotLevel)
 

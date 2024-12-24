@@ -16,4 +16,6 @@ export interface PlayerState {
   hasInitDotMulti3: boolean
 
   startDate: number
+  pDamageUpgradeCount: number
+  pHealthUpgradeCount: number
 }

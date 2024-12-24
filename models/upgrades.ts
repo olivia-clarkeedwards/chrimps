@@ -38,8 +38,8 @@ export interface UpgradeConfig {
 }
 
 export interface PlayerCalc {
-  clickDamage: (clickLevel: number, clickMulti: number) => number
-  dotDamage: (dotLevel: number, dotMulti: number) => number
+  clickDamage: (clickLevel: number, clickMulti: number, pDamageUpgradeCount: number) => number
+  dotDamage: (dotLevel: number, dotMulti: number, pDamageUpgradeCount: number) => number
 }
 
 export type UpgradeKey = "click" | "dot"

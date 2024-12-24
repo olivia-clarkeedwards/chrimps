@@ -33,8 +33,8 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
     return costs[upgradeName][upgradeCount]
   },
   prestige: [
-    { id: "damage", basePrice: 2, additiveInc: 1, modifier: 1.05, tooltip: "" },
-    { id: "health", basePrice: 2, additiveInc: 1, modifier: 1.05, tooltip: "" },
+    { id: "damage", basePrice: 2, additiveInc: 1, modifier: 0.05, tooltip: "" },
+    { id: "health", basePrice: 2, additiveInc: 1, modifier: 0.05, tooltip: "" },
   ],
   calcAdditiveCost(atLevel, prestigeUpgrade) {
     return (((atLevel - 1) * atLevel) / 2) * prestigeUpgrade.additiveInc + prestigeUpgrade.basePrice * atLevel
@@ -42,9 +42,8 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
 }
 
 export const playerCalc: PlayerCalc = {
-  clickDamage: (clickLevel, clickMultiUpgradeCount) => clickLevel * Math.pow(2, clickMultiUpgradeCount),
-  dotDamage: function (dotLevel, dotMultiUpgradeCount) {
-    const damagePerSecond = dotLevel * Math.pow(2, dotMultiUpgradeCount)
-    return damagePerSecond
-  },
+  clickDamage: (clickLevel, clickMultiUpgradeCount, pDamageUpgradeCount) =>
+    clickLevel * Math.pow(2, clickMultiUpgradeCount) * pDamageUpgradeCount,
+  dotDamage: (dotLevel, dotMultiUpgradeCount, pDamageUpgradeCount) =>
+    dotLevel * Math.pow(2, dotMultiUpgradeCount) * pDamageUpgradeCount,
 }
