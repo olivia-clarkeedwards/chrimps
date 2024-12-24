@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { useEffect, useState } from "react"
-import { UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
+import { PrestigeUpgrade, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
 import { RootState } from "../redux/store"
 import { PlayerState } from "../models/player"
 import { selectInitState } from "../redux/playerSlice"
@@ -73,8 +73,4 @@ export function serialize(classInstance) {
     serialized[key] = serialize(classInstance[key])
   }
   return serialized
-}
-
-function getAdditivePrice(atLevel, prestigeUpgrade) {
-  return (((atLevel - 1) * atLevel) / 2) * prestigeUpgrade.additiveInc + prestigeUpgrade.priceBase * atLevel
 }

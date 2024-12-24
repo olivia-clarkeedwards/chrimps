@@ -32,6 +32,13 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
     }
     return costs[upgradeName][upgradeCount]
   },
+  prestige: [
+    { id: "attack", basePrice: 2, additiveInc: 1, modifier: 1.05, tooltip: "" },
+    { id: "health", basePrice: 2, additiveInc: 1, modifier: 1.05, tooltip: "" },
+  ],
+  calcAdditiveCost(atLevel, prestigeUpgrade) {
+    return (((atLevel - 1) * atLevel) / 2) * prestigeUpgrade.additiveInc + prestigeUpgrade.basePrice * atLevel
+  },
 }
 
 export const playerCalc: PlayerCalc = {
