@@ -8,7 +8,7 @@ import {
 } from "../../../redux/playerSlice"
 import MultiplierUpgrade from "./multiplierUpgrade"
 import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
-import { Upgrade, UpgradeKey, UpgradeProps } from "../../../models/upgrades"
+import { Upgrade, UpgradeIdWithLevel, UpgradeKey, UpgradeProps } from "../../../models/upgrades"
 import LevelUpButton from "./levelUpButton"
 import { selectCurrentZoneNumber } from "../../../redux/zoneSlice"
 import clsx from "clsx/lite"
@@ -78,7 +78,7 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
           {multiIcons.map((icon, i) => (
             <MultiplierUpgrade
               key={upgradeName + i}
-              id={`${config.elementId}.${i + 1}`}
+              id={`${config.elementId}.${i + 1}` as UpgradeIdWithLevel}
               onClick={onUpgrade}
               icon={icon}
               hidden={i === 0 ? thisUpgradeProps.level < 10 : thisUpgradeProps.upgradeCount < i}

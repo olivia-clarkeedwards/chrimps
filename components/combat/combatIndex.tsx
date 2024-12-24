@@ -6,7 +6,7 @@ import Monster from "./monster"
 import ZoneMap from "./zoneMap"
 import ZoneSelector from "./zoneSelector"
 import clsx from "clsx/lite"
-import { setDebugState } from "../../redux/playerSlice"
+import { toggleDebugState } from "../../redux/playerSlice"
 import { CookieEnjoyerIcon } from "../svg/stageIcons"
 import FarmToggle from "./farmToggle"
 
@@ -15,7 +15,7 @@ export default function CombatIndex() {
   const currentZoneNumber = useAppSelector(selectCurrentZoneNumber)
 
   function debug() {
-    dispatch(setDebugState())
+    dispatch(toggleDebugState())
   }
 
   const [shouldMount, setShouldMount] = useState(false)

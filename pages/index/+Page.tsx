@@ -7,7 +7,6 @@ import { store } from "../../redux/store"
 import { Provider } from "react-redux"
 import Navigation from "../../components/nav/navigation"
 import { useForcedDPI } from "../../gameconfig/utils"
-import clsx from "clsx"
 
 export default function Page() {
   const currentScale = useForcedDPI()
