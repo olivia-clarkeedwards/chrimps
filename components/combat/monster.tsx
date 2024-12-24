@@ -229,7 +229,7 @@ export default function Monster({ children }: PropsWithChildren) {
         </div>
         <div className="">{children}</div>
       </div>
-      <button className="flex flex-grow items-end h-[28rem] max-h-[34rem] hover:cursor-dagger" onClick={handleClick}>
+      <button className="flex flex-grow items-end h-[27rem] max-h-[34rem] hover:cursor-dagger" onClick={handleClick}>
         <img
           className="max-h-full h-full w-full object-cover lg:object-contain pointer-events-none"
           src={monsterImage}
