@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
-import { useAppSelector } from "../../../redux/hooks"
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import {
+  initialiseElement,
   selectCanAfford,
   selectClickLevelUpCost,
   selectDotLevelUpCost,
@@ -12,6 +13,7 @@ import { Upgrade, UpgradeIdWithLevel, UpgradeKey, UpgradeProps } from "../../../
 import LevelUpButton from "./levelUpButton"
 import { selectCurrentZoneNumber } from "../../../redux/zoneSlice"
 import clsx from "clsx/lite"
+import { initSelectorMap } from "../../../gameconfig/utils"
 
 interface UpgradePaneProps {
   config: Upgrade
@@ -22,6 +24,7 @@ interface UpgradePaneProps {
 }
 
 export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onLevelUp }: UpgradePaneProps) {
+  const dispatch = useAppDispatch()
   const [upgradeName] = config.elementId.split("-")
   const thisUpgradeName = upgradeName as UpgradeKey
 
@@ -50,16 +53,33 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
 
   const [shouldMount, setShouldMount] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [animationComplete, setAnimationComplete] = useState(false)
 
   const isNotClick = upgradeName !== "click"
 
+  const thisSelector = isNotClick ? initSelectorMap[thisUpgradeName] : null
+  const hasInitialised = isNotClick ? thisSelector && useAppSelector(thisSelector) : true
+
   useEffect(() => {
+    if (isNotClick) {
+      // If already initialised, skip animation sequence
+      if (hasInitialised) setAnimationComplete(true)
+      // Once animation is completed, dispatch to store
+      if (animationComplete && !hasInitialised) dispatch(initialiseElement(thisUpgradeName))
+    }
+
     if (currentZoneNumber >= config.visibleAtZone && !shouldMount) {
       setShouldMount(true)
-      const timeout = setTimeout(() => setIsVisible(true), 350)
-      return () => clearTimeout(timeout)
+      const fadeinTimeout = setTimeout(() => {
+        setIsVisible(true)
+        const preventFurtherAnimations = setTimeout(() => {
+          setAnimationComplete(true)
+        }, 500)
+        return () => clearTimeout(preventFurtherAnimations)
+      }, 350)
+      return () => clearTimeout(fadeinTimeout)
     }
-  }, [currentZoneNumber, config.visibleAtZone])
+  }, [currentZoneNumber, config.visibleAtZone, hasInitialised, animationComplete])
 
   if (!shouldMount && isNotClick) return null
 
@@ -69,7 +89,8 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
         "flex w-full items-start justify-between align-start py-4 px-4 border-amber-950 transition-opacity duration-1000",
         upgradeName === "click" ? "border-y-2" : "border-b-2",
         isVisible && isNotClick && "opacity-100",
-        !isVisible && isNotClick && "opacity-0",
+        !animationComplete && !isVisible && isNotClick && "opacity-0",
+        animationComplete && "opacity-100 transition-none",
       )}>
       <div className="flex flex-col w-40 items-center">
         <div className="">{`${upgradeName[0].toUpperCase()}${upgradeName.substring(1)} Damage`}</div>

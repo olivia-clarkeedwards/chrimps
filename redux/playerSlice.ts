@@ -4,7 +4,7 @@ import type { RootState } from "./store"
 import { PlayerState } from "../models/player"
 import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 import { setInitElementMap } from "../gameconfig/utils"
-import { UpgradeIdWithLevel } from "../models/upgrades"
+import { UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
 
 const debugState: PlayerState = {
   clickLevel: 10000,
@@ -64,7 +64,7 @@ export const playerSlice = createSlice({
     incrementDotMultiUpgradeCount: (state) => {
       state.dotMultiUpgradeCount++
     },
-    initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel>) {
+    initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel | UpgradeKey>) {
       setInitElementMap[action.payload](state)
     },
     increaseGold(state, action: PayloadAction<number>) {

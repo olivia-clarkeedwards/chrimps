@@ -1,12 +1,12 @@
 // @ts-nocheck
 
 import { useEffect, useState } from "react"
-import { UpgradeIdWithLevel } from "../models/upgrades"
+import { UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
 import { RootState } from "../redux/store"
 import { PlayerState } from "../models/player"
 import { selectInitState } from "../redux/playerSlice"
 
-export const setInitElementMap: Record<UpgradeIdWithLevel, (state: PlayerState) => boolean> = {
+export const setInitElementMap: Record<UpgradeIdWithLevel | UpgradeKey, (state: PlayerState) => boolean> = {
   "click-multi.1": (state) => {
     state.hasInitClickMulti1 = true
   },
@@ -25,17 +25,20 @@ export const setInitElementMap: Record<UpgradeIdWithLevel, (state: PlayerState) 
   "dot-multi.3": (state) => {
     state.hasInitDotMulti3 = true
   },
-  dotpane: (state) => (state.hasInitDotPane = true),
+  dot: (state) => {
+    state.hasInitDotPane = true
+  },
+  click: (state) => true,
 }
 
-export const initSelectorMap: Record<UpgradeIdWithLevel, (state: RootState) => boolean> = {
+export const initSelectorMap: Record<UpgradeIdWithLevel | UpgradeKey, (state: RootState) => boolean> = {
   "click-multi.1": (state) => selectInitState(state).hasInitClickMulti1,
   "click-multi.2": (state) => selectInitState(state).hasInitClickMulti2,
   "click-multi.3": (state) => selectInitState(state).hasInitClickMulti3,
   "dot-multi.1": (state) => selectInitState(state).hasInitDotMulti1,
   "dot-multi.2": (state) => selectInitState(state).hasInitDotMulti2,
   "dot-multi.3": (state) => selectInitState(state).hasInitDotMulti3,
-  dotpane: (state) => selectInitState(state).hasInitDotPane,
+  dot: (state) => selectInitState(state).hasInitDotPane,
 }
 
 export function useForcedDPI() {
