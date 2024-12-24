@@ -44,7 +44,7 @@ export default function ZoneMap() {
           <div
             key={stageIndex}
             className={clsx(
-              "flex relative h-8 w-16 border-2 border-gray-300 flex items-center justify-center",
+              "flex relative h-8 w-16 border-2 border-gray-300 items-center justify-center",
               stageIndex < currentStage && "bg-islam",
               stageIndex === currentStage && stageIndex !== zoneLength && "bg-yellow-500",
 
