@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import UpgradeIndex from "./upgrades/upgradeIndex"
 import clsx from "clsx/lite"
+import Prestige from "./prestige"
 
 export default function PanelIndex() {
   const [activeTab, setActiveTab] = useState("upgrade")
 
   const tabs = [
     { id: "upgrade", title: "Upgrades", component: <UpgradeIndex /> },
-    { id: "prestige", title: "Prestige", component: "" },
+    { id: "prestige", title: "Prestige", component: <Prestige /> },
   ]
 
   return (

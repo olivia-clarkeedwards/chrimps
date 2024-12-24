@@ -16,7 +16,7 @@ import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/cli
 import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { LevelUpID } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"
-import Gold from "../gold"
+import Gold from "./gold"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
