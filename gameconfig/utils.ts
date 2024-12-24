@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { useEffect, useState } from "react"
-import { PrestigeUpgrade, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
+import { PrestigeUpgradeConfig, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
 import { RootState } from "../redux/store"
 import { PlayerState } from "../models/player"
 import { selectInitState } from "../redux/playerSlice"

@@ -22,8 +22,11 @@ export interface Upgrade {
   levelUpCost: (currentLevel: number) => number
 }
 
-export interface PrestigeUpgrade {
-  id: "damage" | "health"
+export type PrestigeUpgradeName = "damage" | "health"
+
+export interface PrestigeUpgradeConfig {
+  id: PrestigeUpgradeName
+  title: string
   basePrice: number
   additiveInc: number
   modifier: number
@@ -32,9 +35,9 @@ export interface PrestigeUpgrade {
 export interface UpgradeConfig {
   click: Upgrade
   dot: Upgrade
-  prestige: PrestigeUpgrade[]
+  prestige: PrestigeUpgradeConfig[]
   calcMultiCost: (upgradeName: UpgradeId, upgradeCount: number) => number
-  calcAdditiveCost: (atLevel: number, prestigeUpgrade: PrestigeUpgrade) => number
+  calcAdditiveCost: (atLevel: number, prestigeUpgrade: PrestigeUpgradeConfig) => number
 }
 
 export interface PlayerCalc {
