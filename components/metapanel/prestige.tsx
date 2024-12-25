@@ -1,8 +1,8 @@
-import clsx from "clsx"
 import React from "react"
 import PrestigeButton from "./prestigeButton"
 import { useAppDispatch } from "../../redux/hooks"
 import { UPGRADE_CONFIG } from "../../gameconfig/upgrades"
+import clsx from "clsx/lite"
 
 export default function Prestige() {
   const dispatch = useAppDispatch()
