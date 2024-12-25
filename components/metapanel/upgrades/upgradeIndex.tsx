@@ -1,4 +1,4 @@
-  import React from "react"
+import React from "react"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import {
   decreaseGold,
@@ -11,12 +11,14 @@ import {
   selectDotDamage,
   selectClickLevelUpCost,
   selectDotLevelUpCost,
+  selectGold,
 } from "../../../redux/playerSlice"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/clickIcons"
 import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { LevelUpID } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"
-import Gold from "./gold"
+import Currency from "../currency"
+import { GoldIcon } from "../../svg/resourceIcons"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
@@ -25,6 +27,7 @@ export default function UpgradeIndex() {
   const dotDamage = useAppSelector(selectDotDamage)
   const clickLevelUpCost = useAppSelector(selectClickLevelUpCost)
   const dotLevelUpCost = useAppSelector(selectDotLevelUpCost)
+  const goldSelector = selectGold
 
   const LevelUp = {
     click: {
@@ -75,7 +78,7 @@ export default function UpgradeIndex() {
   return (
     <>
       <div id="gold-cont" className="flex flex-none flex-col h-28 items-center relative">
-        <Gold />
+        <Currency image={GoldIcon()} currencySelector={goldSelector} />
       </div>
       <div>
         <UpgradePane
