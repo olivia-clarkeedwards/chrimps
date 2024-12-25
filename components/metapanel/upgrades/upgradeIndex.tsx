@@ -77,9 +77,7 @@ export default function UpgradeIndex() {
 
   return (
     <>
-      <div id="gold-cont" className="flex flex-none flex-col h-28 items-center relative">
-        <Currency image={GoldIcon()} fontstyle="text-white font-outline-2" currencySelector={goldSelector} />
-      </div>
+      <Currency image={GoldIcon()} fontstyle="text-white font-outline-2" currencySelector={goldSelector} />
       <div>
         <UpgradePane
           config={UPGRADE_CONFIG.click}
