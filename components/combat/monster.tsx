@@ -30,7 +30,7 @@ import { EnemyState } from "../../models/monsters"
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
 
-  const { clickLevel, plasma } = useAppSelector(selectPlayerState)
+  const { clickLevel } = useAppSelector(selectPlayerState)
   const clickDamage = useAppSelector(selectClickDamage)
   const dotDamage = useAppSelector(selectDotDamage)
 
@@ -221,7 +221,6 @@ export default function Monster({ children }: PropsWithChildren) {
       <div className="absolute bottom-[16%] text-white">
         Debug: monsterGoldValue: {monsterGoldValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage:{" "}
         {clickDamage} dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}{" "}
-        plasma: {plasma}
       </div>
       <div className="flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center text-2xl">

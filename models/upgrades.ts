@@ -30,6 +30,7 @@ export interface PrestigeUpgradeConfig {
   basePrice: number
   additiveInc: number
   modifier: number
+  unlocked: boolean
   tooltip: string
 }
 export interface UpgradeConfig {

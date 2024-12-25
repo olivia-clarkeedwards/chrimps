@@ -1,10 +1,10 @@
 // @ts-nocheck
 
 import { useEffect, useState } from "react"
-import { PrestigeUpgradeConfig, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
+import { PrestigeUpgradeConfig, PrestigeUpgradeName, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
 import { RootState } from "../redux/store"
 import { PlayerState } from "../models/player"
-import { selectInitState } from "../redux/playerSlice"
+import { selectInitState, selectPrestigeState } from "../redux/playerSlice"
 
 export const setInitElementMap: Record<UpgradeIdWithLevel | UpgradeKey, (state: PlayerState) => boolean> = {
   "click-multi.1": (state) => {
@@ -39,6 +39,11 @@ export const initSelectorMap: Record<UpgradeIdWithLevel | UpgradeKey, (state: Ro
   "dot-multi.2": (state) => selectInitState(state).hasInitDotMulti2,
   "dot-multi.3": (state) => selectInitState(state).hasInitDotMulti3,
   dot: (state) => selectInitState(state).hasInitDotPane,
+}
+
+export const prestigeUpgradeMap: Record<PrestigeUpgradeName, (state: RootState) => number> = {
+  damage: (state) => selectPrestigeState(state).pDamageUpgradeCount,
+  health: (state) => selectPrestigeState(state).pHealthUpgradeCount,
 }
 
 export function useForcedDPI() {

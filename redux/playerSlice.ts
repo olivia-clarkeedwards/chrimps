@@ -120,11 +120,11 @@ export const selectPlayerState = createSelector([(state: RootState) => state.pla
   clickMultiUpgradeCount: player.clickMultiUpgradeCount,
   dotLevel: player.dotLevel,
   dotMultiUpgradeCount: player.dotMultiUpgradeCount,
-  plasma: player.plasma,
   startDate: player.startDate,
 }))
 
 export const selectPrestigeState = createSelector([(state: RootState) => state.player], (player) => ({
+  plasma: player.plasma,
   pDamageUpgradeCount: player.pDamageUpgradeCount,
   pHealthUpgradeCount: player.pHealthUpgradeCount,
 }))
