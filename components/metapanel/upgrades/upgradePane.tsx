@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import {
   initialiseElement,
-  selectCanAfford,
+  selectGCanAfford,
   selectClickLevelUpCost,
   selectDotLevelUpCost,
   selectPlayerState,
@@ -44,9 +44,9 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   }
   const thisUpgradeProps = upgradeProps[thisUpgradeName]
 
-  const canAffordLevelUp = useAppSelector(selectCanAfford(thisUpgradeProps.levelUpCost))
+  const canAffordLevelUp = useAppSelector(selectGCanAfford(thisUpgradeProps.levelUpCost))
   const canAffordMultiUpgrade = useAppSelector(
-    selectCanAfford(UPGRADE_CONFIG.calcMultiCost(config.elementId, thisUpgradeProps.upgradeCount)),
+    selectGCanAfford(UPGRADE_CONFIG.calcMultiCost(config.elementId, thisUpgradeProps.upgradeCount)),
   )
 
   const currentZoneNumber = useAppSelector(selectCurrentZoneNumber)

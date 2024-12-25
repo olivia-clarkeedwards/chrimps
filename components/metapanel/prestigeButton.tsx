@@ -1,19 +1,18 @@
 import React, { useState } from "react"
-import clsx from "clsx/lite"
 import { PrestigeUpgradeConfig, PrestigeUpgradeName } from "../../models/upgrades"
 import { prestigeUpgradeMap } from "../../gameconfig/utils"
 import { useAppSelector } from "../../redux/hooks"
 import { UPGRADE_CONFIG } from "../../gameconfig/upgrades"
-import { selectPrestigeState } from "../../redux/playerSlice"
+import { selectPCanAfford, selectPlasma } from "../../redux/playerSlice"
+import clsx from "clsx/lite"
 
 interface PrestigeBtnProps {
   config: PrestigeUpgradeConfig
   onClick: (e: React.MouseEvent<HTMLButtonElement>, cost: number, isAffordable: boolean) => void
-  currentUpgradeCount: number
   hidden: boolean
 }
 
-export default function PrestigeButton({ config, onClick: onPrestige, currentUpgradeCount, hidden }: PrestigeBtnProps) {
+export default function PrestigeButton({ config, onClick: onPrestige, hidden }: PrestigeBtnProps) {
   if (hidden) return null
 
   const thisUpgradeName = config.id
@@ -23,9 +22,9 @@ export default function PrestigeButton({ config, onClick: onPrestige, currentUpg
   const [nextCost, setNextCost] = useState(upgradeCount + 1)
   const [totalCost, setCost] = useState(0)
 
-  const { plasma } = useAppSelector(selectPrestigeState)
+  const plasma = useAppSelector(selectPlasma)
   const cost = UPGRADE_CONFIG.calcAdditiveCost(nextCost, config)
-  const isAffordable = plasma >= cost
+  const isAffordable = useAppSelector(selectPCanAfford(cost))
 
   function onSelectPrestigeUpgrade(
     e: React.MouseEvent<HTMLButtonElement>,
@@ -41,9 +40,6 @@ export default function PrestigeButton({ config, onClick: onPrestige, currentUpg
     console.log(`Cost: ${cost}, Total purchased: ${toPurchase}, Total cost: ${totalCost + cost}, Plasma: ${plasma}`)
   }
 
-  // console.log(
-  //   `Upgrade: ${thisUpgradeName}, Count: ${upgradeCount}, Cost: ${cost}, Current Plasma: ${plasma}, Affordable: ${isAffordable} `,
-  // )
   return (
     <button
       key={config.id}

@@ -6,7 +6,7 @@ import {
   incrementClickMultiUpgradeCount,
   incrementDotMultiUpgradeCount,
   incrementDotLevel,
-  selectCanAfford,
+  selectGCanAfford,
   selectClickDamage,
   selectDotDamage,
   selectClickLevelUpCost,
@@ -32,12 +32,12 @@ export default function UpgradeIndex() {
   const LevelUp = {
     click: {
       cost: clickLevelUpCost,
-      canAfford: useAppSelector(selectCanAfford(clickLevelUpCost)),
+      canAfford: useAppSelector(selectGCanAfford(clickLevelUpCost)),
       action: incrementClickLevel(),
     },
     dot: {
       cost: dotLevelUpCost,
-      canAfford: useAppSelector(selectCanAfford(dotLevelUpCost)),
+      canAfford: useAppSelector(selectGCanAfford(dotLevelUpCost)),
       action: incrementDotLevel(),
     },
   }

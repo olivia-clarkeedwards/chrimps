@@ -152,7 +152,9 @@ export const selectInitState = createSelector(
 
 export const selectClickLevel = (state: RootState) => state.player.clickLevel
 export const selectGold = (state: RootState) => state.player.gold
-export const selectCanAfford = (cost: number) => (state: RootState) => selectGold(state) >= cost
+export const selectGCanAfford = (cost: number) => (state: RootState) => selectGold(state) >= cost
+export const selectPlasma = (state: RootState) => state.player.plasma
+export const selectPCanAfford = (cost: number) => (state: RootState) => selectPlasma(state) >= cost
 
 const prestigeDamage = UPGRADE_CONFIG.prestige.find((pUpgrade) => pUpgrade.id === "damage")!.modifier
 
