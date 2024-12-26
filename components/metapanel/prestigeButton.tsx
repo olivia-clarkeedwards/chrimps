@@ -9,38 +9,36 @@ import { MinPlasmaIcon } from "../svg/resourceIcons"
 
 interface PrestigeBtnProps {
   config: PrestigeUpgradeConfig
-  onClick: (e: React.MouseEvent<HTMLButtonElement>, cost: number, upgradeCount: number, isAffordable: boolean) => void
+  onClick: (e: React.MouseEvent<HTMLButtonElement>, cost: number, purchaseCount: number) => void
   hidden: boolean
 }
 
-export default function PrestigeButton({ config, onClick: onPrestige, hidden }: PrestigeBtnProps) {
+export default function PrestigeButton({ config, onClick: onUpdatePurchase, hidden }: PrestigeBtnProps) {
   if (hidden) return null
 
   const thisUpgradeName = config.id
   const upgradeCount = useAppSelector(prestigeUpgradeMap[thisUpgradeName])
 
   const [toPurchase, setToPurchase] = useState(0)
-  const [nextCost, setNextCost] = useState(UPGRADE_CONFIG.calcAdditiveCost(upgradeCount + 1, config))
+  const [purchasePrice, setPurchasePrice] = useState(UPGRADE_CONFIG.calcAdditiveCost(upgradeCount + 1, config))
   const [totalCost, setTotalCost] = useState(0)
 
   const plasma = useAppSelector(selectPlasma)
-  const isAffordable = useAppSelector(selectPCanAfford(nextCost))
+  const isAffordable = useAppSelector(selectPCanAfford(purchasePrice))
 
   function onSelectPrestigeUpgrade(
     e: React.MouseEvent<HTMLButtonElement>,
     upgradeCount: number,
-    nextCost: number,
+    purchasePrice: number,
     toPurchase: number,
-    isAffordable: boolean,
   ) {
     const tempUpgradeCount = upgradeCount + toPurchase + 1
-    setTotalCost(nextCost + totalCost)
-    setNextCost(UPGRADE_CONFIG.calcAdditiveCost(tempUpgradeCount + 1, config))
+    const newTotalCost = purchasePrice + totalCost
+
+    onUpdatePurchase(e, newTotalCost, toPurchase + 1)
+    setPurchasePrice(UPGRADE_CONFIG.calcAdditiveCost(tempUpgradeCount + 1, config))
     setToPurchase(toPurchase + 1)
-    onPrestige(e, totalCost, upgradeCount, isAffordable)
-    console.log(
-      `Cost: ${nextCost}, Total purchased: ${toPurchase}, Total cost: ${totalCost + nextCost}, Plasma: ${plasma}`,
-    )
+    setTotalCost(newTotalCost)
   }
 
   return (
@@ -48,7 +46,7 @@ export default function PrestigeButton({ config, onClick: onPrestige, hidden }: 
       key={config.id}
       id={config.id}
       onClick={(e) => {
-        onSelectPrestigeUpgrade(e, upgradeCount, nextCost, toPurchase, isAffordable)
+        onSelectPrestigeUpgrade(e, upgradeCount, purchasePrice, toPurchase)
       }}
       disabled={!isAffordable}
       className={clsx(
@@ -64,7 +62,7 @@ export default function PrestigeButton({ config, onClick: onPrestige, hidden }: 
           Price:{" "}
           <span className={clsx("flex", isAffordable ? "text-blue-200" : "text-red-500")}>
             {<span className="self-center -mr-[0.18rem]">{MinPlasmaIcon()}</span>}
-            {nextCost}
+            {purchasePrice}
           </span>
         </span>
       </div>

@@ -29,7 +29,7 @@ export function MinPlasmaIcon() {
         d="M50 10 Q85 30 50 50 Q15 70 50 90 Q85 70 50 50 Q15 30 50 10 Z"
         fill="none"
         stroke="currentColor"
-        stroke-width="6"
+        strokeWidth="6"
         opacity="0.8"
       />
     </svg>
