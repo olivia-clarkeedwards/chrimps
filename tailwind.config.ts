@@ -7,6 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        electricblue: "#7DF9FF",
         islam: "#009000",
         hpgreen: "#00BB27",
         darkgreen: "#11772D",

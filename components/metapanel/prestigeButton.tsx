@@ -5,6 +5,7 @@ import { useAppSelector } from "../../redux/hooks"
 import { UPGRADE_CONFIG } from "../../gameconfig/upgrades"
 import { selectPCanAfford, selectPlasma } from "../../redux/playerSlice"
 import clsx from "clsx/lite"
+import { MinPlasmaIcon } from "../svg/resourceIcons"
 
 interface PrestigeBtnProps {
   config: PrestigeUpgradeConfig
@@ -51,15 +52,21 @@ export default function PrestigeButton({ config, onClick: onPrestige, hidden }: 
       }}
       disabled={!isAffordable}
       className={clsx(
-        "w-56 cursor-hand bg-cyan-800/50 text-cyan-300 py-4 px-6 rounded-lg flex items-center justify-center gap-2 border border-cyan-500 shadow-lg shadow-cyan-500/20 transition-all duration-300",
+        "w-56 cursor-hand text-lg bg-cyan-800/50 text-cyan-300 py-4 px-6 rounded-lg flex items-center justify-center gap-2 border border-cyan-500 shadow-lg shadow-cyan-500/20 transition-all duration-300",
         "hover:bg-cyan-700/80 hover:shadow-cyan-500/40 disabled:bg-cyan-800/50 disabled:shadow-none disabled:text-gray-300/80 disabled:border-black",
       )}>
       <div className="relative flex flex-col items-center">
-        <span className="text-xl font-extrabold"> {config.title}</span>
+        <span className="text-2xl font-extrabold"> {config.title}</span>
         <span>
           Level: {upgradeCount} {toPurchase > 0 && `(+${toPurchase})`}
         </span>
-        <span>Price: {nextCost}</span>
+        <span className="flex">
+          Price:{" "}
+          <span className={clsx("flex", isAffordable ? "text-blue-200" : "text-red-500")}>
+            {<span className="self-center -mr-[0.18rem]">{MinPlasmaIcon()}</span>}
+            {nextCost}
+          </span>
+        </span>
       </div>
     </button>
   )

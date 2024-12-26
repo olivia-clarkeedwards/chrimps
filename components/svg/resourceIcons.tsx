@@ -24,13 +24,13 @@ export function PlasmaIcon() {
 
 export function MinPlasmaIcon() {
   return (
-    <svg height={"2rem"} width={"2rem"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <svg height={"1.25rem"} width={"1.25rem"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
       <path
-        d="M50 10 Q70 30 50 50 Q30 70 50 90 Q70 70 50 50 Q30 30 50 10 Z"
+        d="M50 10 Q85 30 50 50 Q15 70 50 90 Q85 70 50 50 Q15 30 50 10 Z"
         fill="none"
-        stroke="white"
-        strokeWidth={4}
-        opacity={0.8}
+        stroke="currentColor"
+        stroke-width="6"
+        opacity="0.8"
       />
     </svg>
   )
