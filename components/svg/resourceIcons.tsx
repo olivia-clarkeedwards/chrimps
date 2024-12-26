@@ -5,19 +5,32 @@ export function PlasmaIcon() {
     <svg height={"5rem"} width={"5rem"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
       <defs>
         <radialGradient id="plasma-gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-          <stop offset="0%" stop-color="#05e6e6" />
-          <stop offset="50%" stop-color="#0099ff" />
-          <stop offset="100%" stop-color="#005577" />
+          <stop offset="0%" stopColor="#05e6e6" />
+          <stop offset="50%" stopColor="#0099ff" />
+          <stop offset="100%" stopColor="#005577" />
         </radialGradient>
       </defs>
-      <circle cx="50" cy="50" r="45" fill="url(#plasma-gradient)" />
-
+      <circle cx={50} cy={50} r={45} fill="url(#plasma-gradient)" />
       <path
         d="M50 10 Q70 30 50 50 Q30 70 50 90 Q70 70 50 50 Q30 30 50 10 Z"
         fill="none"
         stroke="white"
-        stroke-width="2"
-        opacity="0.8"
+        strokeWidth={4}
+        opacity={0.8}
+      />
+    </svg>
+  )
+}
+
+export function MinPlasmaIcon() {
+  return (
+    <svg height={"2rem"} width={"2rem"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <path
+        d="M50 10 Q70 30 50 50 Q30 70 50 90 Q70 70 50 50 Q30 30 50 10 Z"
+        fill="none"
+        stroke="white"
+        strokeWidth={4}
+        opacity={0.8}
       />
     </svg>
   )

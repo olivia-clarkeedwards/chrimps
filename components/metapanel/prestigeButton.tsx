@@ -8,7 +8,7 @@ import clsx from "clsx/lite"
 
 interface PrestigeBtnProps {
   config: PrestigeUpgradeConfig
-  onClick: (e: React.MouseEvent<HTMLButtonElement>, cost: number, isAffordable: boolean) => void
+  onClick: (e: React.MouseEvent<HTMLButtonElement>, cost: number, upgradeCount: number, isAffordable: boolean) => void
   hidden: boolean
 }
 
@@ -19,25 +19,27 @@ export default function PrestigeButton({ config, onClick: onPrestige, hidden }: 
   const upgradeCount = useAppSelector(prestigeUpgradeMap[thisUpgradeName])
 
   const [toPurchase, setToPurchase] = useState(0)
-  const [nextCost, setNextCost] = useState(upgradeCount + 1)
-  const [totalCost, setCost] = useState(0)
+  const [nextCost, setNextCost] = useState(UPGRADE_CONFIG.calcAdditiveCost(upgradeCount + 1, config))
+  const [totalCost, setTotalCost] = useState(0)
 
   const plasma = useAppSelector(selectPlasma)
-  const cost = UPGRADE_CONFIG.calcAdditiveCost(nextCost, config)
-  const isAffordable = useAppSelector(selectPCanAfford(cost))
+  const isAffordable = useAppSelector(selectPCanAfford(nextCost))
 
   function onSelectPrestigeUpgrade(
     e: React.MouseEvent<HTMLButtonElement>,
-    cost: number,
+    upgradeCount: number,
     nextCost: number,
     toPurchase: number,
     isAffordable: boolean,
   ) {
-    setCost(cost + totalCost)
-    setNextCost(nextCost + 1)
+    const tempUpgradeCount = upgradeCount + toPurchase + 1
+    setTotalCost(nextCost + totalCost)
+    setNextCost(UPGRADE_CONFIG.calcAdditiveCost(tempUpgradeCount + 1, config))
     setToPurchase(toPurchase + 1)
-    onPrestige(e, totalCost, isAffordable)
-    console.log(`Cost: ${cost}, Total purchased: ${toPurchase}, Total cost: ${totalCost + cost}, Plasma: ${plasma}`)
+    onPrestige(e, totalCost, upgradeCount, isAffordable)
+    console.log(
+      `Cost: ${nextCost}, Total purchased: ${toPurchase}, Total cost: ${totalCost + nextCost}, Plasma: ${plasma}`,
+    )
   }
 
   return (
@@ -45,18 +47,19 @@ export default function PrestigeButton({ config, onClick: onPrestige, hidden }: 
       key={config.id}
       id={config.id}
       onClick={(e) => {
-        onSelectPrestigeUpgrade(e, cost, nextCost, toPurchase, isAffordable)
+        onSelectPrestigeUpgrade(e, upgradeCount, nextCost, toPurchase, isAffordable)
       }}
       disabled={!isAffordable}
       className={clsx(
-        "w-56 cursor-hand bg-cyan-800/50 font-extrabold text-cyan-300 py-4 px-6 rounded-lg flex items-center justify-center gap-2 border border-cyan-500 shadow-lg shadow-cyan-500/20 transition-all duration-300",
+        "w-56 cursor-hand bg-cyan-800/50 text-cyan-300 py-4 px-6 rounded-lg flex items-center justify-center gap-2 border border-cyan-500 shadow-lg shadow-cyan-500/20 transition-all duration-300",
         "hover:bg-cyan-700/80 hover:shadow-cyan-500/40 disabled:bg-cyan-800/50 disabled:shadow-none disabled:text-gray-300/80 disabled:border-black",
       )}>
-      <div className="relative flex items-center gap-2">
-        <span className={clsx("text-xl")}>
-          {" "}
-          {config.title} {upgradeCount} +{nextCost && nextCost}
+      <div className="relative flex flex-col items-center">
+        <span className="text-xl font-extrabold"> {config.title}</span>
+        <span>
+          Level: {upgradeCount} {toPurchase > 0 && `(+${toPurchase})`}
         </span>
+        <span>Price: {nextCost}</span>
       </div>
     </button>
   )
