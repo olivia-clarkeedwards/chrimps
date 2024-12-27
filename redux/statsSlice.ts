@@ -55,6 +55,9 @@ export const statsSlice = createSlice({
         state.highestZoneEver = state.highestZone
       }
     })
+    builder.addCase("prestige/reset", (state) => {
+      state.highestZone = 1
+    })
   },
 })
 

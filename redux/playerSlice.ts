@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import type { RootState } from "./store"
+import { prestigeReset, type RootState } from "./store"
 import { PlayerState } from "../models/player"
 import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 import { setInitElementMap } from "../gameconfig/utils"
@@ -34,7 +34,7 @@ const initialState: PlayerState = {
   clickMultiUpgradeCount: 0,
   dotLevel: 0,
   dotMultiUpgradeCount: 0,
-  gold: 1,
+  gold: 0,
 
   plasmaSpent: 0,
   // Prevents animation triggering again on mount
@@ -105,6 +105,23 @@ export const playerSlice = createSlice({
         return (state = { ...initialState, gold: 1000000 })
       }
     },
+  },
+  extraReducers(builder) {
+    builder.addCase("prestige/reset", (state) => {
+      state.clickLevel = 1
+      state.clickMultiUpgradeCount = 0
+      state.dotLevel = 0
+      state.dotMultiUpgradeCount = 0
+      state.gold = 0
+      state.plasmaSpent = 0
+      state.hasInitClickMulti1 = false
+      state.hasInitClickMulti2 = false
+      state.hasInitClickMulti3 = false
+      state.hasInitDotPane = false
+      state.hasInitDotMulti1 = false
+      state.hasInitDotMulti2 = false
+      state.hasInitDotMulti3 = false
+    })
   },
 })
 

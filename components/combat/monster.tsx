@@ -174,17 +174,21 @@ export default function Monster({ children }: PropsWithChildren) {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        if (frameRef.current) cancelAnimationFrame(frameRef.current)
+        if (frameRef.current) {
+          cancelAnimationFrame(frameRef.current)
+          frameRef.current = undefined // Explicitly set to undefined
+        }
       } else {
-        // The setTimeout seems to prevent extra loops between document hidden and document visible
         setTimeout(() => {
-          frameRef.current = requestAnimationFrame(gameLoop)
+          if (!frameRef.current) {
+            frameRef.current = requestAnimationFrame(gameLoop)
+          }
         }, 0)
       }
     }
     document.addEventListener("visibilitychange", handleVisibilityChange)
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
-  }, [dealDamageOverTime, runTasks])
+  }, [gameLoop])
 
   useEffect(() => {
     frameRef.current = requestAnimationFrame(gameLoop)

@@ -21,8 +21,8 @@ const firstZone = new Zone(1)
 firstZone.monsters = [getMonster("Slime"), ...firstZone.monsters.slice(1)]
 const initialState: ZoneState = {
   // Progression zone data
-  currentZoneLength: firstZone.zoneLength,
   currentZoneNumber: firstZone.zoneNumber,
+  currentZoneLength: firstZone.zoneLength,
   monsters: firstZone.monsters,
   nextStageIndex: 1,
   // Farming zone data
@@ -98,6 +98,22 @@ export const zoneSlice = createSlice({
     setZoneInView(state, action: PayloadAction<number>) {
       state.zoneInView = action.payload
     },
+  },
+  extraReducers(builder) {
+    builder.addCase("prestige/reset", (state) => {
+      const newZone = new Zone(1)
+
+      state.currentZoneNumber = newZone.zoneNumber
+      state.currentZoneLength = newZone.zoneLength
+      state.monsters = newZone.monsters
+      state.nextStageIndex = 1
+      state.isFarming = false
+      state.farmZoneMonsters = null
+      state.farmZoneNumber = null
+      state.farmStageIndex = 1
+      state.farmZoneLength = 30
+      state.zoneInView = 1
+    })
   },
 })
 
