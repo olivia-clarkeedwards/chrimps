@@ -5,6 +5,7 @@ export interface PlayerState {
   dotMultiUpgradeCount: number
   gold: number
   plasma: number
+  plasmaSpent: number
 
   hasInitClickMulti1: boolean
   hasInitClickMulti2: boolean

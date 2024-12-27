@@ -5,7 +5,6 @@ import { PlayerState } from "../models/player"
 import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 import { setInitElementMap } from "../gameconfig/utils"
 import { UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
-import { statsSlice } from "./statsSlice"
 
 const debugState: PlayerState = {
   clickLevel: 500,
@@ -15,6 +14,7 @@ const debugState: PlayerState = {
   gold: 1000000,
   plasma: 1000000,
 
+  plasmaSpent: 0,
   hasInitClickMulti1: false,
   hasInitClickMulti2: false,
   hasInitClickMulti3: false,
@@ -36,6 +36,7 @@ const initialState: PlayerState = {
   dotMultiUpgradeCount: 0,
   gold: 1,
 
+  plasmaSpent: 0,
   // Prevents animation triggering again on mount
   hasInitClickMulti1: false,
   hasInitClickMulti2: false,
@@ -78,9 +79,15 @@ export const playerSlice = createSlice({
     increasePlasma(state, action: PayloadAction<number>) {
       state.plasma += action.payload
     },
-    decreasePlasma(state, action: PayloadAction<number>) {
-      state.plasma -= action.payload
+    spendPlasma(state, action: PayloadAction<number>) {
+      state.plasmaSpent += action.payload
     },
+    resetPlasmaSpent: (state) => {
+      state.plasmaSpent = 0
+    },
+    // decreasePlasma(state, action: PayloadAction<number>) {
+    //   state.plasma -= action.payload
+    // },
     incrementPDamageUpgradeCount: (state) => {
       state.pDamageUpgradeCount++
     },
@@ -108,7 +115,8 @@ export const {
   increaseGold,
   decreaseGold,
   increasePlasma,
-  decreasePlasma,
+  spendPlasma,
+  // decreasePlasma,
   incrementPDamageUpgradeCount,
   incrementPHealthUpgradeCount,
   initialiseElement,

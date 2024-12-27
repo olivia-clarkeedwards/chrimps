@@ -1,8 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit"
+import { configureStore, createAction } from "@reduxjs/toolkit"
 import statsReducer from "./statsSlice"
 import monsterReducer from "./monsterSlice"
 import zoneReducer from "./zoneSlice"
 import playerReducer from "./playerSlice"
+
+export const prestigeReset = createAction("prestige/reset")
 
 export const store = configureStore({
   reducer: {
