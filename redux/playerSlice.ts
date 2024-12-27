@@ -80,14 +80,15 @@ export const playerSlice = createSlice({
       state.plasma += action.payload
     },
     spendPlasma(state, action: PayloadAction<number>) {
-      state.plasmaSpent += action.payload
+      const diff = action.payload - state.plasmaSpent
+      state.plasmaSpent += diff
+      state.plasma -= diff
     },
     resetPlasmaSpent: (state) => {
+      state.plasma += state.plasmaSpent
       state.plasmaSpent = 0
     },
-    // decreasePlasma(state, action: PayloadAction<number>) {
-    //   state.plasma -= action.payload
-    // },
+
     incrementPDamageUpgradeCount: (state) => {
       state.pDamageUpgradeCount++
     },
@@ -116,6 +117,7 @@ export const {
   decreaseGold,
   increasePlasma,
   spendPlasma,
+  resetPlasmaSpent,
   // decreasePlasma,
   incrementPDamageUpgradeCount,
   incrementPHealthUpgradeCount,
@@ -161,11 +163,12 @@ export const selectInitState = createSelector(
 export const selectClickLevel = (state: RootState) => state.player.clickLevel
 export const selectGold = (state: RootState) => state.player.gold
 export const selectGCanAfford = (cost: number) => (state: RootState) => selectGold(state) >= cost
+
 export const selectPlasma = (state: RootState) => state.player.plasma
 export const selectPCanAfford = (cost: number) => (state: RootState) => selectPlasma(state) >= cost
+export const selectPlasmaSpent = (state: RootState) => state.player.plasmaSpent
 
 const prestigeDamage = UPGRADE_CONFIG.prestige.find((pUpgrade) => pUpgrade.id === "damage")!.modifier
-
 export const selectClickDamage = (state: RootState) =>
   playerCalc.clickDamage(
     state.player.clickLevel,

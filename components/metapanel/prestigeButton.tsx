@@ -31,9 +31,12 @@ export default function PrestigeButton({ config, onClick: onUpdatePurchase, hidd
     upgradeCount: number,
     purchasePrice: number,
     toPurchase: number,
+    isAffordable: boolean,
   ) {
     const tempUpgradeCount = upgradeCount + toPurchase + 1
     const newTotalCost = purchasePrice + totalCost
+
+    console.log(purchasePrice, isAffordable)
 
     onUpdatePurchase(e, newTotalCost, toPurchase + 1)
     setPurchasePrice(UPGRADE_CONFIG.calcAdditiveCost(tempUpgradeCount + 1, config))
@@ -46,7 +49,7 @@ export default function PrestigeButton({ config, onClick: onUpdatePurchase, hidd
       key={config.id}
       id={config.id}
       onClick={(e) => {
-        onSelectPrestigeUpgrade(e, upgradeCount, purchasePrice, toPurchase)
+        onSelectPrestigeUpgrade(e, upgradeCount, purchasePrice, toPurchase, isAffordable)
       }}
       disabled={!isAffordable}
       className={clsx(
