@@ -28,8 +28,8 @@ const debugState: PlayerState = {
   tabInView: "upgrade",
 
   startDate: performance.timeOrigin,
-  pDamageUpgradeCount: 10,
-  pHealthUpgradeCount: 10,
+  pDamageUpgradeCount: 30,
+  pHealthUpgradeCount: 30,
   plasmaSpent: 50000,
 }
 
