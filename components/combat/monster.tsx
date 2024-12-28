@@ -108,7 +108,6 @@ export default function Monster({ children }: PropsWithChildren) {
 
     // Zone transition
     if (stageNumber === zoneLength) {
-      console.log("Zone transition")
       // When highest zone
       if (isProgressing) {
         dispatch(zoneComplete())
@@ -146,7 +145,6 @@ export default function Monster({ children }: PropsWithChildren) {
     }
     // Spawn the next monster when we didn't jump to zoneInView transition
     if (nextMonster) {
-      console.log("Spawning next monster", nextMonster)
       dispatch(spawnMonster(nextMonster))
     }
   }
@@ -162,7 +160,6 @@ export default function Monster({ children }: PropsWithChildren) {
     }
 
     if (nextMonster) {
-      console.log("Spawning next monster", nextMonster)
       dispatch(spawnMonster(nextMonster))
     } else throw new Error("Monster undefined during zone transition")
   }, [zoneInView])
