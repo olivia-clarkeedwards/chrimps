@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { UPGRADE_CONFIG } from "../../gameconfig/upgrades"
 import Currency from "./currency"
 import { PlasmaIcon } from "../svg/resourceIcons"
-import { resetPlasmaSpent, selectPlasma, selectPlasmaSpent, spendPlasma } from "../../redux/playerSlice"
+import { resetPlasmaReserved, selectPlasma, selectPlasmaReserved, reservePlasma } from "../../redux/playerSlice"
 import { PrestigeState, PrestigeUpgradeName } from "../../models/upgrades"
 import clsx from "clsx/lite"
 import { prestigeReset } from "../../redux/sharedActions"
@@ -13,7 +13,7 @@ export default function Prestige() {
   const dispatch = useAppDispatch()
   const plasmaSelector = selectPlasma
   const plasma = useAppSelector(plasmaSelector)
-  const plasmaSpent = useAppSelector(selectPlasmaSpent)
+  const plasmaReserved = useAppSelector(selectPlasmaReserved)
 
   const [prestigePurchase, setPrestigePurchase] = useState(
     Object.fromEntries(
@@ -28,7 +28,7 @@ export default function Prestige() {
   )
 
   useEffect(() => {
-    dispatch(resetPlasmaSpent())
+    dispatch(resetPlasmaReserved())
   }, [])
 
   function onUpdatePurchase(e: React.MouseEvent<HTMLButtonElement>, cost: number, purchaseCount: number) {
@@ -49,8 +49,8 @@ export default function Prestige() {
         purchaseCount: purchaseCount,
       },
     }
-    const plasmaToSpend = Object.values(newTotalCost).reduce((acc, upgrade) => acc + upgrade.cost, 0)
-    dispatch(spendPlasma(plasmaToSpend))
+    const plasmaToReserve = Object.values(newTotalCost).reduce((acc, upgrade) => acc + upgrade.cost, 0)
+    dispatch(reservePlasma(plasmaToReserve))
   }
 
   return (
@@ -59,7 +59,7 @@ export default function Prestige() {
         image={PlasmaIcon()}
         fontstyle="text-cyan-300"
         currencySelector={plasmaSelector}
-        suffix={plasmaSpent > 0 ? `  (-${plasmaSpent})` : undefined}
+        suffix={plasmaReserved > 0 ? `  (-${plasmaReserved})` : undefined}
       />
       <div className="flex font-sans gap-2">
         {UPGRADE_CONFIG.prestige.map((prestigeUpgrade) => (
@@ -73,7 +73,7 @@ export default function Prestige() {
           Prestige
         </button>
         <button
-          onClick={() => dispatch(resetPlasmaSpent())}
+          onClick={() => dispatch(resetPlasmaReserved())}
           className="w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-black bg-gray-700 text-white font-sans font-extrabold text-2xl">
           Reset
         </button>

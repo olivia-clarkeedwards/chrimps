@@ -2,12 +2,17 @@ import React, { useState } from "react"
 import UpgradeIndex from "./upgrades/upgradeIndex"
 import clsx from "clsx/lite"
 import Prestige from "./prestige"
+import { Tab } from "../../models/player"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { selectTabInView, setTabInView } from "../../redux/playerSlice"
 
 export default function PanelIndex() {
-  const [activeTab, setActiveTab] = useState("upgrade")
+  const dispatch = useAppDispatch()
 
-  const tabs = [
-    { id: "upgrade", title: "Upgrades", component: <UpgradeIndex /> },
+  const activeTab = useAppSelector(selectTabInView)
+
+  const tabs: { id: Tab; title: string; component: JSX.Element }[] = [
+    { id: "upgrade", title: "Upgrade", component: <UpgradeIndex /> },
     { id: "prestige", title: "Prestige", component: <Prestige /> },
   ]
 
@@ -22,7 +27,7 @@ export default function PanelIndex() {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => dispatch(setTabInView(tab.id))}
               className={clsx(
                 "flex cursor-hand items-center shadow-panel-t-1 w-full px-4 py-1.5 text-lg rounded-t-lg",
                 activeTab === tab.id

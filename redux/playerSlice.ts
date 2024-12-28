@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { type RootState } from "./store"
-import { PlayerState } from "../models/player"
+import { PlayerState, Tab } from "../models/player"
 import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 import { setInitElementMap } from "../gameconfig/utils"
 import { PrestigeState, PrestigeUpgradeName, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
@@ -15,7 +15,7 @@ const debugState: PlayerState = {
   gold: 1000000,
   plasma: 1000000,
 
-  plasmaSpent: 0,
+  plasmaReserved: 0,
   hasInitClickMulti1: false,
   hasInitClickMulti2: false,
   hasInitClickMulti3: false,
@@ -24,6 +24,8 @@ const debugState: PlayerState = {
   hasInitDotMulti1: false,
   hasInitDotMulti2: false,
   hasInitDotMulti3: false,
+
+  tabInView: "upgrade",
 
   startDate: performance.timeOrigin,
   pDamageUpgradeCount: 10,
@@ -37,7 +39,7 @@ const initialState: PlayerState = {
   dotMultiUpgradeCount: 0,
   gold: 0,
 
-  plasmaSpent: 0,
+  plasmaReserved: 0,
   // Prevents animation triggering again on mount
   hasInitClickMulti1: false,
   hasInitClickMulti2: false,
@@ -48,6 +50,7 @@ const initialState: PlayerState = {
   hasInitDotMulti2: false,
   hasInitDotMulti3: false,
 
+  tabInView: "upgrade",
   // Preserved between runs
   startDate: performance.timeOrigin,
   plasma: 0,
@@ -57,7 +60,7 @@ const initialState: PlayerState = {
 
 export const playerSlice = createSlice({
   name: "player",
-  initialState: initialState,
+  initialState,
   reducers: {
     incrementClickLevel: (state) => {
       state.clickLevel++
@@ -80,16 +83,15 @@ export const playerSlice = createSlice({
     increasePlasma(state, action: PayloadAction<number>) {
       state.plasma += action.payload
     },
-    spendPlasma(state, action: PayloadAction<number>) {
-      const diff = action.payload - state.plasmaSpent
-      state.plasmaSpent += diff
+    reservePlasma(state, action: PayloadAction<number>) {
+      const diff = action.payload - state.plasmaReserved
+      state.plasmaReserved += diff
       state.plasma -= diff
     },
-    resetPlasmaSpent: (state) => {
-      state.plasma += state.plasmaSpent
-      state.plasmaSpent = 0
+    resetPlasmaReserved: (state) => {
+      state.plasma += state.plasmaReserved
+      state.plasmaReserved = 0
     },
-
     incrementPDamageUpgradeCount: (state) => {
       state.pDamageUpgradeCount++
     },
@@ -98,6 +100,9 @@ export const playerSlice = createSlice({
     },
     initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel | UpgradeKey>) {
       setInitElementMap[action.payload](state)
+    },
+    setTabInView: (state, action: PayloadAction<Tab>) => {
+      state.tabInView = action.payload
     },
     toggleDebugState: (state) => {
       if (state.plasma < 1000000) {
@@ -114,7 +119,7 @@ export const playerSlice = createSlice({
       state.dotLevel = 0
       state.dotMultiUpgradeCount = 0
       state.gold = 0
-      state.plasmaSpent = 0
+      state.plasmaReserved = 0
       state.hasInitClickMulti1 = false
       state.hasInitClickMulti2 = false
       state.hasInitClickMulti3 = false
@@ -122,6 +127,8 @@ export const playerSlice = createSlice({
       state.hasInitDotMulti1 = false
       state.hasInitDotMulti2 = false
       state.hasInitDotMulti3 = false
+
+      state.tabInView = "upgrade"
 
       state.pDamageUpgradeCount += action.payload.damage.purchaseCount
       state.pHealthUpgradeCount += action.payload.health.purchaseCount
@@ -137,12 +144,13 @@ export const {
   increaseGold,
   decreaseGold,
   increasePlasma,
-  spendPlasma,
-  resetPlasmaSpent,
+  reservePlasma,
+  resetPlasmaReserved,
   // decreasePlasma,
   incrementPDamageUpgradeCount,
   incrementPHealthUpgradeCount,
   initialiseElement,
+  setTabInView,
   toggleDebugState,
 } = playerSlice.actions
 
@@ -187,7 +195,7 @@ export const selectGCanAfford = (cost: number) => (state: RootState) => selectGo
 
 export const selectPlasma = (state: RootState) => state.player.plasma
 export const selectPCanAfford = (cost: number) => (state: RootState) => selectPlasma(state) >= cost
-export const selectPlasmaSpent = (state: RootState) => state.player.plasmaSpent
+export const selectPlasmaReserved = (state: RootState) => state.player.plasmaReserved
 
 const prestigeDamage = UPGRADE_CONFIG.prestige.find((pUpgrade) => pUpgrade.id === "damage")!.modifier
 export const selectClickDamage = (state: RootState) =>
@@ -204,5 +212,7 @@ export const selectDotDamage = (state: RootState) =>
   )
 export const selectClickLevelUpCost = (state: RootState) => UPGRADE_CONFIG.click.levelUpCost(state.player.clickLevel)
 export const selectDotLevelUpCost = (state: RootState) => UPGRADE_CONFIG.dot.levelUpCost(state.player.dotLevel)
+
+export const selectTabInView = (state: RootState) => state.player.tabInView
 
 export default playerSlice.reducer

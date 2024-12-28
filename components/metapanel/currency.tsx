@@ -14,9 +14,9 @@ export default function Currency({ image, fontstyle, currencySelector, suffix }:
 
   return (
     <div className="relative flex flex-none flex-col h-28 items-center">
-      <div className="flex absolute items-center gap-3 top-1/2 left-[57%] transform -translate-x-[57%] -translate-y-1/2">
+      <div className="flex absolute items-center gap-3 top-1/2 left-[55%] md:left-[66%] transform -translate-x-[55%] md:-translate-x-[66%] -translate-y-1/2">
         <div className="w-20 h-20">{image}</div>
-        <span className={`text-3xl min-w-[9ch] text-left ${fontstyle}`}>
+        <span className={`text-3xl min-w-[10ch] md:w-[15ch] text-left ${fontstyle}`}>
           {currency}
           {suffix}
         </span>

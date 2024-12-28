@@ -1,3 +1,5 @@
+export type Tab = "upgrade" | "prestige"
+
 export interface PlayerState {
   clickLevel: number
   clickMultiUpgradeCount: number
@@ -5,7 +7,7 @@ export interface PlayerState {
   dotMultiUpgradeCount: number
   gold: number
   plasma: number
-  plasmaSpent: number
+  plasmaReserved: number
 
   hasInitClickMulti1: boolean
   hasInitClickMulti2: boolean
@@ -15,6 +17,8 @@ export interface PlayerState {
   hasInitDotMulti1: boolean
   hasInitDotMulti2: boolean
   hasInitDotMulti3: boolean
+
+  tabInView: Tab
 
   startDate: number
   pDamageUpgradeCount: number
