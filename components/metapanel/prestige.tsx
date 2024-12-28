@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react"
 import PrestigeButton from "./prestigeButton"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { UPGRADE_CONFIG } from "../../gameconfig/upgrades"
-import clsx from "clsx/lite"
 import Currency from "./currency"
 import { PlasmaIcon } from "../svg/resourceIcons"
 import { resetPlasmaSpent, selectPlasma, selectPlasmaSpent, spendPlasma } from "../../redux/playerSlice"
-import { PrestigeUpgradeName } from "../../models/upgrades"
-import { prestigeReset } from "../../redux/store"
+import { PrestigeState, PrestigeUpgradeName } from "../../models/upgrades"
+import clsx from "clsx/lite"
+import { prestigeReset } from "../../redux/sharedActions"
 
 export default function Prestige() {
   const dispatch = useAppDispatch()
@@ -15,12 +15,7 @@ export default function Prestige() {
   const plasma = useAppSelector(plasmaSelector)
   const plasmaSpent = useAppSelector(selectPlasmaSpent)
 
-  interface PrestigeState {
-    cost: number
-    purchaseCount: number
-  }
-
-  const [totalCost, setTotalCost] = useState(
+  const [prestigePurchase, setPrestigePurchase] = useState(
     Object.fromEntries(
       UPGRADE_CONFIG.prestige.map((upgrade) => [
         upgrade.id,
@@ -39,7 +34,7 @@ export default function Prestige() {
   function onUpdatePurchase(e: React.MouseEvent<HTMLButtonElement>, cost: number, purchaseCount: number) {
     const purchasedUpgrade = e.currentTarget.id
 
-    setTotalCost((previousCosts) => ({
+    setPrestigePurchase((previousCosts) => ({
       ...previousCosts,
       [purchasedUpgrade]: {
         cost: cost,
@@ -48,7 +43,7 @@ export default function Prestige() {
     }))
 
     const newTotalCost = {
-      ...totalCost,
+      ...prestigePurchase,
       [purchasedUpgrade]: {
         cost: cost,
         purchaseCount: purchaseCount,
@@ -71,11 +66,16 @@ export default function Prestige() {
           <PrestigeButton key={prestigeUpgrade.id} config={prestigeUpgrade} onClick={onUpdatePurchase} hidden={false} />
         ))}
       </div>
-      <div className="flex grow h-full w-full items-end justify-center">
+      <div className="flex grow gap-4 h-full w-full items-end justify-center">
         <button
-          onClick={() => dispatch(prestigeReset())}
+          onClick={() => dispatch(prestigeReset(prestigePurchase))}
           className="w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-extrabold text-2xl">
           Prestige
+        </button>
+        <button
+          onClick={() => dispatch(resetPlasmaSpent())}
+          className="w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-black bg-gray-700 text-white font-sans font-extrabold text-2xl">
+          Reset
         </button>
       </div>
     </div>

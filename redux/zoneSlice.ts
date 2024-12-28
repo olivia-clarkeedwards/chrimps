@@ -3,6 +3,7 @@ import type { RootState } from "./store"
 import { EnemyState } from "../models/monsters"
 import { Zone } from "../gameconfig/zone"
 import { getMonster } from "../gameconfig/monster"
+import { prestigeReset } from "./sharedActions"
 
 interface ZoneState {
   currentZoneNumber: number
@@ -100,7 +101,7 @@ export const zoneSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase("prestige/reset", (state) => {
+    builder.addCase(prestigeReset, (state) => {
       const newZone = new Zone(1)
 
       state.currentZoneNumber = newZone.zoneNumber

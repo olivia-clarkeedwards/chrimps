@@ -1,10 +1,11 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { prestigeReset, type RootState } from "./store"
+import { type RootState } from "./store"
 import { PlayerState } from "../models/player"
 import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 import { setInitElementMap } from "../gameconfig/utils"
-import { UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
+import { PrestigeState, PrestigeUpgradeName, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
+import { prestigeReset } from "./sharedActions"
 
 const debugState: PlayerState = {
   clickLevel: 500,
@@ -107,7 +108,7 @@ export const playerSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase("prestige/reset", (state) => {
+    builder.addCase(prestigeReset, (state, action: PayloadAction<Record<PrestigeUpgradeName, PrestigeState>>) => {
       state.clickLevel = 1
       state.clickMultiUpgradeCount = 0
       state.dotLevel = 0
@@ -121,6 +122,9 @@ export const playerSlice = createSlice({
       state.hasInitDotMulti1 = false
       state.hasInitDotMulti2 = false
       state.hasInitDotMulti3 = false
+
+      state.pDamageUpgradeCount += action.payload.damage.purchaseCount
+      state.pHealthUpgradeCount += action.payload.health.purchaseCount
     })
   },
 })

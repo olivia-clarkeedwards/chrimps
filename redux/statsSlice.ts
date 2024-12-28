@@ -2,6 +2,7 @@ import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import { zoneComplete } from "./zoneSlice"
+import { prestigeReset } from "./sharedActions"
 
 interface StatsState {
   clickCount: number
@@ -55,7 +56,7 @@ export const statsSlice = createSlice({
         state.highestZoneEver = state.highestZone
       }
     })
-    builder.addCase("prestige/reset", (state) => {
+    builder.addCase(prestigeReset, (state) => {
       state.highestZone = 1
     })
   },

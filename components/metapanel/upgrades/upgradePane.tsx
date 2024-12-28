@@ -94,7 +94,7 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
       )}>
       <div className="flex flex-col w-40 items-center">
         <div className="">{`${upgradeName[0].toUpperCase()}${upgradeName.substring(1)} Damage`}</div>
-        <div className="self-center">{damage}</div>
+        <div className="self-center">{Math.round(damage)}</div>
         <div className="flex gap-2.5 pt-1">
           {multiIcons.map((icon, i) => (
             <MultiplierUpgrade

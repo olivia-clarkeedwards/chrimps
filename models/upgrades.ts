@@ -33,6 +33,11 @@ export interface PrestigeUpgradeConfig {
   unlocked: boolean
   tooltip: string
 }
+
+export interface PrestigeState {
+  cost: number
+  purchaseCount: number
+}
 export interface UpgradeConfig {
   click: Upgrade
   dot: Upgrade

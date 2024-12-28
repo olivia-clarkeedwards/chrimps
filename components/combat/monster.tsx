@@ -55,11 +55,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const TICK_RATE = 20
   const TICK_TIME = 1000 / TICK_RATE
 
-  const checkAchievements = useCallback(() => {
-    if (clickLevel > 5) {
-      console.log("Achievement unlocked: Click level")
-    }
-  }, [clickLevel])
+  const checkAchievements = useCallback(() => {}, [clickLevel])
   const runTasks = useCallback(() => {
     // 200ms
     if (tickCount.current % 4 === 0) {
@@ -112,6 +108,7 @@ export default function Monster({ children }: PropsWithChildren) {
 
     // Zone transition
     if (stageNumber === zoneLength) {
+      console.log("Zone transition")
       // When highest zone
       if (isProgressing) {
         dispatch(zoneComplete())
@@ -121,6 +118,9 @@ export default function Monster({ children }: PropsWithChildren) {
         if (isFarming) {
           const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
           if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
+        } else {
+          const newZoneMonsters = selectZoneState(store.getState()).zoneMonsters
+          nextMonster = newZoneMonsters[0]
         }
 
         // When farming and farming is toggled, continue; else goto zoneInView useEffect block
@@ -145,8 +145,27 @@ export default function Monster({ children }: PropsWithChildren) {
       }
     }
     // Spawn the next monster when we didn't jump to zoneInView transition
-    if (nextMonster) dispatch(spawnMonster(nextMonster))
+    if (nextMonster) {
+      console.log("Spawning next monster", nextMonster)
+      dispatch(spawnMonster(nextMonster))
+    }
   }
+
+  useEffect(() => {
+    // Zone in view changed due to progression; do nothing
+    if (currentZone === zoneInView && !isFarming) return
+
+    let nextMonster: undefined | EnemyState
+    // Zone in view changed due to farming toggle or zone selector; spawn monster from another zone
+    if (farmZoneNumber === zoneInView && farmZoneMonsters) {
+      nextMonster = farmZoneMonsters[0]
+    }
+
+    if (nextMonster) {
+      console.log("Spawning next monster", nextMonster)
+      dispatch(spawnMonster(nextMonster))
+    } else throw new Error("Monster undefined during zone transition")
+  }, [zoneInView])
 
   const gameLoop = useCallback(
     (currentTime: number) => {
@@ -176,7 +195,7 @@ export default function Monster({ children }: PropsWithChildren) {
       if (document.hidden) {
         if (frameRef.current) {
           cancelAnimationFrame(frameRef.current)
-          frameRef.current = undefined // Explicitly set to undefined
+          frameRef.current = undefined
         }
       } else {
         setTimeout(() => {
@@ -207,25 +226,12 @@ export default function Monster({ children }: PropsWithChildren) {
     if (!monsterAlive) onMonsterDeath()
   }, [monsterAlive, onMonsterDeath])
 
-  useEffect(() => {
-    // On zoneInView change, transition to or from farming
-    let nextMonster: undefined | EnemyState
-    if (farmZoneNumber === zoneInView && farmZoneMonsters) {
-      nextMonster = farmZoneMonsters[0]
-    } else if (currentZone === zoneInView) {
-      nextMonster = zoneMonsters[0]
-    }
-    if (nextMonster) {
-      dispatch(spawnMonster(nextMonster))
-    } else throw new Error("Monster undefined during zone transition")
-  }, [zoneInView])
-
   return (
     <>
-      <div className="absolute bottom-[16%] text-white">
+      {/* <div className="absolute bottom-[16%] text-white">
         Debug: monsterGoldValue: {monsterGoldValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage:{" "}
         {clickDamage} dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}{" "}
-      </div>
+      </div> */}
       <div className="flex flex-col w-full items-center">
         <div className="relative flex w-full justify-center text-2xl">
           <div className="text-center">{monsterName}</div>

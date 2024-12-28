@@ -1,9 +1,10 @@
 import { createSelector, createSlice, isAnyOf } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { prestigeReset, type RootState } from "./store"
+import { type RootState } from "./store"
 import { getMonster } from "../gameconfig/monster"
 import { EnemyState } from "../models/monsters"
 import { increaseTotalClickDamageDealt, increaseTotalDotDamageDealt } from "./statsSlice"
+import { prestigeReset } from "./sharedActions"
 
 interface EnemyThatDies extends EnemyState {
   alive: boolean
