@@ -20,6 +20,7 @@ export interface PlayerState {
 
   tabInView: Tab
 
+  plasmaSpent: number
   startDate: number
   pDamageUpgradeCount: number
   pHealthUpgradeCount: number

@@ -30,6 +30,7 @@ const debugState: PlayerState = {
   startDate: performance.timeOrigin,
   pDamageUpgradeCount: 10,
   pHealthUpgradeCount: 10,
+  plasmaSpent: 50000,
 }
 
 const initialState: PlayerState = {
@@ -56,6 +57,7 @@ const initialState: PlayerState = {
   plasma: 0,
   pDamageUpgradeCount: 0,
   pHealthUpgradeCount: 0,
+  plasmaSpent: 0,
 }
 
 export const playerSlice = createSlice({
@@ -98,6 +100,14 @@ export const playerSlice = createSlice({
     incrementPHealthUpgradeCount: (state) => {
       state.pHealthUpgradeCount++
     },
+    prestigeRespec: (state) => {
+      state.plasma += state.plasmaReserved
+      state.plasma += state.plasmaSpent
+      state.plasmaReserved = 0
+      state.plasmaSpent = 0
+      state.pDamageUpgradeCount = 0
+      state.pHealthUpgradeCount = 0
+    },
     initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel | UpgradeKey>) {
       setInitElementMap[action.payload](state)
     },
@@ -119,6 +129,7 @@ export const playerSlice = createSlice({
       state.dotLevel = 0
       state.dotMultiUpgradeCount = 0
       state.gold = 0
+      state.plasmaSpent += state.plasmaReserved
       state.plasmaReserved = 0
       state.hasInitClickMulti1 = false
       state.hasInitClickMulti2 = false
@@ -149,6 +160,7 @@ export const {
   // decreasePlasma,
   incrementPDamageUpgradeCount,
   incrementPHealthUpgradeCount,
+  prestigeRespec,
   initialiseElement,
   setTabInView,
   toggleDebugState,
