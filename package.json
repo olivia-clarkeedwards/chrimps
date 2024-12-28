@@ -9,6 +9,7 @@
   "dependencies": {
     "@auth/core": "^0.37.0",
     "@reduxjs/toolkit": "^2.3.0",
+    "@types/react-modal": "^3.16.3",
     "@universal-middleware/core": "^0.2.13",
     "@universal-middleware/express": "^0.2.9",
     "@vitejs/plugin-react": "^4.3.2",

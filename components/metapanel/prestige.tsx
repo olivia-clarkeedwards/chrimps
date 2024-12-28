@@ -8,6 +8,7 @@ import { resetPlasmaReserved, selectPlasma, selectPlasmaReserved, reservePlasma 
 import { PrestigeState, PrestigeUpgradeName } from "../../models/upgrades"
 import clsx from "clsx/lite"
 import { prestigeReset } from "../../redux/sharedActions"
+import ReactModal from "react-modal"
 
 export default function Prestige() {
   const dispatch = useAppDispatch()
@@ -15,6 +16,7 @@ export default function Prestige() {
   const plasma = useAppSelector(plasmaSelector)
   const plasmaReserved = useAppSelector(selectPlasmaReserved)
 
+  const [confirmPrestige, setConfirmPrestige] = useState(false)
   const [prestigePurchase, setPrestigePurchase] = useState(
     Object.fromEntries(
       UPGRADE_CONFIG.prestige.map((upgrade) => [
@@ -26,7 +28,6 @@ export default function Prestige() {
       ]),
     ) as Record<PrestigeUpgradeName, PrestigeState>,
   )
-
   useEffect(() => {
     dispatch(resetPlasmaReserved())
   }, [])
@@ -52,6 +53,20 @@ export default function Prestige() {
     const plasmaToReserve = Object.values(newTotalCost).reduce((acc, upgrade) => acc + upgrade.cost, 0)
     dispatch(reservePlasma(plasmaToReserve))
   }
+  ReactModal.defaultStyles.content = {
+    ...ReactModal.defaultStyles.content,
+    cursor: "url(/icons/hand.png) 0 0, pointer",
+    zIndex: 1000,
+    top: "10%",
+    right: "10%",
+    bottom: "10%",
+    left: "10%",
+  }
+  ReactModal.defaultStyles.overlay = {
+    ...ReactModal.defaultStyles.overlay,
+    cursor: "url(/icons/hand.png) 0 0, pointer",
+    zIndex: 1000,
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -67,11 +82,27 @@ export default function Prestige() {
         ))}
       </div>
       <div className="flex grow gap-4 h-full w-full items-end justify-center">
+        <ReactModal
+          isOpen={confirmPrestige}
+          onRequestClose={() => setConfirmPrestige(false)}
+          // className={"cursor-hand"}
+          // overlayClassName={""}
+
+          contentLabel="Prestige confirmation prompt">
+          <div className="flex h-full">
+            <button
+              onClick={() => dispatch(prestigeReset(prestigePurchase))}
+              className="w-40 h-16 my-4 self-end cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-bold text-2xl">
+              Confirm
+            </button>
+          </div>
+        </ReactModal>
         <button
-          onClick={() => dispatch(prestigeReset(prestigePurchase))}
+          onClick={() => setConfirmPrestige(true)}
           className="w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-extrabold text-2xl">
           Prestige
         </button>
+
         <button
           onClick={() => dispatch(resetPlasmaReserved())}
           className="w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-black bg-gray-700 text-white font-sans font-extrabold text-2xl">
@@ -81,3 +112,29 @@ export default function Prestige() {
     </div>
   )
 }
+
+// Default modal styles:
+// style={{
+//   overlay: {
+//     position: 'fixed',
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     bottom: 0,
+//     backgroundColor: 'rgba(255, 255, 255, 0.75)'
+//   },
+//   content: {
+//     position: 'absolute',
+//     top: '40px',
+//     left: '40px',
+//     right: '40px',
+//     bottom: '40px',
+//     border: '1px solid #ccc',
+//     background: '#fff',
+//     overflow: 'auto',
+//     WebkitOverflowScrolling: 'touch',
+//     borderRadius: '4px',
+//     outline: 'none',
+//     padding: '20px'
+//   }
+// }}
