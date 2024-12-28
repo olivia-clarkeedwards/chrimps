@@ -61,7 +61,7 @@ export default function Prestige() {
         currencySelector={plasmaSelector}
         suffix={plasmaReserved > 0 ? `  (-${plasmaReserved})` : undefined}
       />
-      <div className="flex font-sans gap-2">
+      <div className="flex mx-2 font-sans gap-2">
         {UPGRADE_CONFIG.prestige.map((prestigeUpgrade) => (
           <PrestigeButton key={prestigeUpgrade.id} config={prestigeUpgrade} onClick={onUpdatePurchase} hidden={false} />
         ))}
