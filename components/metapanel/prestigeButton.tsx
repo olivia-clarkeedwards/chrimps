@@ -36,8 +36,6 @@ export default function PrestigeButton({ config, onClick: onUpdatePurchase, hidd
     const tempUpgradeCount = upgradeCount + toPurchase + 1
     const newTotalCost = purchasePrice + totalCost
 
-    console.log(purchasePrice, isAffordable)
-
     onUpdatePurchase(e, newTotalCost, toPurchase + 1)
     setPurchasePrice(UPGRADE_CONFIG.calcAdditiveCost(tempUpgradeCount + 1, config))
     setToPurchase(toPurchase + 1)
