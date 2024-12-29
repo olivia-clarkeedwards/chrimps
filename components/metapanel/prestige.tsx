@@ -58,35 +58,6 @@ export default function Prestige() {
     dispatch(reservePlasma(plasmaToReserve))
   }
 
-  const confirmPrestigeStyle: ModalStyle = {
-    content: {
-      position: "absolute",
-      top: "10%",
-      right: "10%",
-      bottom: "10%",
-      left: "10%",
-      border: "1px solid #7DF9FF",
-      background: "#fff",
-      overflow: "visible",
-      WebkitOverflowScrolling: "touch",
-      borderRadius: "12px",
-      outline: "none",
-      padding: "20px",
-      cursor: "url(/icons/hand.png) 0 0, pointer",
-      zIndex: 1000,
-    },
-    overlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(255, 255, 255, 0.75)",
-      cursor: "url(/icons/hand.png) 0 0, pointer",
-      zIndex: 1000,
-    },
-  }
-
   return (
     <div className="flex flex-col h-full">
       <Currency
@@ -101,50 +72,6 @@ export default function Prestige() {
         ))}
       </div>
       <div className="relative flex grow gap-4 h-full w-full items-end justify-center">
-        <ReactModal
-          isOpen={confirmPrestige}
-          onRequestClose={() => setConfirmPrestige(false)}
-          contentLabel="Prestige confirmation prompt"
-          style={confirmPrestigeStyle}>
-          <div className="flex h-full flex-col">
-            <button
-              className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white ring-amber-800 ring-2 ring-inset shadow-[0_3px_5px_-2px_rgb(0_0_0_/_0.8),_0_3px_5px_-2px_rgb(0_0_0_/_0.6)] stroke-white z-[1000000] cursor-hand"
-              onClick={() => setConfirmPrestige(false)}>
-              {CancelIcon()}
-            </button>
-            <h2 className="self-center text-2xl font-bold mb-4">Go backwards to go forwards</h2>
-            <div className="flex gap-4 justify-around">
-              <div className="flex flex-col">
-                <ul className="text-red-600">
-                  <h3 className="text-xl font-bold mb-1"> You will lose</h3>
-                  <li>Gold</li>
-                  <li>Upgrades</li>
-                  <li>Zone progress</li>
-                </ul>
-              </div>
-              <div className="flex flex-col">
-                <ul className="text-amber-700">
-                  <h3 className="text-xl font-bold mb-1"> You will keep</h3>
-                  <li>Unspent plasma</li>
-                  <li>Achievements</li>
-                </ul>
-              </div>
-              <div className="flex flex-col">
-                <ul className="text-islam">
-                  <h3 className="text-xl font-bold mb-1"> You will gain </h3>
-                  <p>Prestige upgrades</p>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-auto">
-              <button
-                onClick={() => dispatch(prestigeReset(prestigePurchase))}
-                className="w-40 h-16 my-4 self-start cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-bold text-2xl">
-                Confirm
-              </button>
-            </div>
-          </div>
-        </ReactModal>
         <button
           onClick={() => setConfirmPrestige(true)}
           disabled={!zoneTenComplete}
@@ -164,6 +91,79 @@ export default function Prestige() {
           Reset
         </button>
       </div>
+      <ReactModal
+        isOpen={confirmPrestige}
+        onRequestClose={() => setConfirmPrestige(false)}
+        contentLabel="Prestige confirmation prompt"
+        style={confirmPrestigeStyle}>
+        <div className="flex h-full flex-col">
+          <button
+            className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white ring-amber-800 ring-2 ring-inset shadow-[0_3px_5px_-2px_rgb(0_0_0_/_0.8),_0_3px_5px_-2px_rgb(0_0_0_/_0.6)] stroke-white z-[1000000] cursor-hand"
+            onClick={() => setConfirmPrestige(false)}>
+            {CancelIcon()}
+          </button>
+          <h2 className="self-center text-2xl font-bold mb-4">Go backwards to go forwards</h2>
+          <div className="flex gap-4 justify-around">
+            <div className="flex flex-col">
+              <ul className="text-red-600">
+                <h3 className="text-xl font-bold mb-1"> You will lose</h3>
+                <li>Gold</li>
+                <li>Upgrades</li>
+                <li>Zone progress</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-amber-700">
+                <h3 className="text-xl font-bold mb-1"> You will keep</h3>
+                <li>Unspent plasma</li>
+                <li>Achievements</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-islam">
+                <h3 className="text-xl font-bold mb-1"> You will gain </h3>
+                <p>Prestige upgrades</p>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-auto">
+            <button
+              onClick={() => dispatch(prestigeReset(prestigePurchase))}
+              className="w-40 h-16 my-4 self-start cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-bold text-2xl">
+              Confirm
+            </button>
+          </div>
+        </div>
+      </ReactModal>
     </div>
   )
+}
+
+const confirmPrestigeStyle: ModalStyle = {
+  content: {
+    position: "absolute",
+    top: "10%",
+    right: "10%",
+    bottom: "10%",
+    left: "10%",
+    border: "1px solid #7DF9FF",
+    background: "#fff",
+    overflow: "visible",
+    WebkitOverflowScrolling: "touch",
+    borderRadius: "12px",
+    outline: "none",
+    padding: "20px",
+    cursor: "url(/icons/hand.png) 0 0, pointer",
+    zIndex: 1000,
+  },
+  overlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.75)",
+    cursor: "url(/icons/hand.png) 0 0, pointer",
+    zIndex: 1000,
+  },
 }
