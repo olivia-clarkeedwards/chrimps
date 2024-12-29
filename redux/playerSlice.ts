@@ -16,10 +16,10 @@ const debugState: PlayerState = {
   plasma: 1000000,
 
   plasmaReserved: 0,
+  hasEarnedPlasma: true,
   hasInitClickMulti1: false,
   hasInitClickMulti2: false,
   hasInitClickMulti3: false,
-
   hasInitDotPane: false,
   hasInitDotMulti1: false,
   hasInitDotMulti2: false,
@@ -42,6 +42,7 @@ const initialState: PlayerState = {
 
   plasmaReserved: 0,
   // Prevents animation triggering again on mount
+  hasEarnedPlasma: false,
   hasInitClickMulti1: false,
   hasInitClickMulti2: false,
   hasInitClickMulti3: false,
@@ -84,6 +85,7 @@ export const playerSlice = createSlice({
     },
     increasePlasma(state, action: PayloadAction<number>) {
       state.plasma += action.payload
+      state.hasEarnedPlasma = true
     },
     reservePlasma(state, action: PayloadAction<number>) {
       const diff = action.payload - state.plasmaReserved
@@ -115,10 +117,10 @@ export const playerSlice = createSlice({
       state.tabInView = action.payload
     },
     toggleDebugState: (state) => {
-      if (state.plasma < 1000000) {
+      if (state.clickLevel < 500) {
         return (state = debugState)
       } else {
-        return (state = { ...initialState, gold: 1000000 })
+        return (state = { ...initialState, gold: 1000000, plasma: 1000000 })
       }
     },
   },
@@ -144,6 +146,7 @@ export const playerSlice = createSlice({
       state.pDamageUpgradeCount += action.payload.damage.purchaseCount
       state.pHealthUpgradeCount += action.payload.health.purchaseCount
     })
+    // builder.addCase("stats/zoneTenCompleted", (state) => {})
   },
 })
 
@@ -203,10 +206,9 @@ export const selectInitState = createSelector(
 
 export const selectClickLevel = (state: RootState) => state.player.clickLevel
 export const selectGold = (state: RootState) => state.player.gold
-export const selectGCanAfford = (cost: number) => (state: RootState) => selectGold(state) >= cost
-
+export const selectGCanAfford = (cost: number) => createSelector([selectGold], (gold) => gold >= cost)
 export const selectPlasma = (state: RootState) => state.player.plasma
-export const selectPCanAfford = (cost: number) => (state: RootState) => selectPlasma(state) >= cost
+export const selectPCanAfford = (cost: number) => createSelector([selectPlasma], (plasma) => plasma >= cost)
 export const selectPlasmaReserved = (state: RootState) => state.player.plasmaReserved
 
 const prestigeDamage = UPGRADE_CONFIG.prestige.find((pUpgrade) => pUpgrade.id === "damage")!.modifier
@@ -226,5 +228,8 @@ export const selectClickLevelUpCost = (state: RootState) => UPGRADE_CONFIG.click
 export const selectDotLevelUpCost = (state: RootState) => UPGRADE_CONFIG.dot.levelUpCost(state.player.dotLevel)
 
 export const selectTabInView = (state: RootState) => state.player.tabInView
-
+export const selectPrestigeTabVisible = createSelector(
+  [(state: RootState) => state.player.hasEarnedPlasma],
+  (hasEarnedPlasma) => hasEarnedPlasma === true,
+)
 export default playerSlice.reducer

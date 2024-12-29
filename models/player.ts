@@ -1,5 +1,11 @@
 export type Tab = "upgrade" | "prestige"
 
+export interface TabData {
+  id: Tab
+  title: string
+  component: JSX.Element
+}
+
 export interface PlayerState {
   clickLevel: number
   clickMultiUpgradeCount: number
@@ -9,10 +15,10 @@ export interface PlayerState {
   plasma: number
   plasmaReserved: number
 
+  hasEarnedPlasma: boolean
   hasInitClickMulti1: boolean
   hasInitClickMulti2: boolean
   hasInitClickMulti3: boolean
-
   hasInitDotPane: boolean
   hasInitDotMulti1: boolean
   hasInitDotMulti2: boolean

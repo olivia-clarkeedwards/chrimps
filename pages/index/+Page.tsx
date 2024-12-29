@@ -7,8 +7,10 @@ import { store } from "../../redux/store"
 import { Provider } from "react-redux"
 import Navigation from "../../components/nav/navigation"
 import { useForcedDPI } from "../../gameconfig/utils"
+import ReactModal from "react-modal"
 
 export default function Page() {
+  ReactModal.setAppElement("#root")
   const currentScale = useForcedDPI()
   const inverseScale = 1 / currentScale
 

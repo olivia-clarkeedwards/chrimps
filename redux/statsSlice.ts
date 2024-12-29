@@ -12,6 +12,7 @@ interface StatsState {
   farmZonesCompleted: number
   totalZonesCompleted: number
   highestZoneEver: number
+  zoneTenCompleted: boolean
   highestZone: number
 }
 
@@ -23,6 +24,9 @@ const initialState: StatsState = {
   farmZonesCompleted: 0,
   totalZonesCompleted: 0,
   highestZoneEver: 1,
+
+  // Milestones
+  zoneTenCompleted: false,
 
   // This run data
   highestZone: 1,
@@ -47,6 +51,9 @@ export const statsSlice = createSlice({
     incrementFarmZonesCompleted: (state) => {
       state.farmZonesCompleted++
     },
+    zoneTenCompleted: (state) => {
+      state.zoneTenCompleted = true
+    },
   },
   extraReducers(builder) {
     builder.addCase(zoneComplete, (state) => {
@@ -68,6 +75,7 @@ export const {
   increaseTotalDotDamageDealt,
   incrementKillCount,
   incrementFarmZonesCompleted,
+  zoneTenCompleted,
 } = statsSlice.actions
 
 export const selectStatsState = createSelector([(state) => state.stats], (stats) => ({
@@ -82,5 +90,9 @@ export const selectStatsState = createSelector([(state) => state.stats], (stats)
 }))
 
 export const selectHighestZoneEver = (state: RootState) => state.stats.highestZoneEver
+export const selectZoneTenComplete = createSelector(
+  [(state: RootState) => state.stats.highestZone],
+  (highestZone) => highestZone > 10,
+)
 
 export default statsSlice.reducer

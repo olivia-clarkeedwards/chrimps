@@ -9,12 +9,16 @@ import { PrestigeState, PrestigeUpgradeName } from "../../models/upgrades"
 import clsx from "clsx/lite"
 import { prestigeReset } from "../../redux/sharedActions"
 import ReactModal from "react-modal"
+import { Styles as ModalStyle } from "react-modal"
+import { CancelIcon } from "../svg/metaIcons"
+import { selectZoneTenComplete } from "../../redux/statsSlice"
 
 export default function Prestige() {
   const dispatch = useAppDispatch()
   const plasmaSelector = selectPlasma
   const plasma = useAppSelector(plasmaSelector)
   const plasmaReserved = useAppSelector(selectPlasmaReserved)
+  const zoneTenComplete = useAppSelector(selectZoneTenComplete)
 
   const [confirmPrestige, setConfirmPrestige] = useState(false)
   const [prestigePurchase, setPrestigePurchase] = useState(
@@ -53,19 +57,34 @@ export default function Prestige() {
     const plasmaToReserve = Object.values(newTotalCost).reduce((acc, upgrade) => acc + upgrade.cost, 0)
     dispatch(reservePlasma(plasmaToReserve))
   }
-  ReactModal.defaultStyles.content = {
-    ...ReactModal.defaultStyles.content,
-    cursor: "url(/icons/hand.png) 0 0, pointer",
-    zIndex: 1000,
-    top: "10%",
-    right: "10%",
-    bottom: "10%",
-    left: "10%",
-  }
-  ReactModal.defaultStyles.overlay = {
-    ...ReactModal.defaultStyles.overlay,
-    cursor: "url(/icons/hand.png) 0 0, pointer",
-    zIndex: 1000,
+
+  const confirmPrestigeStyle: ModalStyle = {
+    content: {
+      position: "absolute",
+      top: "10%",
+      right: "10%",
+      bottom: "10%",
+      left: "10%",
+      border: "1px solid #7DF9FF",
+      background: "#fff",
+      overflow: "visible",
+      WebkitOverflowScrolling: "touch",
+      borderRadius: "12px",
+      outline: "none",
+      padding: "20px",
+      cursor: "url(/icons/hand.png) 0 0, pointer",
+      zIndex: 1000,
+    },
+    overlay: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(255, 255, 255, 0.75)",
+      cursor: "url(/icons/hand.png) 0 0, pointer",
+      zIndex: 1000,
+    },
   }
 
   return (
@@ -81,60 +100,70 @@ export default function Prestige() {
           <PrestigeButton key={prestigeUpgrade.id} config={prestigeUpgrade} onClick={onUpdatePurchase} hidden={false} />
         ))}
       </div>
-      <div className="flex grow gap-4 h-full w-full items-end justify-center">
+      <div className="relative flex grow gap-4 h-full w-full items-end justify-center">
         <ReactModal
           isOpen={confirmPrestige}
           onRequestClose={() => setConfirmPrestige(false)}
-          // className={"cursor-hand"}
-          // overlayClassName={""}
-
-          contentLabel="Prestige confirmation prompt">
-          <div className="flex h-full">
+          contentLabel="Prestige confirmation prompt"
+          style={confirmPrestigeStyle}>
+          <div className="flex h-full flex-col">
             <button
-              onClick={() => dispatch(prestigeReset(prestigePurchase))}
-              className="w-40 h-16 my-4 self-end cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-bold text-2xl">
-              Confirm
+              className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white ring-amber-800 ring-2 ring-inset shadow-[0_3px_5px_-2px_rgb(0_0_0_/_0.8),_0_3px_5px_-2px_rgb(0_0_0_/_0.6)] stroke-white z-[1000000] cursor-hand"
+              onClick={() => setConfirmPrestige(false)}>
+              {CancelIcon()}
             </button>
+            <h2 className="self-center text-2xl font-bold mb-4">Go backwards to go forwards</h2>
+            <div className="flex gap-4 justify-around">
+              <div className="flex flex-col">
+                <ul className="text-red-600">
+                  <h3 className="text-xl font-bold mb-1"> You will lose</h3>
+                  <li>Gold</li>
+                  <li>Upgrades</li>
+                  <li>Zone progress</li>
+                </ul>
+              </div>
+              <div className="flex flex-col">
+                <ul className="text-amber-700">
+                  <h3 className="text-xl font-bold mb-1"> You will keep</h3>
+                  <li>Unspent plasma</li>
+                  <li>Achievements</li>
+                </ul>
+              </div>
+              <div className="flex flex-col">
+                <ul className="text-islam">
+                  <h3 className="text-xl font-bold mb-1"> You will gain </h3>
+                  <p>Prestige upgrades</p>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-auto">
+              <button
+                onClick={() => dispatch(prestigeReset(prestigePurchase))}
+                className="w-40 h-16 my-4 self-start cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-bold text-2xl">
+                Confirm
+              </button>
+            </div>
           </div>
         </ReactModal>
         <button
           onClick={() => setConfirmPrestige(true)}
-          className="w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-extrabold text-2xl">
+          disabled={!zoneTenComplete}
+          className={clsx(
+            "w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-extrabold text-2xl",
+            !zoneTenComplete && "opacity-50 bg-red-800",
+          )}>
           Prestige
         </button>
-
         <button
           onClick={() => dispatch(resetPlasmaReserved())}
-          className="w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-black bg-gray-700 text-white font-sans font-extrabold text-2xl">
+          disabled={!zoneTenComplete}
+          className={clsx(
+            "w-40 h-16 my-4 cursor-hand rounded-lg border-2 border-black bg-gray-700 text-white font-sans font-extrabold text-2xl",
+            !zoneTenComplete && "opacity-50 bg-gray-800",
+          )}>
           Reset
         </button>
       </div>
     </div>
   )
 }
-
-// Default modal styles:
-// style={{
-//   overlay: {
-//     position: 'fixed',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     backgroundColor: 'rgba(255, 255, 255, 0.75)'
-//   },
-//   content: {
-//     position: 'absolute',
-//     top: '40px',
-//     left: '40px',
-//     right: '40px',
-//     bottom: '40px',
-//     border: '1px solid #ccc',
-//     background: '#fff',
-//     overflow: 'auto',
-//     WebkitOverflowScrolling: 'touch',
-//     borderRadius: '4px',
-//     outline: 'none',
-//     padding: '20px'
-//   }
-// }}

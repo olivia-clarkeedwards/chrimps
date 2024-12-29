@@ -1,20 +1,36 @@
-import React, { useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import UpgradeIndex from "./upgrades/upgradeIndex"
 import clsx from "clsx/lite"
 import Prestige from "./prestige"
-import { Tab } from "../../models/player"
+import { TabData } from "../../models/player"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { selectTabInView, setTabInView } from "../../redux/playerSlice"
+import { selectPrestigeTabVisible, selectTabInView, setTabInView } from "../../redux/playerSlice"
 
 export default function PanelIndex() {
   const dispatch = useAppDispatch()
 
   const activeTab = useAppSelector(selectTabInView)
+  const prestigeTabVisible = useAppSelector(selectPrestigeTabVisible)
 
-  const tabs: { id: Tab; title: string; component: JSX.Element }[] = [
-    { id: "upgrade", title: "Upgrade", component: <UpgradeIndex /> },
-    { id: "prestige", title: "Prestige", component: <Prestige /> },
-  ]
+  const tabs = useMemo(() => {
+    const tabsToRender: TabData[] = [
+      {
+        id: "upgrade",
+        title: "Upgrade",
+        component: <UpgradeIndex />,
+      },
+    ]
+
+    if (prestigeTabVisible) {
+      tabsToRender.push({
+        id: "prestige",
+        title: "Prestige",
+        component: <Prestige />,
+      })
+    }
+
+    return tabsToRender
+  }, [prestigeTabVisible])
 
   return (
     <>
