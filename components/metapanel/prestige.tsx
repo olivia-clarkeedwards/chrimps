@@ -9,7 +9,7 @@ import { PrestigeState, PrestigeUpgradeName } from "../../models/upgrades"
 import clsx from "clsx/lite"
 import { prestigeReset } from "../../redux/sharedActions"
 import ReactModal from "react-modal"
-import { Styles as ModalStyle } from "react-modal"
+import { Styles as ModalStylesheet } from "react-modal"
 import { CancelIcon } from "../svg/metaIcons"
 import { selectZoneTenComplete } from "../../redux/statsSlice"
 
@@ -139,7 +139,7 @@ export default function Prestige() {
   )
 }
 
-const confirmPrestigeStyle: ModalStyle = {
+const confirmPrestigeStyle: ModalStylesheet = {
   content: {
     position: "absolute",
     top: "10%",

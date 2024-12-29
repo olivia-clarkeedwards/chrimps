@@ -1,6 +1,6 @@
 import { useState } from "react"
 import ReactModal from "react-modal"
-import { Styles as ModalStyle } from "react-modal"
+import { Styles as ModalStylesheet } from "react-modal"
 import { CancelIcon } from "../svg/metaIcons"
 
 export default function Navigation() {
@@ -62,15 +62,16 @@ export function NavigationLinkButton({ text, onClick }: NavigationLinkButtonProp
   )
 }
 
-const achievementsStyle: ModalStyle = {
+const achievementsStyle: ModalStylesheet = {
   content: {
     position: "absolute",
-    top: "10%",
-    right: "10%",
-    bottom: "10%",
-    left: "10%",
-    border: "1px solid #7DF9FF",
-    background: "#fff",
+    top: "5%",
+    right: "5%",
+    bottom: "5%",
+    left: "5%",
+    border: "2px solid #ffcf40",
+    background: "radial-gradient(circle, rgba(163,72,16,1) 0%, rgba(146,64,14,1) 35%, rgba(125,54,11,1) 100%)",
+    boxShadow: "rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
     overflow: "visible",
     WebkitOverflowScrolling: "touch",
     borderRadius: "12px",
@@ -85,7 +86,7 @@ const achievementsStyle: ModalStyle = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.75)",
+    backgroundColor: "rgba(255, 255, 255, 0.50)",
     cursor: "url(/icons/hand.png) 0 0, pointer",
     zIndex: 1000,
   },
