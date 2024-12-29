@@ -14,6 +14,7 @@ interface StatsState {
   highestZoneEver: number
   zoneTenCompleted: boolean
   highestZone: number
+  prestigeCount: number
 }
 
 const initialState: StatsState = {
@@ -24,6 +25,7 @@ const initialState: StatsState = {
   farmZonesCompleted: 0,
   totalZonesCompleted: 0,
   highestZoneEver: 1,
+  prestigeCount: 0,
 
   // Milestones
   zoneTenCompleted: false,
@@ -64,6 +66,7 @@ export const statsSlice = createSlice({
       }
     })
     builder.addCase(prestigeReset, (state) => {
+      state.prestigeCount++
       state.highestZone = 1
     })
   },
