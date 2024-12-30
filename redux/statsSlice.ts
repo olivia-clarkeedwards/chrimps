@@ -112,7 +112,6 @@ export const updateDotDamage = (damage: number) => (dispatch: AppDispatch, getSt
     (achievement) => !state.stats.achievementsUnlocked.includes(achievement.id),
   )
 
-  console.log(nextAchievement)
   if (nextAchievement && state.stats.totalDotDamage >= nextAchievement.condition) {
     dispatch(unlockAchievement(nextAchievement.id))
   }
