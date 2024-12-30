@@ -26,8 +26,8 @@ interface Achievement {
   id: string
   title: string
   description: string
-  difficulty: Difficulty
   condition: number
+  difficulty: Difficulty
   modifier: number
 }
 
