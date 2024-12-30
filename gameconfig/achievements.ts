@@ -14,7 +14,7 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
     count: [
       {
         id: "zone-count.1",
-        title: "TODO",
+        title: "Geological Genesis",
         description: "Complete 50 zones",
         difficulty: "beginner",
         condition: 50,
@@ -22,7 +22,7 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
       },
       {
         id: "zone-count.2",
-        title: "TODO",
+        title: "Tectonic Trascendence",
         description: "Complete 250 zones",
         difficulty: "beginner",
         condition: 250,
@@ -30,7 +30,7 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
       },
       {
         id: "zone-count.3",
-        title: "TODO",
+        title: "Sedimentary Sage",
         description: "Complete 500 zones",
         difficulty: "novice",
         condition: 500,
@@ -38,7 +38,7 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
       },
       {
         id: "zone-count.4",
-        title: "TODO",
+        title: "Metamorphic Mastery",
         description: "Complete 1000 zones",
         difficulty: "novice",
         condition: 1000,
@@ -46,7 +46,7 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
       },
       {
         id: "zone-count.5",
-        title: "TODO",
+        title: "Supercontinental Serenity",
         description: "Complete 2500 zones",
         difficulty: "intermediate",
         condition: 2500,
