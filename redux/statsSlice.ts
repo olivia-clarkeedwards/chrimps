@@ -1,8 +1,10 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit"
-import type { PayloadAction } from "@reduxjs/toolkit"
-import type { RootState } from "./store"
+import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit"
+import type { PayloadAction, ThunkAction } from "@reduxjs/toolkit"
+import type { AppDispatch, RootState } from "./store"
 import { zoneComplete } from "./zoneSlice"
 import { prestigeReset } from "./sharedActions"
+import { selectDotDamage } from "./playerSlice"
+import { ACHIEVEMENT_CONFIG } from "../gameconfig/achievements"
 
 interface StatsState {
   clickCount: number
@@ -12,9 +14,10 @@ interface StatsState {
   farmZonesCompleted: number
   totalZonesCompleted: number
   highestZoneEver: number
+  prestigeCount: number
+  achievementsUnlocked: string[]
   zoneTenCompleted: boolean
   highestZone: number
-  prestigeCount: number
 }
 
 const initialState: StatsState = {
@@ -26,6 +29,7 @@ const initialState: StatsState = {
   totalZonesCompleted: 0,
   highestZoneEver: 1,
   prestigeCount: 0,
+  achievementsUnlocked: [],
 
   // Milestones
   zoneTenCompleted: false,
@@ -38,14 +42,16 @@ export const statsSlice = createSlice({
   name: "stats",
   initialState,
   reducers: {
-    incrementClickCount: (state) => {
-      state.clickCount++
+    unlockAchievement(state, action: PayloadAction<string>) {
+      state.achievementsUnlocked.push(action.payload)
+      console.log("Achievement unlocked", action.payload)
     },
-    increaseTotalClickDamageDealt(state, action: PayloadAction<number>) {
+    monsterClicked(state, action: PayloadAction<number>) {
+      state.clickCount++
       state.totalClickDamage += action.payload
     },
     increaseTotalDotDamageDealt(state, action: PayloadAction<number>) {
-      state.totalClickDamage += action.payload
+      state.totalDotDamage += action.payload
     },
     incrementKillCount: (state) => {
       state.killCount++
@@ -73,8 +79,8 @@ export const statsSlice = createSlice({
 })
 
 export const {
-  incrementClickCount,
-  increaseTotalClickDamageDealt,
+  unlockAchievement,
+  monsterClicked,
   increaseTotalDotDamageDealt,
   incrementKillCount,
   incrementFarmZonesCompleted,
@@ -98,4 +104,43 @@ export const selectZoneTenComplete = createSelector(
   (highestZone) => highestZone > 10,
 )
 
+export const updateDotDamage = (damage: number) => (dispatch: AppDispatch, getState: () => RootState) => {
+  dispatch(increaseTotalDotDamageDealt(damage))
+
+  const state = getState()
+  const nextAchievement = ACHIEVEMENT_CONFIG.dot.damage.find(
+    (achievement) => !state.stats.achievementsUnlocked.includes(achievement.id),
+  )
+
+  console.log(nextAchievement)
+  if (nextAchievement && state.stats.totalDotDamage >= nextAchievement.condition) {
+    dispatch(unlockAchievement(nextAchievement.id))
+  }
+}
+
 export default statsSlice.reducer
+
+// const checkDotAchievements = createAsyncThunk("stats/checkDot", async (_, { getState, dispatch }) => {
+//   const state = getState() as RootState
+//   const unlockedAchievements = state.stats.achievementsUnlocked
+//   const currentDotDamage = selectDotDamage(state)
+//   const totalDotDamage = state.stats.totalDotDamage
+
+//   const valueMap = {
+//     "dot-value": selectDotDamage(state),
+//     "dot-damage": state.stats.totalDotDamage,
+//   }
+
+//   Object.entries(ACHIEVEMENT_CONFIG.dot).forEach(([category, achievements]) => {
+//     console.log(category, achievements)
+//     for (const achievement of achievements) {
+//       console.log(achievement)
+//       const [thisAchievementCategory] = achievement.id.split(".")
+//       const value = valueMap[thisAchievementCategory as keyof typeof valueMap]
+
+//       if (value >= achievement.condition && !state.stats.achievementsUnlocked.includes(achievement.id)) {
+//         dispatch(unlockAchievement(achievement.id))
+//       }
+//     }
+//   })
+// })

@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { type RootState } from "./store"
 import { getMonster } from "../gameconfig/monster"
 import { EnemyState } from "../models/monsters"
-import { increaseTotalClickDamageDealt, increaseTotalDotDamageDealt } from "./statsSlice"
+import { monsterClicked, increaseTotalDotDamageDealt } from "./statsSlice"
 import { prestigeReset } from "./sharedActions"
 
 interface EnemyThatDies extends EnemyState {
@@ -27,7 +27,7 @@ export const monsterSlice = createSlice({
     builder.addCase(prestigeReset, (state) => {
       return (state = initialState)
     })
-    builder.addMatcher(isAnyOf(increaseTotalClickDamageDealt, increaseTotalDotDamageDealt), (state, action) => {
+    builder.addMatcher(isAnyOf(monsterClicked, increaseTotalDotDamageDealt), (state, action) => {
       state.health - action.payload < 1 ? (state.alive = false) : (state.health -= action.payload)
     })
   },

@@ -293,7 +293,7 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "dot-damage.1",
         title: "TODO",
         description: "Deal 10000 Damage Passively",
-        condition: 1000,
+        condition: 10000,
         ...ACHIEVEMENT_TIER_CONFIG.beginner,
       },
       {

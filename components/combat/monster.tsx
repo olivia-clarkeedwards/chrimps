@@ -9,12 +9,12 @@ import {
 } from "../../redux/playerSlice"
 import { selectMonsterAlive, selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
 import {
-  increaseTotalClickDamageDealt,
   increaseTotalDotDamageDealt,
-  incrementClickCount,
+  monsterClicked,
   incrementFarmZonesCompleted,
   incrementKillCount,
   selectHighestZoneEver,
+  updateDotDamage,
 } from "../../redux/statsSlice"
 import {
   selectZoneState,
@@ -83,7 +83,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const dealDamageOverTime = useCallback(() => {
     if (dotDamage) {
       const damageThisTick = dotDamage / 20
-      dispatch(increaseTotalDotDamageDealt(damageThisTick))
+      dispatch(updateDotDamage(damageThisTick))
     }
   }, [dotDamage])
 
@@ -214,8 +214,7 @@ export default function Monster({ children }: PropsWithChildren) {
   }, [gameLoop])
 
   function handleClick() {
-    dispatch(incrementClickCount())
-    dispatch(increaseTotalClickDamageDealt(clickDamage))
+    dispatch(monsterClicked(clickDamage))
     // Goto !monsterAlive useEffect if monster died
   }
 
