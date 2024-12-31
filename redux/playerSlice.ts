@@ -8,6 +8,7 @@ import { PrestigeState, PrestigeUpgradeName, UpgradeIdWithLevel, UpgradeKey } fr
 import { prestigeReset } from "./sharedActions"
 import { ACHIEVEMENTS } from "../gameconfig/achievements"
 import { checkAchievementUnlock, statsSlice, unlockAchievement } from "./statsSlice"
+import { StatementSync } from "node:sqlite"
 
 const debugState: PlayerState = {
   clickLevel: 500,
@@ -220,6 +221,7 @@ export const selectGCanAfford = (cost: number) => createSelector([selectGold], (
 export const selectPlasma = (state: RootState) => state.player.plasma
 export const selectPCanAfford = (cost: number) => createSelector([selectPlasma], (plasma) => plasma >= cost)
 export const selectPlasmaReserved = (state: RootState) => state.player.plasmaReserved
+export const selectAchievementModifier = (state: RootState) => state.player.achievementModifier
 
 const prestigeDamage = UPGRADE_CONFIG.prestige.find((pUpgrade) => pUpgrade.id === "damage")!.modifier
 export const selectClickDamage = (state: RootState) =>
