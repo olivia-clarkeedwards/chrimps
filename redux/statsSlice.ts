@@ -4,6 +4,7 @@ import type { AppDispatch, RootState } from "./store"
 import { refreshFarmZone, zoneComplete } from "./zoneSlice"
 import { prestigeReset } from "./sharedActions"
 import { Achievement, ACHIEVEMENTS } from "../gameconfig/achievements"
+import { increaseAchievementModifier } from "./playerSlice"
 
 interface StatsState {
   clickCount: number
@@ -114,6 +115,7 @@ export const checkAchievementUnlock = (dispatch: AppDispatch, check: Achievement
     if (nextAchievement && value >= nextAchievement.condition) {
       achievements.shift()
       dispatch(unlockAchievement(nextAchievement.id))
+      dispatch(increaseAchievementModifier(nextAchievement.modifier))
     }
   })
 }

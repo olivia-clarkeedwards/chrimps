@@ -115,7 +115,10 @@ export const playerSlice = createSlice({
       state.pHealthUpgradeCount = 0
     },
     increaseAchievementModifier(state, action: PayloadAction<number>) {
-      state.achievementModifier += action.payload
+      // Integer conversion to avoid floating-point imprecision
+      const currentValue = Math.round(state.achievementModifier * 100)
+      const payloadValue = Math.round(action.payload * 100)
+      state.achievementModifier = (currentValue + payloadValue) / 100
     },
     initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel | UpgradeKey>) {
       setInitElementMap[action.payload](state)
@@ -167,10 +170,10 @@ export const {
   increasePlasma,
   reservePlasma,
   resetPlasmaReserved,
-  // decreasePlasma,
   incrementPDamageUpgradeCount,
   incrementPHealthUpgradeCount,
   prestigeRespec,
+  increaseAchievementModifier,
   initialiseElement,
   setTabInView,
   toggleDebugState,
