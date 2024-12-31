@@ -3,7 +3,7 @@ import type { RootState } from "./store"
 import { EnemyState } from "../models/monsters"
 import { Zone } from "../gameconfig/zone"
 import { getMonster } from "../gameconfig/monster"
-import { prestigeReset } from "./sharedActions"
+import { prestigeReset } from "./shared/actions"
 
 interface ZoneState {
   currentZoneNumber: number

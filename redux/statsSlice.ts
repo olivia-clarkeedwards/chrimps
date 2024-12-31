@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction, ThunkAction } from "@reduxjs/toolkit"
 import type { AppDispatch, RootState } from "./store"
-import { refreshFarmZone, zoneComplete } from "./zoneSlice"
-import { prestigeReset } from "./sharedActions"
+import { zoneComplete } from "./zoneSlice"
+import { prestigeReset } from "./shared/actions"
 import { Achievement, ACHIEVEMENTS } from "../gameconfig/achievements"
-import { increaseAchievementModifier } from "./playerSlice"
+import { checkAchievementUnlock } from "./shared/helpers"
 
 interface StatsState {
   clickCount: number
@@ -87,38 +87,24 @@ export const {
   zoneTenCompleted,
 } = statsSlice.actions
 
-export const selectStatsState = createSelector([(state) => state.stats], (stats) => ({
+export const selectStatsState = createSelector([(state: RootState) => state.stats], (stats) => ({
   clickCount: stats.clickCount,
   totalClickDamageDealt: stats.totalClickDamage,
   totalDotDamageDealt: stats.totalDotDamage,
   killCount: stats.killCount,
-  zonesCompleted: stats.zonesCompleted,
+  farmZonesCompleted: stats.farmZonesCompleted,
   totalZonesCompleted: stats.totalZonesCompleted,
   highestZoneEver: stats.highestZoneEver,
   highestZone: stats.highestZone,
+  prestigeCount: stats.prestigeCount,
 }))
+export const selectAchievements = (state: RootState) => state.stats.achievementsUnlocked
 
 export const selectHighestZoneEver = (state: RootState) => state.stats.highestZoneEver
 export const selectZoneTenComplete = createSelector(
   [(state: RootState) => state.stats.highestZone],
   (highestZone) => highestZone > 10,
 )
-
-interface AchievementCheck {
-  achievements: Achievement[]
-  value: number
-}
-
-export const checkAchievementUnlock = (dispatch: AppDispatch, check: AchievementCheck[]) => {
-  check.forEach(({ achievements, value }) => {
-    const nextAchievement = achievements[0]
-    if (nextAchievement && value >= nextAchievement.condition) {
-      achievements.shift()
-      dispatch(unlockAchievement(nextAchievement.id))
-      dispatch(increaseAchievementModifier(nextAchievement.modifier))
-    }
-  })
-}
 
 export const updateFarmZonesCompleted = () => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(incrementFarmZonesCompleted())

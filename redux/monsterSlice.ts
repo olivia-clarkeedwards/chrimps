@@ -4,7 +4,7 @@ import { type RootState } from "./store"
 import { getMonster } from "../gameconfig/monster"
 import { EnemyState } from "../models/monsters"
 import { monsterClicked, increaseTotalDotDamageDealt } from "./statsSlice"
-import { prestigeReset } from "./sharedActions"
+import { prestigeReset } from "./shared/actions"
 
 interface EnemyThatDies extends EnemyState {
   alive: boolean

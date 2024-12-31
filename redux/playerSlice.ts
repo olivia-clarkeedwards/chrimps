@@ -5,10 +5,9 @@ import { PlayerState, Tab } from "../models/player"
 import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 import { setInitElementMap } from "../gameconfig/utils"
 import { PrestigeState, PrestigeUpgradeName, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
-import { prestigeReset } from "./sharedActions"
+import { prestigeReset } from "./shared/actions"
 import { ACHIEVEMENTS } from "../gameconfig/achievements"
-import { checkAchievementUnlock, statsSlice, unlockAchievement } from "./statsSlice"
-import { StatementSync } from "node:sqlite"
+import { checkAchievementUnlock } from "./shared/helpers"
 
 const debugState: PlayerState = {
   clickLevel: 500,
@@ -190,6 +189,7 @@ export const selectPlayerState = createSelector([(state: RootState) => state.pla
 
 export const selectPrestigeState = createSelector([(state: RootState) => state.player], (player) => ({
   plasma: player.plasma,
+  plasmaSpent: player.plasmaSpent,
   pDamageUpgradeCount: player.pDamageUpgradeCount,
   pHealthUpgradeCount: player.pHealthUpgradeCount,
 }))
