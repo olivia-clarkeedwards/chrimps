@@ -98,7 +98,7 @@ export const selectStatsState = createSelector([(state: RootState) => state.stat
   highestZone: stats.highestZone,
   prestigeCount: stats.prestigeCount,
 }))
-export const selectAchievements = (state: RootState) => state.stats.achievementsUnlocked
+export const selectUnlockedAchievements = (state: RootState) => state.stats.achievementsUnlocked
 
 export const selectHighestZoneEver = (state: RootState) => state.stats.highestZoneEver
 export const selectZoneTenComplete = createSelector(

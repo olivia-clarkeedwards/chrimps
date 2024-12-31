@@ -32,7 +32,7 @@ export interface Achievement {
 }
 
 // Feature{} > Achievement[] per category > Achievement{}
-const ACHIEVEMENT_CONFIG: AchievementConfig = {
+export const ACHIEVEMENT_CONFIG: AchievementConfig = {
   zone: {
     count: [
       {

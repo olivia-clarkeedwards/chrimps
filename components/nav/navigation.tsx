@@ -2,6 +2,7 @@ import { useState } from "react"
 import ReactModal from "react-modal"
 import { Styles as ModalStylesheet } from "react-modal"
 import { CancelIcon } from "../svg/metaIcons"
+import Achievements from "./achievements"
 
 export default function Navigation() {
   const [viewAchievements, setViewAchievements] = useState(false)
@@ -20,150 +21,7 @@ export default function Navigation() {
         onRequestClose={() => setViewAchievements(false)}
         contentLabel="Prestige confirmation prompt"
         style={achievementsStyle}>
-        <div className="flex h-full">
-          <div className="flex gap-1 flex-col h-full">
-            <div className="flex gap-2">
-              <h2 className="font-bold text-xl mb-2">Zone</h2>
-              <div className="flex gap-x-4 flex-wrap">
-                <div>Current zone</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <h2 className="font-bold text-xl mb-2">Zone</h2>
-              <div className="flex gap-x-4 flex-wrap">
-                <div>Current zone</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-                <div>Total zones</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Achievements />
         <button
           className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white ring-amber-800 ring-2 ring-inset shadow-[0_3px_5px_-2px_rgb(0_0_0_/_0.8),_0_3px_5px_-2px_rgb(0_0_0_/_0.6)] stroke-white z-[1000000] cursor-hand"
           onClick={() => setViewAchievements(false)}>
