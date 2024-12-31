@@ -114,7 +114,7 @@ export const playerSlice = createSlice({
       state.pDamageUpgradeCount = 0
       state.pHealthUpgradeCount = 0
     },
-    updateAchievementModifier(state, action: PayloadAction<number>) {
+    increaseAchievementModifier(state, action: PayloadAction<number>) {
       state.achievementModifier += action.payload
     },
     initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel | UpgradeKey>) {
