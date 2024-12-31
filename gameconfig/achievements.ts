@@ -127,7 +127,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "zone-farm.5",
         title: "Modern Farmer II: Relationship Drama Post by ChatGPT",
         description: "Complete 1000 farm zones",
-
         condition: 1000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -269,7 +268,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "click-damage.3",
         title: "Scroll Wheel Slime Keelhauling",
         description: "deal 100000 click damage",
-
         condition: 100000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -277,7 +275,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "click-damage.4",
         title: "Drawn Quartered on the Palm Rest",
         description: "deal 500000 click damage",
-
         condition: 500000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -310,7 +307,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "dot-value.3",
         title: "TODO",
         description: "Deal 10000 Damage Per Second",
-
         condition: 10000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -318,7 +314,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "dot-value.4",
         title: "TODO",
         description: "Deal 25000 Damage Per Second",
-
         condition: 25000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -349,7 +344,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "dot-damage.3",
         title: "TODO",
         description: "Deal 1000000 Damage Passively",
-
         condition: 1000000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -357,7 +351,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "dot-damage.4",
         title: "TODO",
         description: "Deal 10000000 Damage Passively",
-
         condition: 10000000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -398,7 +391,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "prestige-count.4",
         title: "TODO",
         description: "Prestige 15 times",
-
         condition: 15,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -429,7 +421,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "prestige-plasmaspent.3",
         title: "TODO",
         description: "Spend 10000 Plasma",
-
         condition: 10000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -437,7 +428,6 @@ const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "prestige-plasmaspent.4",
         title: "TODO",
         description: "Spend 100000 Plasma",
-
         condition: 100000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
