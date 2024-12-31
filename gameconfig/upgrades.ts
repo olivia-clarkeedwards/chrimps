@@ -42,8 +42,8 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
 }
 
 export const playerCalc: PlayerCalc = {
-  clickDamage: (clickLevel, clickMultiUpgradeCount, pDamageUpgradeCount) =>
-    clickLevel * Math.pow(2, clickMultiUpgradeCount) * pDamageUpgradeCount,
-  dotDamage: (dotLevel, dotMultiUpgradeCount, pDamageUpgradeCount) =>
-    dotLevel * Math.pow(2, dotMultiUpgradeCount * 2) * pDamageUpgradeCount,
+  clickDamage: (clickLevel, clickMultiUpgradeCount, pDamage, achievementModifier) =>
+    clickLevel * Math.pow(2, clickMultiUpgradeCount) * pDamage * achievementModifier,
+  dotDamage: (dotLevel, dotMultiUpgradeCount, pDamage, achievementModifier) =>
+    dotLevel * Math.pow(2, dotMultiUpgradeCount * 2) * pDamage * achievementModifier,
 }

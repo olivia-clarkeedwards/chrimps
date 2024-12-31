@@ -16,6 +16,7 @@ const debugState: PlayerState = {
   dotMultiUpgradeCount: 3,
   gold: 1000000,
   plasma: 1000000,
+  achievementModifier: 1,
 
   plasmaReserved: 0,
   hasEarnedPlasma: true,
@@ -41,6 +42,7 @@ const initialState: PlayerState = {
   dotLevel: 0,
   dotMultiUpgradeCount: 0,
   gold: 0,
+  achievementModifier: 0,
 
   plasmaReserved: 0,
   // Prevents animation triggering again on mount
@@ -111,6 +113,9 @@ export const playerSlice = createSlice({
       state.plasmaSpent = 0
       state.pDamageUpgradeCount = 0
       state.pHealthUpgradeCount = 0
+    },
+    updateAchievementModifier(state, action: PayloadAction<number>) {
+      state.achievementModifier += action.payload
     },
     initialiseElement(state, action: PayloadAction<UpgradeIdWithLevel | UpgradeKey>) {
       setInitElementMap[action.payload](state)
@@ -219,12 +224,14 @@ export const selectClickDamage = (state: RootState) =>
     state.player.clickLevel,
     state.player.clickMultiUpgradeCount,
     1 + state.player.pDamageUpgradeCount * prestigeDamage,
+    1 + state.player.achievementModifier,
   )
 export const selectDotDamage = (state: RootState) =>
   playerCalc.dotDamage(
     state.player.dotLevel,
     state.player.dotMultiUpgradeCount,
     1 + state.player.pDamageUpgradeCount * prestigeDamage,
+    1 + state.player.achievementModifier,
   )
 export const selectClickLevelUpCost = (state: RootState) => UPGRADE_CONFIG.click.levelUpCost(state.player.clickLevel)
 export const selectDotLevelUpCost = (state: RootState) => UPGRADE_CONFIG.dot.levelUpCost(state.player.dotLevel)

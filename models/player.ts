@@ -14,6 +14,7 @@ export interface PlayerState {
   gold: number
   plasma: number
   plasmaReserved: number
+  achievementModifier: number
 
   hasEarnedPlasma: boolean
   hasInitClickMulti1: boolean
