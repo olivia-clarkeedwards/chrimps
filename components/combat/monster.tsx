@@ -14,15 +14,12 @@ import {
   incrementFarmZonesCompleted,
   incrementKillCount,
   selectHighestZoneEver,
-  updateDotDamage,
+  updateDotDamageDealt,
+  updateMonsterClicked,
+  updateFarmZonesCompleted,
+  updateZone,
 } from "../../redux/statsSlice"
-import {
-  selectZoneState,
-  incrementStageNumber,
-  zoneComplete,
-  refreshFarmZone,
-  setZoneInView,
-} from "../../redux/zoneSlice"
+import { selectZoneState, incrementStageNumber, refreshFarmZone, setZoneInView } from "../../redux/zoneSlice"
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
@@ -83,7 +80,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const dealDamageOverTime = useCallback(() => {
     if (dotDamage) {
       const damageThisTick = dotDamage / 20
-      dispatch(updateDotDamage(damageThisTick))
+      dispatch(updateDotDamageDealt(damageThisTick))
     }
   }, [dotDamage])
 
@@ -110,7 +107,7 @@ export default function Monster({ children }: PropsWithChildren) {
     if (stageNumber === zoneLength) {
       // When highest zone
       if (isProgressing) {
-        dispatch(zoneComplete())
+        dispatch(updateZone())
         if (currentZone > 9) dispatch(increasePlasma(monsterPlasmaValue))
 
         // Highest zone & farming toggled; zone transition in place
@@ -124,7 +121,7 @@ export default function Monster({ children }: PropsWithChildren) {
 
         // When farming and farming is toggled, continue; else goto zoneInView useEffect block
       } else if (zoneInView < currentZone) {
-        dispatch(incrementFarmZonesCompleted())
+        dispatch(updateFarmZonesCompleted())
         if (isFarming && farmZoneMonsters) {
           dispatch(refreshFarmZone())
           const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
@@ -214,7 +211,7 @@ export default function Monster({ children }: PropsWithChildren) {
   }, [gameLoop])
 
   function handleClick() {
-    dispatch(monsterClicked(clickDamage))
+    dispatch(updateMonsterClicked(clickDamage))
     // Goto !monsterAlive useEffect if monster died
   }
 

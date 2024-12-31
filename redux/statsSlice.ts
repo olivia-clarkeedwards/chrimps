@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction, ThunkAction } from "@reduxjs/toolkit"
 import type { AppDispatch, RootState } from "./store"
-import { zoneComplete } from "./zoneSlice"
+import { refreshFarmZone, zoneComplete } from "./zoneSlice"
 import { prestigeReset } from "./sharedActions"
-import { selectDotDamage } from "./playerSlice"
-import { ACHIEVEMENT_CONFIG } from "../gameconfig/achievements"
+import { Achievement, ACHIEVEMENTS } from "../gameconfig/achievements"
 
 interface StatsState {
   clickCount: number
@@ -104,42 +103,77 @@ export const selectZoneTenComplete = createSelector(
   (highestZone) => highestZone > 10,
 )
 
-export const updateDotDamage = (damage: number) => (dispatch: AppDispatch, getState: () => RootState) => {
+interface AchievementCheck {
+  achievements: Achievement[]
+  value: number
+}
+
+export const checkAchievementUnlock = (dispatch: AppDispatch, check: AchievementCheck[]) => {
+  check.forEach(({ achievements, value }) => {
+    const nextAchievement = achievements[0]
+    if (nextAchievement && value >= nextAchievement.condition) {
+      achievements.shift()
+      dispatch(unlockAchievement(nextAchievement.id))
+    }
+  })
+}
+
+export const updateFarmZonesCompleted = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  dispatch(incrementFarmZonesCompleted())
+  const state = getState()
+  checkAchievementUnlock(dispatch, [
+    {
+      achievements: ACHIEVEMENTS.zone.farm,
+      value: state.stats.farmZonesCompleted,
+    },
+  ])
+}
+
+export const updateZone = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  dispatch(zoneComplete())
+
+  const state = getState()
+
+  checkAchievementUnlock(dispatch, [
+    {
+      achievements: ACHIEVEMENTS.zone.count,
+      value: state.stats.totalZonesCompleted,
+    },
+    {
+      achievements: ACHIEVEMENTS.zone.progression,
+      value: state.stats.highestZoneEver,
+    },
+  ])
+}
+
+export const updateMonsterClicked = (damage: number) => (dispatch: AppDispatch, getState: () => RootState) => {
+  dispatch(monsterClicked(damage))
+
+  const state = getState()
+
+  checkAchievementUnlock(dispatch, [
+    {
+      achievements: ACHIEVEMENTS.click.count,
+      value: state.stats.clickCount,
+    },
+    {
+      achievements: ACHIEVEMENTS.click.damage,
+      value: state.stats.totalClickDamage,
+    },
+  ])
+}
+
+export const updateDotDamageDealt = (damage: number) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(increaseTotalDotDamageDealt(damage))
 
   const state = getState()
-  const nextAchievement = ACHIEVEMENT_CONFIG.dot.damage.find(
-    (achievement) => !state.stats.achievementsUnlocked.includes(achievement.id),
-  )
 
-  if (nextAchievement && state.stats.totalDotDamage >= nextAchievement.condition) {
-    dispatch(unlockAchievement(nextAchievement.id))
-  }
+  checkAchievementUnlock(dispatch, [
+    {
+      achievements: ACHIEVEMENTS.dot.damage,
+      value: state.stats.totalDotDamage,
+    },
+  ])
 }
 
 export default statsSlice.reducer
-
-// const checkDotAchievements = createAsyncThunk("stats/checkDot", async (_, { getState, dispatch }) => {
-//   const state = getState() as RootState
-//   const unlockedAchievements = state.stats.achievementsUnlocked
-//   const currentDotDamage = selectDotDamage(state)
-//   const totalDotDamage = state.stats.totalDotDamage
-
-//   const valueMap = {
-//     "dot-value": selectDotDamage(state),
-//     "dot-damage": state.stats.totalDotDamage,
-//   }
-
-//   Object.entries(ACHIEVEMENT_CONFIG.dot).forEach(([category, achievements]) => {
-//     console.log(category, achievements)
-//     for (const achievement of achievements) {
-//       console.log(achievement)
-//       const [thisAchievementCategory] = achievement.id.split(".")
-//       const value = valueMap[thisAchievementCategory as keyof typeof valueMap]
-
-//       if (value >= achievement.condition && !state.stats.achievementsUnlocked.includes(achievement.id)) {
-//         dispatch(unlockAchievement(achievement.id))
-//       }
-//     }
-//   })
-// })

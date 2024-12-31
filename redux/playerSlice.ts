@@ -1,11 +1,13 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { type RootState } from "./store"
+import { AppDispatch, type RootState } from "./store"
 import { PlayerState, Tab } from "../models/player"
 import { playerCalc, UPGRADE_CONFIG } from "../gameconfig/upgrades"
 import { setInitElementMap } from "../gameconfig/utils"
 import { PrestigeState, PrestigeUpgradeName, UpgradeIdWithLevel, UpgradeKey } from "../models/upgrades"
 import { prestigeReset } from "./sharedActions"
+import { ACHIEVEMENTS } from "../gameconfig/achievements"
+import { checkAchievementUnlock, statsSlice, unlockAchievement } from "./statsSlice"
 
 const debugState: PlayerState = {
   clickLevel: 500,
@@ -28,8 +30,8 @@ const debugState: PlayerState = {
   tabInView: "upgrade",
 
   startDate: performance.timeOrigin,
-  pDamageUpgradeCount: 30,
-  pHealthUpgradeCount: 30,
+  pDamageUpgradeCount: 300,
+  pHealthUpgradeCount: 300,
   plasmaSpent: 50000,
 }
 
@@ -232,4 +234,69 @@ export const selectPrestigeTabVisible = createSelector(
   [(state: RootState) => state.player.hasEarnedPlasma],
   (hasEarnedPlasma) => hasEarnedPlasma === true,
 )
+
+export const updateClickDamage = (whatChanged: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  switch (whatChanged) {
+    case "levelup":
+      dispatch(incrementClickLevel())
+      break
+    case "multi":
+      dispatch(incrementClickMultiUpgradeCount())
+      break
+    case "pDamage":
+      break
+    default:
+      throw new Error("Unexpected updateDotDamage argument: " + whatChanged)
+  }
+
+  const state = getState()
+  checkAchievementUnlock(dispatch, [
+    {
+      achievements: ACHIEVEMENTS.click.value,
+      value: selectClickDamage(state),
+    },
+  ])
+}
+
+export const updateDotDamage = (whatChanged: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  switch (whatChanged) {
+    case "levelup":
+      dispatch(incrementDotLevel())
+      break
+    case "multi":
+      dispatch(incrementDotMultiUpgradeCount())
+      break
+    case "pDamage":
+      break
+    default:
+      throw new Error("Unexpected updateDotDamage argument: " + whatChanged)
+  }
+
+  const state = getState()
+
+  checkAchievementUnlock(dispatch, [
+    {
+      achievements: ACHIEVEMENTS.dot.value,
+      value: selectDotDamage(state),
+    },
+  ])
+}
+
+export const updatePrestige =
+  (prestigePurchase: Record<PrestigeUpgradeName, PrestigeState>) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(prestigeReset(prestigePurchase))
+    const state = getState()
+    checkAchievementUnlock(dispatch, [
+      {
+        achievements: ACHIEVEMENTS.prestige.count,
+        value: state.stats.prestigeCount,
+      },
+      {
+        achievements: ACHIEVEMENTS.prestige.plasmaSpent,
+        value: state.player.plasmaSpent,
+      },
+    ])
+  }
+
 export default playerSlice.reducer

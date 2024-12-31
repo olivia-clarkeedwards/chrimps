@@ -22,7 +22,7 @@ const ACHIEVEMENT_TIER_CONFIG: Record<Difficulty, AchievementTier> = {
   },
 }
 
-interface Achievement {
+export interface Achievement {
   id: string
   title: string
   description: string
@@ -32,7 +32,7 @@ interface Achievement {
 }
 
 // Feature{} > Achievement[] per category > Achievement{}
-export const ACHIEVEMENT_CONFIG: AchievementConfig = {
+const ACHIEVEMENT_CONFIG: AchievementConfig = {
   zone: {
     count: [
       {
@@ -162,6 +162,50 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
     ],
   },
   click: {
+    value: [
+      {
+        id: "click-value.1",
+        title: "TODO",
+        description: "Reach 100 damage per click",
+        condition: 100,
+        ...ACHIEVEMENT_TIER_CONFIG.beginner,
+      },
+      {
+        id: "click-value.2",
+        title: "TODO",
+        description: "Reach 500 damage per click",
+        condition: 500,
+        ...ACHIEVEMENT_TIER_CONFIG.beginner,
+      },
+      {
+        id: "click-value.3",
+        title: "TODO",
+        description: "Reach 1000 damage per click",
+        condition: 1000,
+        ...ACHIEVEMENT_TIER_CONFIG.beginner,
+      },
+      {
+        id: "click-value.3",
+        title: "TODO",
+        description: "Reach 5000 damage per click",
+        condition: 5000,
+        ...ACHIEVEMENT_TIER_CONFIG.novice,
+      },
+      {
+        id: "click-value.4",
+        title: "TODO",
+        description: "Reach 25000 damage per click",
+        condition: 25000,
+        ...ACHIEVEMENT_TIER_CONFIG.novice,
+      },
+      {
+        id: "click-value.5",
+        title: "TODO",
+        description: "Reach 100000 damage per click",
+        condition: 100000,
+        ...ACHIEVEMENT_TIER_CONFIG.intermediate,
+      },
+    ],
     count: [
       {
         id: "click-count.1",
@@ -188,7 +232,6 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "click-count.3",
         title: "Certificate in Applied Mouse Usership: Full Range-Of-Motion Clicker",
         description: "Click monsters 2500 times",
-
         condition: 2500,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -196,7 +239,6 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
         id: "click-count.4",
         title: "Bachelor of Mouse Operations",
         description: "Click monsters 10000 times",
-
         condition: 10000,
         ...ACHIEVEMENT_TIER_CONFIG.novice,
       },
@@ -409,3 +451,5 @@ export const ACHIEVEMENT_CONFIG: AchievementConfig = {
     ],
   },
 } as const
+
+export const ACHIEVEMENTS = structuredClone(ACHIEVEMENT_CONFIG)

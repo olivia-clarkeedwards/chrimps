@@ -2,16 +2,14 @@ import React from "react"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import {
   decreaseGold,
-  incrementClickLevel,
-  incrementClickMultiUpgradeCount,
-  incrementDotMultiUpgradeCount,
-  incrementDotLevel,
   selectGCanAfford,
   selectClickDamage,
   selectDotDamage,
   selectClickLevelUpCost,
   selectDotLevelUpCost,
   selectGold,
+  updateDotDamage,
+  updateClickDamage,
 } from "../../../redux/playerSlice"
 import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/clickIcons"
 import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
@@ -33,12 +31,12 @@ export default function UpgradeIndex() {
     click: {
       cost: clickLevelUpCost,
       canAfford: useAppSelector(selectGCanAfford(clickLevelUpCost)),
-      action: incrementClickLevel(),
+      action: updateClickDamage("levelup"),
     },
     dot: {
       cost: dotLevelUpCost,
       canAfford: useAppSelector(selectGCanAfford(dotLevelUpCost)),
-      action: incrementDotLevel(),
+      action: updateDotDamage("levelup"),
     },
   }
 
@@ -63,8 +61,8 @@ export default function UpgradeIndex() {
   ) {
     const [upgradeId, purchasedUpgradeLevel] = e.currentTarget.id.split(".")
     const upgradeActions = {
-      "click-multi": incrementClickMultiUpgradeCount(),
-      "dot-multi": incrementDotMultiUpgradeCount(),
+      "click-multi": updateClickDamage("multi"),
+      "dot-multi": updateDotDamage("multi"),
     }
 
     if (isAffordable && !hidden) {

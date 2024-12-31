@@ -4,10 +4,15 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { UPGRADE_CONFIG } from "../../gameconfig/upgrades"
 import Currency from "./currency"
 import { PlasmaIcon } from "../svg/resourceIcons"
-import { resetPlasmaReserved, selectPlasma, selectPlasmaReserved, reservePlasma } from "../../redux/playerSlice"
+import {
+  resetPlasmaReserved,
+  selectPlasma,
+  selectPlasmaReserved,
+  reservePlasma,
+  updatePrestige,
+} from "../../redux/playerSlice"
 import { PrestigeState, PrestigeUpgradeName } from "../../models/upgrades"
 import clsx from "clsx/lite"
-import { prestigeReset } from "../../redux/sharedActions"
 import ReactModal from "react-modal"
 import { Styles as ModalStylesheet } from "react-modal"
 import { CancelIcon } from "../svg/metaIcons"
@@ -128,7 +133,7 @@ export default function Prestige() {
           </div>
           <div className="mt-auto">
             <button
-              onClick={() => dispatch(prestigeReset(prestigePurchase))}
+              onClick={() => dispatch(updatePrestige(prestigePurchase))}
               className="w-40 h-16 my-4 self-start cursor-hand rounded-lg border-2 border-white bg-red-600 text-white font-sans font-bold text-2xl">
               Confirm
             </button>
