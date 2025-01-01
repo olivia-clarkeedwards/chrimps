@@ -1,10 +1,11 @@
-import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit"
-import type { PayloadAction, ThunkAction } from "@reduxjs/toolkit"
+import { createSelector, createSlice } from "@reduxjs/toolkit"
+import type { PayloadAction } from "@reduxjs/toolkit"
 import type { AppDispatch, RootState } from "./store"
 import { zoneComplete } from "./zoneSlice"
 import { prestigeReset } from "./shared/actions"
-import { Achievement, ACHIEVEMENTS } from "../gameconfig/achievements"
+import { ACHIEVEMENTS } from "../gameconfig/achievements"
 import { checkAchievementUnlock } from "./shared/helpers"
+import { METADATA_CONFIG } from "../gameconfig/meta"
 
 interface StatsState {
   clickCount: number
@@ -16,8 +17,9 @@ interface StatsState {
   highestZoneEver: number
   prestigeCount: number
   achievementsUnlocked: string[]
-  zoneTenCompleted: boolean
   highestZone: number
+  zoneTenCompleted: boolean
+  gameVersion: string
 }
 
 const initialState: StatsState = {
@@ -31,11 +33,12 @@ const initialState: StatsState = {
   prestigeCount: 0,
   achievementsUnlocked: [],
 
-  // Milestones
-  zoneTenCompleted: false,
-
   // This run data
   highestZone: 1,
+
+  // Persisted data
+  zoneTenCompleted: false,
+  gameVersion: METADATA_CONFIG.version,
 }
 
 export const statsSlice = createSlice({

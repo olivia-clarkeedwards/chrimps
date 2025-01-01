@@ -1,8 +1,28 @@
-import { configureStore } from "@reduxjs/toolkit"
+import { configureStore, createSlice, Middleware } from "@reduxjs/toolkit"
 import statsReducer from "./statsSlice"
 import monsterReducer from "./monsterSlice"
 import zoneReducer from "./zoneSlice"
 import playerReducer from "./playerSlice"
+import { loadFromLocalStorage, saveToLocalStorage } from "../gameconfig/utils"
+
+const metaSlice = createSlice({
+  name: "meta",
+  initialState: {},
+  reducers: {
+    saveGame: () => undefined,
+  },
+})
+
+const saveMiddleware: Middleware = (store) => (next) => (action) => {
+  const nextAction = next(action)
+
+  if (metaSlice.actions.saveGame.match(action)) {
+    console.log("Saving game")
+    saveToLocalStorage(store.getState())
+  }
+
+  return nextAction
+}
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +31,8 @@ export const store = configureStore({
     stats: statsReducer,
     zone: zoneReducer,
   },
-  // preloadedState: {}
+  preloadedState: loadFromLocalStorage(),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saveMiddleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

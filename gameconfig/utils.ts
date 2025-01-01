@@ -79,3 +79,14 @@ export function serialize(classInstance) {
   }
   return serialized
 }
+
+export function saveToLocalStorage(state: RootState) {
+  console.log("Saving", state)
+
+  // localStorage.setItem("gameState", JSON.stringify())
+}
+
+export function loadFromLocalStorage() {
+  //TODO: Overwrite game version on load
+  console.log("Loading from local storage")
+}

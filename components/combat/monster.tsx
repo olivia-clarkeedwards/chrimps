@@ -9,11 +9,7 @@ import {
 } from "../../redux/playerSlice"
 import { selectMonsterAlive, selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
 import {
-  increaseTotalDotDamageDealt,
-  monsterClicked,
-  incrementFarmZonesCompleted,
   incrementKillCount,
-  selectHighestZoneEver,
   updateDotDamageDealt,
   updateMonsterClicked,
   updateFarmZonesCompleted,
@@ -23,6 +19,7 @@ import { selectZoneState, incrementStageNumber, refreshFarmZone, setZoneInView }
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
+import { saveGame } from "../../redux/shared/actions"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -34,17 +31,13 @@ export default function Monster({ children }: PropsWithChildren) {
   const zoneLength = ZONE_CONFIG.length
   const {
     currentZoneNumber: currentZone,
-    zoneMonsters,
-    stageNumber: currentStage,
     isFarming,
     farmZoneMonsters,
     farmZoneNumber,
-    farmStageNumber,
     zoneInView,
   } = useAppSelector(selectZoneState)
 
-  const { monsterName, monsterGoldValue, monsterPlasmaValue, monsterImage, monsterAlive } =
-    useAppSelector(selectMonsterState)
+  const { monsterName, monsterPlasmaValue, monsterImage, monsterAlive } = useAppSelector(selectMonsterState)
 
   const tickCount = useRef(0)
   const lastFrameTime = useRef(performance.now())
@@ -53,29 +46,37 @@ export default function Monster({ children }: PropsWithChildren) {
   const TICK_TIME = 1000 / TICK_RATE
 
   const checkAchievements = useCallback(() => {}, [clickLevel])
-  const runTasks = useCallback(() => {
-    // 200ms
-    if (tickCount.current % 4 === 0) {
-    }
+  const runTasks = useCallback(
+    (catchup?: boolean) => {
+      // 200ms
+      if (tickCount.current % 4 === 0) {
+      }
 
-    // 500ms
-    if (tickCount.current % 10 === 0) {
-    }
+      // 500ms
+      if (tickCount.current % 10 === 0) {
+      }
 
-    // 1 second
-    if (tickCount.current % 20 === 0) {
-      checkAchievements()
-    }
+      // 1 second
+      if (tickCount.current % 20 === 0) {
+        checkAchievements()
+      }
 
-    // 2 seconds
-    if (tickCount.current % 40 === 0) {
-    }
+      // 2 seconds
+      if (tickCount.current % 40 === 0) {
+      }
 
-    // 10 seconds
-    if (tickCount.current % 200 === 0) {
-      // dispatch(updateLastPlayed)
-    }
-  }, [checkAchievements])
+      // 10 seconds
+      if (tickCount.current % 200 === 0) {
+        // dispatch(updateLastPlayed)
+      }
+
+      // 30 seconds
+      if (!catchup && tickCount.current % 600 === 0) {
+        dispatch(saveGame())
+      }
+    },
+    [checkAchievements],
+  )
 
   const dealDamageOverTime = useCallback(() => {
     if (dotDamage) {
@@ -166,11 +167,17 @@ export default function Monster({ children }: PropsWithChildren) {
       let delta = currentTime - lastFrameTime.current
 
       // Todo: if delta > [a large number] then do fullscreen catchup
+      // Todo: if delta < [a large number] but is expected to take a couple seconds, show loading screen
 
       while (delta >= TICK_TIME) {
         tickCount.current++
         dealDamageOverTime()
-        runTasks()
+        // More than 30 seconds behind, use catchup flag to prevent save spam
+        if (delta >= 30000) {
+          runTasks(true)
+        } else {
+          runTasks()
+        }
 
         const monsterDied = selectMonsterAlive(store.getState()) === false
         if (monsterDied) onMonsterDeath()
