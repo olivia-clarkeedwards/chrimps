@@ -35,19 +35,28 @@ export default function Achievements() {
         </div>
       )}
 
-      <div className="flex-1 min-h-0 overflow-y-auto border-t border-lightgold pt-2">
+      <div id="achievements-cont" className="flex-1 min-h-0 overflow-y-auto border-t border-lightgold pt-2">
         {Object.entries(ACHIEVEMENT_CONFIG).map(([feature, categories]) => (
-          <div key={`${feature}-container`} className="flex flex-col pb-2">
-            <div className="grid grid-cols-[100px_1fr] md:grid-cols-[100px_1fr] lg:grid-cols-[150px_1fr] xl:grid-cols-[200px_1fr] gap-4 border-b border-lightgold">
+          // Achievement pane
+
+          <div id="achievement-cont" key={`${feature}-container`} className="flex flex-col pb-2">
+            <div
+              id="feature-category:achievement-grid"
+              className="grid grid-cols-[100px_1fr] md:grid-cols-[100px_1fr] lg:grid-cols-[150px_1fr] xl:grid-cols-[200px_1fr] gap-4 border-b border-lightgold">
               <h2 className="place-self-center font-bold text-2xl">{formatFeature(feature)}</h2>
-              <div className="flex flex-col gap-2 mb-2">
+              <div id="category-achievement-cont" className="flex flex-col gap-2 mb-2">
                 {Object.entries(categories).map(([category, achievements]) => (
+                  // Category title: Achievement grid
+
                   <div
+                    id="category:achievement"
                     key={`${feature}-${category}`}
                     className="grid grid-row md:grid-cols-[100px_1fr] lg:grid-cols-[150px_1fr] xl:grid-cols-[200px_1fr] gap-4">
                     <h3 className="text-center md:text-left font-bold">{formatCategory(category)}</h3>
-                    <div className="flex flex-wrap gap-2">
+                    <div id="achievements-for-category" className="flex flex-wrap gap-2">
                       {achievements.map((achievement) => {
+                        // Grid items
+
                         const unlocked = isAchievementUnlocked(achievement.id)
                         return (
                           <div
@@ -68,16 +77,20 @@ export default function Achievements() {
           </div>
         ))}
       </div>
-      {selectedAchievement && (
-        <div className="min-h-[25%] md:h-[15%] absolute pointer-events-none bottom-0 left-0 right-0 bg-[radial-gradient(circle,_rgba(189,189,189,1)_0%,_rgba(179,179,179,1)_81%,_rgba(219,217,217,1)_100%)] rounded-b-[8px] border-t-4 border-neutral-400 -m-5">
+      {selectedAchievement && ( // Achievement details overlay
+        <div
+          id="achievement-tooltip-overlay"
+          className="min-h-[25%] md:h-[15%] absolute pointer-events-none bottom-0 left-0 right-0 bg-[radial-gradient(circle,_rgba(189,189,189,1)_0%,_rgba(179,179,179,1)_81%,_rgba(219,217,217,1)_100%)] rounded-b-[8px] border-t-4 border-neutral-400 -m-5">
           <div className="relative flex justify-center items-center">
             <h2 className="text-2xl font-bold">{selectedAchievement.title}</h2>
-            {isAchievementUnlocked(selectedAchievement.id) && (
+            {isAchievementUnlocked(selectedAchievement.id) && ( // Unlocked text top-right if desktop
               <p className="hidden md:block absolute right-2 font-extrabold text-xl bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-600 inline-block bg-clip-text text-transparent">
                 UNLOCKED
               </p>
             )}
           </div>
+
+          {/* Description & current progress */}
           <div className="flex flex-col gap-2 mx-2">
             <div className="relative flex justify-between">
               <p className="text-lg text-center">{selectedAchievement.description}</p>
@@ -87,6 +100,8 @@ export default function Achievements() {
                 </span>
               </p>
             </div>
+
+            {/* Reward & UNLOCKED text if mobile */}
             <div className="relative flex justify-between items-center">
               <div>
                 {isAchievementUnlocked(selectedAchievement.id) && (
