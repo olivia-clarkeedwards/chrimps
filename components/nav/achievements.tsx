@@ -1,16 +1,20 @@
-import clsx from "clsx"
 import { Achievement, ACHIEVEMENT_CONFIG } from "../../gameconfig/achievements"
 import { useAppSelector } from "../../redux/hooks"
 import { selectUnlockedAchievements } from "../../redux/statsSlice"
 import { useState } from "react"
 import { achievementSelectorMap } from "../../redux/shared/helpers"
 import { selectAchievementModifier } from "../../redux/playerSlice"
+import clsx from "clsx/lite"
 
 export default function Achievements() {
   const unlockedAchievements = useAppSelector(selectUnlockedAchievements)
   const achievementModifier = useAppSelector(selectAchievementModifier)
 
   const [selectedAchievement, setSelectedAchievement] = useState<false | Achievement>(false)
+
+  function onViewAchievement(Achievement: Achievement) {
+    setSelectedAchievement(Achievement)
+  }
 
   const achievementProgress = useAppSelector((state) => {
     if (!selectedAchievement) return 0
@@ -20,10 +24,6 @@ export default function Achievements() {
   const isAchievementUnlocked = (id: string) => unlockedAchievements.includes(id)
   const formatFeature = (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
   const formatCategory = (id: string) => id.charAt(0).toUpperCase() + id.slice(1)
-
-  function onViewAchievement(Achievement: Achievement) {
-    setSelectedAchievement(Achievement)
-  }
 
   return (
     <div className="flex flex-col h-full text-lg relative">
@@ -62,8 +62,10 @@ export default function Achievements() {
                           <div
                             key={achievement.id}
                             className={clsx(
-                              "h-9 w-16 border-2",
-                              unlocked ? "border-gold bg-white" : "border-white/60 bg-black/60",
+                              "h-9 w-16 ",
+                              unlocked
+                                ? "rounded-sm border-gold bg-[linear-gradient(117deg,_rgba(191,149,63,1)_0%,_rgba(170,119,28,1)_18%,_rgba(227,168,18,1)_64%,_rgba(252,246,186,1)_100%)]"
+                                : "border-2 border-white/60 bg-black/60",
                             )}
                             onPointerOver={() => onViewAchievement(achievement)}
                             onMouseLeave={() => setSelectedAchievement(false)}></div>
