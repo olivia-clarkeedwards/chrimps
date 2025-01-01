@@ -16,7 +16,7 @@ const debugState: PlayerState = {
   dotMultiUpgradeCount: 3,
   gold: 1000000,
   plasma: 1000000,
-  achievementModifier: 1,
+  achievementModifier: 0,
 
   plasmaReserved: 0,
   hasEarnedPlasma: true,
