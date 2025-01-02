@@ -60,6 +60,10 @@ export const zoneSlice = createSlice({
     incrementStageNumber: (state) => {
       if (state.zoneInView === state.currentZoneNumber) {
         state.nextStageIndex++
+        if (state.nextStageIndex > state.currentZoneLength) {
+          state.nextStageIndex = 1
+          console.error("Something went wrong, stage index exceeded zone length")
+        }
       } else {
         state.farmStageIndex++
       }

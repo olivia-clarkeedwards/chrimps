@@ -19,7 +19,8 @@ import { selectZoneState, incrementStageNumber, refreshFarmZone, setZoneInView }
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
-import { saveGame } from "../../redux/metaSlice"
+import { catchUpComplete, saveGame, selectLastSaveCatchUp, setLoading } from "../../redux/metaSlice"
+import e from "express"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -27,6 +28,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const { clickLevel } = useAppSelector(selectPlayerState)
   const clickDamage = useAppSelector(selectClickDamage)
   const dotDamage = useAppSelector(selectDotDamage)
+  const lastSaveCatchUp = useAppSelector(selectLastSaveCatchUp)
 
   const zoneLength = ZONE_CONFIG.length
   const {
@@ -162,15 +164,11 @@ export default function Monster({ children }: PropsWithChildren) {
     } else throw new Error("Monster undefined during zone transition")
   }, [zoneInView])
 
-  const gameLoop = useCallback(
-    (currentTime: number) => {
-      let delta = currentTime - lastFrameTime.current
-
-      // Todo: if delta > [a large number] then do fullscreen catchup
-      // Todo: if delta < [a large number] but is expected to take a couple seconds, show loading screen
-
+  const handleProgress = useCallback(
+    (delta: number): number => {
       while (delta >= TICK_TIME) {
         tickCount.current++
+
         dealDamageOverTime()
         // More than 30 seconds behind, use catchup flag to prevent save spam
         if (delta >= 30000) {
@@ -178,17 +176,71 @@ export default function Monster({ children }: PropsWithChildren) {
         } else {
           runTasks()
         }
-
         const monsterDied = selectMonsterAlive(store.getState()) === false
         if (monsterDied) onMonsterDeath()
 
+        if (lastSaveCatchUp) dispatch(catchUpComplete())
         delta -= TICK_TIME
       }
-
-      lastFrameTime.current = currentTime - delta
-      frameRef.current = requestAnimationFrame(gameLoop)
+      return delta
     },
-    [dealDamageOverTime, runTasks],
+    [tickCount, dealDamageOverTime, runTasks, store, onMonsterDeath, dispatch, lastSaveCatchUp],
+  )
+
+  const handleOfflineProgress = useCallback(
+    async (delta: number, long?: boolean): Promise<number> => {
+      dispatch(setLoading(true))
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      console.log("Loading set to true")
+      try {
+        if (long) {
+          // TODO: Fullscreen catchup with asynchronous break
+          // Split into chunks, await new Promise(resolve => setTimeout(resolve, 0))
+          console.log("Bailed on long offline progression because it's not implemented yet")
+          delta = 1800000
+          delta = handleProgress(delta)
+          dispatch(saveGame())
+        } else {
+          console.log("Processing offline ticks:", delta / TICK_RATE)
+          delta = handleProgress(delta)
+        }
+      } catch (err) {
+        console.error("Offline progress failed:", err)
+      } finally {
+        dispatch(setLoading(false))
+      }
+      console.log("Loading set to false")
+      return delta
+    },
+
+    [saveGame, handleProgress],
+  )
+
+  const gameLoop = useCallback(
+    (currentTime: number) => {
+      let delta: number
+      if (lastSaveCatchUp) {
+        delta = Date.now() - lastSaveCatchUp
+      } else {
+        delta = currentTime - lastFrameTime.current
+      }
+
+      const handleCatchUp = async () => {
+        delta = delta > 3600000 ? await handleOfflineProgress(delta, true) : await handleOfflineProgress(delta)
+        lastFrameTime.current = currentTime - (delta % TICK_TIME)
+        frameRef.current = requestAnimationFrame(gameLoop)
+      }
+
+      if (delta <= 600000) {
+        delta = handleProgress(delta)
+        lastFrameTime.current = currentTime - (delta % TICK_TIME)
+        frameRef.current = requestAnimationFrame(gameLoop)
+        return
+      }
+
+      handleCatchUp()
+    },
+    [lastSaveCatchUp, onMonsterDeath, handleOfflineProgress, handleProgress],
   )
 
   useEffect(() => {

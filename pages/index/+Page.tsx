@@ -8,9 +8,11 @@ import { Provider } from "react-redux"
 import Navigation from "../../components/nav/navigation"
 import { useForcedDPI } from "../../gameconfig/utils"
 import ReactModal from "react-modal"
+import Loading from "../../components/Loading"
 
 export default function Page() {
   ReactModal.setAppElement("#root")
+
   const currentScale = useForcedDPI()
   const inverseScale = 1 / currentScale
 
@@ -42,6 +44,7 @@ export default function Page() {
               <Combat />
             </div>
           </main>
+          <Loading />
         </div>
       </Provider>
     </React.StrictMode>

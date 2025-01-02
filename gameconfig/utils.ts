@@ -48,7 +48,7 @@ export const prestigeUpgradeMap: Record<PrestigeUpgradeName, (state: RootState) 
   health: (state) => selectPrestigeState(state).pHealthUpgradeCount,
 }
 
-export function useForcedDPI(): void {
+export function useForcedDPI(): number {
   const getDPIScale = () => (window.matchMedia("(min-width: 1024px)").matches ? window.devicePixelRatio : 1)
 
   const [dpiScale, setDpiScale] = useState(getDPIScale)
