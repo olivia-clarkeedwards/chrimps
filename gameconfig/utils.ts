@@ -5,6 +5,8 @@ import { PrestigeUpgradeConfig, PrestigeUpgradeName, UpgradeIdWithLevel, Upgrade
 import { RootState } from "../redux/store"
 import { PlayerState } from "../models/player"
 import { selectInitState, selectPrestigeState } from "../redux/playerSlice"
+import * as LZString from "lz-string"
+import { METADATA_CONFIG } from "./meta"
 
 export const setInitElementMap: Record<UpgradeIdWithLevel | UpgradeKey, (state: PlayerState) => boolean> = {
   "click-multi.1": (state) => {
@@ -46,7 +48,7 @@ export const prestigeUpgradeMap: Record<PrestigeUpgradeName, (state: RootState) 
   health: (state) => selectPrestigeState(state).pHealthUpgradeCount,
 }
 
-export function useForcedDPI() {
+export function useForcedDPI(): void {
   const getDPIScale = () => (window.matchMedia("(min-width: 1024px)").matches ? window.devicePixelRatio : 1)
 
   const [dpiScale, setDpiScale] = useState(getDPIScale)
@@ -80,13 +82,29 @@ export function serialize(classInstance) {
   return serialized
 }
 
-export function saveToLocalStorage(state: RootState) {
-  console.log("Saving", state)
-
-  // localStorage.setItem("gameState", JSON.stringify())
+export function saveToLocalStorage(state: RootState): void {
+  try {
+    const base64GameState = LZString.compressToBase64(JSON.stringify(state))
+    localStorage.setItem("gameState", base64GameState)
+    console.log("Saved to local storage", state)
+  } catch (err) {
+    console.error(`Error saving to local storage: ${err}`)
+  }
 }
+export function loadFromLocalStorage(): RootState | undefined {
+  try {
+    const base64GameState = localStorage.getItem("gameState")
+    if (!base64GameState) return undefined
 
-export function loadFromLocalStorage() {
-  //TODO: Overwrite game version on load
-  console.log("Loading from local storage")
+    console.log("Loading from local storage", base64GameState)
+
+    const gameState = JSON.parse(LZString.decompressFromBase64(base64GameState)) as RootState
+
+    console.log("Decompressed from local storage", gameState)
+
+    return { ...gameState, stats: { ...gameState.stats, gameVersion: METADATA_CONFIG.version } }
+  } catch (err) {
+    console.error(`Error loading from local storage: ${err}`)
+    return undefined
+  }
 }
