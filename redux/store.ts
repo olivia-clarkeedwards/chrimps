@@ -3,6 +3,7 @@ import statsReducer from "./statsSlice"
 import monsterReducer from "./monsterSlice"
 import zoneReducer from "./zoneSlice"
 import playerReducer from "./playerSlice"
+import metaReducer, { saveGame } from "./metaSlice"
 import { loadFromLocalStorage, saveToLocalStorage } from "../gameconfig/utils"
 
 export interface StoreState {
@@ -10,24 +11,13 @@ export interface StoreState {
   player: ReturnType<typeof playerReducer>
   stats: ReturnType<typeof statsReducer>
   zone: ReturnType<typeof zoneReducer>
+  meta: ReturnType<typeof metaReducer>
 }
-
-const metaSlice = createSlice({
-  name: "meta",
-  initialState: { lastPlayed: Date.now(), catchUpDate: 0 as number | undefined },
-  reducers: {
-    saveGame: (state) => {
-      const now = Date.now()
-      state.lastPlayed = now
-      state.catchUpDate = now
-    },
-  },
-})
 
 const saveMiddleware: Middleware = (store) => (next) => (action) => {
   const nextAction = next(action)
 
-  if (metaSlice.actions.saveGame.match(action)) {
+  if (saveGame.match(action)) {
     saveToLocalStorage(store.getState())
   }
 
@@ -40,6 +30,7 @@ export const store = configureStore({
     player: playerReducer,
     stats: statsReducer,
     zone: zoneReducer,
+    meta: metaReducer,
   },
   preloadedState: loadFromLocalStorage(),
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saveMiddleware),

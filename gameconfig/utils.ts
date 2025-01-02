@@ -96,8 +96,6 @@ export function loadFromLocalStorage(): RootState | undefined {
     const base64GameState = localStorage.getItem("gameState")
     if (!base64GameState) return undefined
 
-    console.log("Loading from local storage", base64GameState)
-
     const gameState = JSON.parse(LZString.decompressFromBase64(base64GameState)) as RootState
 
     console.log("Decompressed from local storage", gameState)

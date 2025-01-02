@@ -19,7 +19,7 @@ import { selectZoneState, incrementStageNumber, refreshFarmZone, setZoneInView }
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
-import { saveGame } from "../../redux/shared/actions"
+import { saveGame } from "../../redux/metaSlice"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
