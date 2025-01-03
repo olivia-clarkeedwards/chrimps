@@ -30,6 +30,17 @@ export default function Monster({ children }: PropsWithChildren) {
   const lastSaveCatchUp = useAppSelector(selectLastSaveCatchUp)
   const loading = useAppSelector(selectLoading)
 
+  const lastSaveCatchUpRef = useRef(lastSaveCatchUp)
+
+  // Update ref whenever the selector value changes
+  useEffect(() => {
+    lastSaveCatchUpRef.current = lastSaveCatchUp
+  }, [lastSaveCatchUp])
+
+  useEffect(() => {
+    console.log("lastSaveCatchUp changed to:", lastSaveCatchUp)
+  }, [lastSaveCatchUp])
+
   const zoneLength = ZONE_CONFIG.length
   const {
     currentZoneNumber: currentZone,
@@ -179,7 +190,7 @@ export default function Monster({ children }: PropsWithChildren) {
         const monsterDied = selectMonsterAlive(store.getState()) === false
         if (monsterDied) onMonsterDeath()
 
-        if (lastSaveCatchUp) dispatch(clearCatchUpTime())
+        if (lastSaveCatchUpRef.current) dispatch(clearCatchUpTime())
         delta -= TICK_TIME
       }
       return delta
@@ -200,7 +211,7 @@ export default function Monster({ children }: PropsWithChildren) {
           delta = handleProgress(delta)
           dispatch(saveGame())
         } else {
-          console.log("Processing offline ticks:", delta / TICK_RATE)
+          // console.log("Processing offline ticks:", delta / TICK_RATE)
           delta = handleProgress(delta)
         }
       } catch (err) {
@@ -208,7 +219,7 @@ export default function Monster({ children }: PropsWithChildren) {
       } finally {
         dispatch(setLoading(false))
       }
-      console.log("Loading set to false")
+      console.log("Offline progress returning delta", delta)
       return delta
     },
 
@@ -218,8 +229,10 @@ export default function Monster({ children }: PropsWithChildren) {
   const gameLoop = useCallback(
     (currentTime: number) => {
       let delta: number
-      if (lastSaveCatchUp) {
-        delta = Date.now() - lastSaveCatchUp
+      if (lastSaveCatchUpRef.current) {
+        delta = Date.now() - lastSaveCatchUpRef.current
+        console.log("Processing offline ticks:", delta / TICK_TIME)
+        console.log("Last save is currently", selectLastSaveCatchUp(store.getState()))
         dispatch(clearCatchUpTime())
       } else {
         delta = currentTime - lastFrameTime.current
@@ -241,7 +254,7 @@ export default function Monster({ children }: PropsWithChildren) {
 
       handleCatchUp()
     },
-    [lastSaveCatchUp, onMonsterDeath, handleOfflineProgress, handleProgress],
+    [onMonsterDeath, handleOfflineProgress, handleProgress],
   )
 
   useEffect(() => {
