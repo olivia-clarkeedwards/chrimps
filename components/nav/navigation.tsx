@@ -1,8 +1,9 @@
 import { useState } from "react"
 import ReactModal from "react-modal"
 import { Styles as ModalStylesheet } from "react-modal"
-import { CancelIcon } from "../svg/metaIcons"
+import { CancelIcon } from "../../assets/svg/metaIcons"
 import Achievements from "./achievements"
+import handURL from "../../assets/icons/hand.png"
 
 export default function Navigation() {
   const [viewAchievements, setViewAchievements] = useState(false)
@@ -79,7 +80,7 @@ const achievementsStyle: ModalStylesheet = {
     borderRadius: "12px",
     outline: "none",
     padding: "20px",
-    cursor: "url(/icons/hand.png) 0 0, pointer",
+    cursor: `url(${handURL}) 0 0, pointer`,
     zIndex: 1000,
   },
   overlay: {
@@ -89,7 +90,7 @@ const achievementsStyle: ModalStylesheet = {
     right: 0,
     bottom: 0,
     backgroundColor: "rgba(255, 255, 255, 0.50)",
-    cursor: "url(/icons/hand.png) 0 0, pointer",
+    cursor: `url(${handURL}) 0 0, pointer`,
     zIndex: 1000,
   },
 }

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react"
+import clsx from "clsx/lite"
+import { useEffect, useRef, useState } from "react"
 import { useAppSelector } from "../../redux/hooks"
 import { selectMonsterHealth, selectMonsterMaxHealth } from "../../redux/monsterSlice"
 import { selectPlayerState } from "../../redux/playerSlice"
-import clsx from "clsx"
 
 export default function Healthbar() {
   const monsterHealth = useAppSelector(selectMonsterHealth)

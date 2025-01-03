@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
+import clsx from "clsx/lite"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { selectCurrentZoneNumber, selectZoneState } from "../../redux/zoneSlice"
+import { selectCurrentZoneNumber } from "../../redux/zoneSlice"
 import Healthbar from "./healthbar"
 import Monster from "./monster"
 import ZoneMap from "./zoneMap"
 import ZoneSelector from "./zoneSelector"
-import clsx from "clsx/lite"
 import { toggleDebugState } from "../../redux/playerSlice"
-import { CookieEnjoyerIcon } from "../svg/stageIcons"
+import { CookieEnjoyerIcon } from "../../assets/svg/stageIcons"
 import FarmToggle from "./farmToggle"
 
 export default function CombatIndex() {

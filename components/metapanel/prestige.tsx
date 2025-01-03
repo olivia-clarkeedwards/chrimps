@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react"
+import clsx from "clsx/lite"
+import { useEffect, useState } from "react"
 import PrestigeButton from "./prestigeButton"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { UPGRADE_CONFIG } from "../../gameconfig/upgrades"
 import Currency from "./currency"
-import { PlasmaIcon } from "../svg/resourceIcons"
+import { PlasmaIcon } from "../../assets/svg/resourceIcons"
 import {
   resetPlasmaReserved,
   selectPlasma,
@@ -12,16 +13,15 @@ import {
   updatePrestige,
 } from "../../redux/playerSlice"
 import { PrestigeState, PrestigeUpgradeName } from "../../models/upgrades"
-import clsx from "clsx/lite"
 import ReactModal from "react-modal"
 import { Styles as ModalStylesheet } from "react-modal"
-import { CancelIcon } from "../svg/metaIcons"
+import { CancelIcon } from "../../assets/svg/metaIcons"
 import { selectZoneTenComplete } from "../../redux/statsSlice"
+import handURL from "../../assets/icons/hand.png"
 
 export default function Prestige() {
   const dispatch = useAppDispatch()
   const plasmaSelector = selectPlasma
-  const plasma = useAppSelector(plasmaSelector)
   const plasmaReserved = useAppSelector(selectPlasmaReserved)
   const zoneTenComplete = useAppSelector(selectZoneTenComplete)
 
@@ -37,6 +37,7 @@ export default function Prestige() {
       ]),
     ) as Record<PrestigeUpgradeName, PrestigeState>,
   )
+  // TODO: Sync prestige shopping cart with redux so this useEffect is not necessary
   useEffect(() => {
     dispatch(resetPlasmaReserved())
   }, [])
@@ -158,7 +159,7 @@ const confirmPrestigeStyle: ModalStylesheet = {
     borderRadius: "12px",
     outline: "none",
     padding: "20px",
-    cursor: "url(/icons/hand.png) 0 0, pointer",
+    cursor: `url(${handURL}) 0 0, pointer`,
     zIndex: 1000,
   },
   overlay: {
@@ -168,7 +169,7 @@ const confirmPrestigeStyle: ModalStylesheet = {
     right: 0,
     bottom: 0,
     backgroundColor: "rgba(255, 255, 255, 0.75)",
-    cursor: "url(/icons/hand.png) 0 0, pointer",
+    cursor: `url(${handURL}) 0 0, pointer`,
     zIndex: 1000,
   },
 }

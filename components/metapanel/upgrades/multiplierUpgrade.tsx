@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react"
 import clsx from "clsx/lite"
+import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import { initialiseElement } from "../../../redux/playerSlice"
 import { UpgradeIdWithLevel } from "../../../models/upgrades"

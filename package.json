@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "tsx ./express-entry.ts",
     "build": "vite build",
-    "start": "vite preview",
+    "start": "cross-env NODE_ENV=production tsx ./express-entry.ts",
     "preview": "cross-env NODE_ENV=production tsx ./express-entry.ts",
     "lint": "eslint .",
     "sqlite:migrate": "tsx ./database/sqlite/schema/all.ts"

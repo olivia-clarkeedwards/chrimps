@@ -1,10 +1,10 @@
+import clsx from "clsx/lite"
 import { Achievement, ACHIEVEMENT_CONFIG } from "../../gameconfig/achievements"
 import { useAppSelector } from "../../redux/hooks"
 import { selectUnlockedAchievements } from "../../redux/statsSlice"
 import { useState } from "react"
 import { achievementSelectorMap } from "../../redux/shared/helpers"
 import { selectAchievementModifier } from "../../redux/playerSlice"
-import clsx from "clsx/lite"
 
 export default function Achievements() {
   const unlockedAchievements = useAppSelector(selectUnlockedAchievements)

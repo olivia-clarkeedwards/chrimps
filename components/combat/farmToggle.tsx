@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { FarmToggleIcon } from "../svg/metaIcons"
-import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { selectCurrentZoneNumber, selectIsFarming, selectZoneState, toggleFarming } from "../../redux/zoneSlice"
 import clsx from "clsx/lite"
+import { FarmToggleIcon } from "../../assets/svg/metaIcons"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { selectIsFarming, toggleFarming } from "../../redux/zoneSlice"
 
 export default function FarmToggle() {
   const dispatch = useAppDispatch()

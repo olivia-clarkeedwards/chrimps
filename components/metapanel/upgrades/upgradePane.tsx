@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react"
+import clsx from "clsx/lite"
+import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import {
   initialiseElement,
@@ -12,7 +13,6 @@ import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
 import { Upgrade, UpgradeIdWithLevel, UpgradeKey, UpgradeProps } from "../../../models/upgrades"
 import LevelUpButton from "./levelUpButton"
 import { selectCurrentZoneNumber } from "../../../redux/zoneSlice"
-import clsx from "clsx/lite"
 import { initSelectorMap } from "../../../gameconfig/utils"
 
 interface UpgradePaneProps {

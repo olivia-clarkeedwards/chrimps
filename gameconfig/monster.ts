@@ -1,5 +1,11 @@
 import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig, EnemyState } from "../models/monsters"
 import { ZONE_CONFIG } from "./zone"
+import slimeURL from "../assets/monsters/ph-slime.png"
+import wormURL from "../assets/monsters/ph-worm.png"
+import cacodemonURL from "../assets/monsters/ph-cacodemon.png"
+import yetiURL from "../assets/monsters/ph-yeti.png"
+import toothURL from "../assets/monsters/ph-boss-tooth.png"
+import treasureGoblinURL from "../assets/monsters/ph-treasure-monster.webp"
 
 const MONSTER_CONFIG: BaseMonsterConfig = {
   health: {
@@ -24,22 +30,20 @@ const MONSTER_CONFIG: BaseMonsterConfig = {
 }
 
 const MONSTER_VARIATIONS: MonsterType[] = [
-  { name: "Slime", kind: "regular", healthMulti: 1, imagePath: "/monsters/ph-slime.png" },
-  { name: "Worm", kind: "regular", healthMulti: 1.05, imagePath: "/monsters/ph-worm.png" },
-  { name: "Cacodemon", kind: "regular", healthMulti: 1.1, imagePath: "/monsters/ph-cacodemon.png" },
-  { name: "Yeti", kind: "regular", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
+  { name: "Slime", kind: "regular", healthMulti: 1, imagePath: `${slimeURL}` },
+  { name: "Worm", kind: "regular", healthMulti: 1.05, imagePath: `${wormURL}` },
+  { name: "Cacodemon", kind: "regular", healthMulti: 1.1, imagePath: `${cacodemonURL}` },
+  { name: "Yeti", kind: "regular", healthMulti: 1.2, imagePath: `${yetiURL}` },
 ]
 
-const BOSS_VARIATIONS: MonsterType[] = [
-  { name: "Tooth", kind: "boss", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" },
-]
+const BOSS_VARIATIONS: MonsterType[] = [{ name: "Tooth", kind: "boss", healthMulti: 2, imagePath: `${toothURL}` }]
 const RARE_VARIATIONS: MonsterType[] = [
   {
     name: "Treasure Goblin",
     kind: "rare",
     healthMulti: 0.5,
     goldMulti: 20,
-    imagePath: "/monsters/ph-treasure-monster.webp",
+    imagePath: `${treasureGoblinURL}`,
   },
 ]
 class BaseMonster implements BaseEnemy {

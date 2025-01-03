@@ -1,3 +1,4 @@
-#!/bin/bash
-npm install -g pnpm
-pnpm install
+[config]
+SCM_DO_BUILD_DURING_DEPLOYMENT=true
+ENABLE_DYNAMIC_INSTALL=true
+PRE_BUILD_SCRIPT_PATH=prebuild.sh

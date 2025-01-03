@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 import UpgradeIndex from "./upgrades/upgradeIndex"
 import clsx from "clsx/lite"
 import Prestige from "./prestige"

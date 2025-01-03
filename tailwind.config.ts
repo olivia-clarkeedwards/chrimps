@@ -1,5 +1,4 @@
 import defaultTheme from "tailwindcss/defaultTheme"
-
 import type { Config } from "tailwindcss"
 
 export default {
@@ -19,12 +18,15 @@ export default {
         sigmar: ["Sigmar", ...defaultTheme.fontFamily.sans],
       },
       cursor: {
-        hand: "url(/icons/hand.png) 0 0, pointer",
-        dagger: "url(/icons/dagger.png) 0 0, pointer",
+        hand: "url('/assets/icons/hand.png') 0 0, pointer",
+        dagger: "url('/assets/icons/dagger.png') 0 0, pointer",
       },
       scale: {
         "85": ".85",
         "80": ".80",
+      },
+      backgroundImage: {
+        meadow: "url('/assets/icons/meadow.jpg')",
       },
       boxShadow: {
         upgrade:

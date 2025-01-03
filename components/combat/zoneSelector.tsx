@@ -1,6 +1,5 @@
-import React from "react"
-import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import clsx from "clsx/lite"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { selectZoneState, zoneSelection } from "../../redux/zoneSlice"
 
 export default function ZoneSelector() {
@@ -9,7 +8,7 @@ export default function ZoneSelector() {
 
   const selectedZones = Array.from({ length: 5 }, (cur, acc) => acc + 1)
 
-  function handleZoneChange(e: React.MouseEvent<HTMLDivElement>) {
+  function handleZoneChange(e: React.MouseEvent<HTMLButtonElement>) {
     const [elementName, deltaSuffix] = e.currentTarget.id.split(".")
     const zoneDelta = Number(deltaSuffix) - 1
     dispatch(zoneSelection(zoneDelta))
@@ -24,7 +23,7 @@ export default function ZoneSelector() {
         const thisZoneNumber = currentZoneNumber - zoneIndex + 1
 
         return (
-          <div
+          <button
             key={`outer.${zoneIndex}`}
             id={`zone-delta.${zoneIndex}`}
             className={clsx(
@@ -36,12 +35,12 @@ export default function ZoneSelector() {
             <div
               key={`inner.${zoneIndex}`}
               className={clsx(
-                "flex justify-center h-full w-full bg-[url('/icons/meadow.jpg')] bg-no-repeat bg-cover text-black text-xl",
+                "flex justify-center h-full w-full bg-meadow bg-no-repeat bg-cover text-black text-xl",
                 opacitySteps[zoneIndex - 1],
               )}>
               {`${thisZoneNumber}`}
             </div>
-          </div>
+          </button>
         )
       })}
     </div>

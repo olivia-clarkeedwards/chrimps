@@ -1,11 +1,11 @@
-import React, { useState } from "react"
-import { PrestigeUpgradeConfig, PrestigeUpgradeName } from "../../models/upgrades"
+import clsx from "clsx/lite"
+import { useState } from "react"
+import { PrestigeUpgradeConfig } from "../../models/upgrades"
 import { prestigeUpgradeMap } from "../../gameconfig/utils"
 import { useAppSelector } from "../../redux/hooks"
 import { UPGRADE_CONFIG } from "../../gameconfig/upgrades"
-import { selectPCanAfford, selectPlasma } from "../../redux/playerSlice"
-import clsx from "clsx/lite"
-import { MinPlasmaIcon } from "../svg/resourceIcons"
+import { selectPCanAfford } from "../../redux/playerSlice"
+import { MinPlasmaIcon } from "../../assets/svg/resourceIcons"
 
 interface PrestigeBtnProps {
   config: PrestigeUpgradeConfig
@@ -23,7 +23,6 @@ export default function PrestigeButton({ config, onClick: onUpdatePurchase, hidd
   const [purchasePrice, setPurchasePrice] = useState(UPGRADE_CONFIG.calcAdditiveCost(upgradeCount + 1, config))
   const [totalCost, setTotalCost] = useState(0)
 
-  const plasma = useAppSelector(selectPlasma)
   const isAffordable = useAppSelector(selectPCanAfford(purchasePrice))
 
   function onSelectPrestigeUpgrade(
