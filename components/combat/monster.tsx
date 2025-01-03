@@ -32,13 +32,9 @@ export default function Monster({ children }: PropsWithChildren) {
 
   const lastSaveCatchUpRef = useRef(lastSaveCatchUp)
 
-  // Update ref whenever the selector value changes
+  // Interface between requestAnimationFrame and React to prevent infinite catchup loops
   useEffect(() => {
     lastSaveCatchUpRef.current = lastSaveCatchUp
-  }, [lastSaveCatchUp])
-
-  useEffect(() => {
-    console.log("lastSaveCatchUp changed to:", lastSaveCatchUp)
   }, [lastSaveCatchUp])
 
   const zoneLength = ZONE_CONFIG.length
@@ -190,12 +186,12 @@ export default function Monster({ children }: PropsWithChildren) {
         const monsterDied = selectMonsterAlive(store.getState()) === false
         if (monsterDied) onMonsterDeath()
 
-        if (lastSaveCatchUpRef.current) dispatch(clearCatchUpTime())
+        if (lastSaveCatchUpRef.current && delta <= 100) dispatch(clearCatchUpTime())
         delta -= TICK_TIME
       }
       return delta
     },
-    [tickCount, dealDamageOverTime, runTasks, store, onMonsterDeath, dispatch, lastSaveCatchUp],
+    [tickCount, dealDamageOverTime, runTasks, store, onMonsterDeath, dispatch],
   )
 
   const handleOfflineProgress = useCallback(
@@ -209,7 +205,6 @@ export default function Monster({ children }: PropsWithChildren) {
           console.warn("Reduced offline progression to 1 hour because long catchup is yet to be implemented")
           delta = 3600000
           delta = handleProgress(delta)
-          dispatch(saveGame())
         } else {
           // console.log("Processing offline ticks:", delta / TICK_RATE)
           delta = handleProgress(delta)
@@ -219,7 +214,6 @@ export default function Monster({ children }: PropsWithChildren) {
       } finally {
         dispatch(setLoading(false))
       }
-      console.log("Offline progress returning delta", delta)
       return delta
     },
 
@@ -231,8 +225,6 @@ export default function Monster({ children }: PropsWithChildren) {
       let delta: number
       if (lastSaveCatchUpRef.current) {
         delta = Date.now() - lastSaveCatchUpRef.current
-        console.log("Processing offline ticks:", delta / TICK_TIME)
-        console.log("Last save is currently", selectLastSaveCatchUp(store.getState()))
         dispatch(clearCatchUpTime())
       } else {
         delta = currentTime - lastFrameTime.current
