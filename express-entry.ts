@@ -1,11 +1,11 @@
 import "dotenv/config"
 import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
-import { authjsHandler, authjsSessionMiddleware } from "./server/authjs-handler"
+// import { authjsHandler, authjsSessionMiddleware } from "./server/authjs-handler"
 
 import { vikeHandler } from "./server/vike-handler"
 import { createHandler, createMiddleware } from "@universal-middleware/express"
-import { dbMiddleware } from "./server/db-middleware"
+// import { dbMiddleware } from "./server/db-middleware"
 import express from "express"
 
 const __filename = fileURLToPath(import.meta.url)
@@ -43,15 +43,15 @@ async function startServer() {
     app.use(viteDevMiddleware)
   }
 
-  app.use(createMiddleware(dbMiddleware)())
+  // app.use(createMiddleware(dbMiddleware)())
 
-  app.use(createMiddleware(authjsSessionMiddleware)())
+  // app.use(createMiddleware(authjsSessionMiddleware)())
 
   /**
    * Auth.js route
    * @link {@see https://authjs.dev/getting-started/installation}
    **/
-  app.all("/api/auth/*", createHandler(authjsHandler)())
+  // app.all("/api/auth/*", createHandler(authjsHandler)())
 
   /**
    * Vike route
