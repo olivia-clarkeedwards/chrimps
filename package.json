@@ -1,8 +1,8 @@
 {
   "scripts": {
     "dev": "tsx ./express-entry.ts",
-    "build": "vite build --base=/public/",
-    "start": "cross-env NODE_ENV=production tsx ./express-entry.ts",
+    "build": "vite build",
+    "start": "vite preview",
     "preview": "cross-env NODE_ENV=production tsx ./express-entry.ts",
     "lint": "eslint .",
     "sqlite:migrate": "tsx ./database/sqlite/schema/all.ts"

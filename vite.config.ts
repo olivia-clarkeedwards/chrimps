@@ -4,10 +4,9 @@ import vike from "vike/plugin"
 
 export default defineConfig({
   plugins: [
-    vike({
-      prerender: false,
-      disableAutoFullBuild: true,
-    }),
+    vike(),
+    // {prerender: false,
+    // disableAutoFullBuild: true,}
     react(),
   ],
 })
