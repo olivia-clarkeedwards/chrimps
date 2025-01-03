@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/17b87920-39d2-49d3-be02-d56673cc5615/resourceGroups/appsvc_linux_centralus_basic/providers/Microsoft.Web/sites/slime-ascendant",
+  "appService.deploySubpath": "."
+}
