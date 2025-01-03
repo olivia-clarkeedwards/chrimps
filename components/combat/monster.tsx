@@ -19,8 +19,7 @@ import { selectZoneState, incrementStageNumber, refreshFarmZone, setZoneInView }
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
-import { catchUpComplete, saveGame, selectLastSaveCatchUp, setLoading } from "../../redux/metaSlice"
-import e from "express"
+import { clearCatchUpTime, saveGame, selectLastSaveCatchUp, selectLoading, setLoading } from "../../redux/metaSlice"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
@@ -29,6 +28,7 @@ export default function Monster({ children }: PropsWithChildren) {
   const clickDamage = useAppSelector(selectClickDamage)
   const dotDamage = useAppSelector(selectDotDamage)
   const lastSaveCatchUp = useAppSelector(selectLastSaveCatchUp)
+  const loading = useAppSelector(selectLoading)
 
   const zoneLength = ZONE_CONFIG.length
   const {
@@ -179,7 +179,7 @@ export default function Monster({ children }: PropsWithChildren) {
         const monsterDied = selectMonsterAlive(store.getState()) === false
         if (monsterDied) onMonsterDeath()
 
-        if (lastSaveCatchUp) dispatch(catchUpComplete())
+        if (lastSaveCatchUp) dispatch(clearCatchUpTime())
         delta -= TICK_TIME
       }
       return delta
@@ -191,13 +191,12 @@ export default function Monster({ children }: PropsWithChildren) {
     async (delta: number, long?: boolean): Promise<number> => {
       dispatch(setLoading(true))
       await new Promise((resolve) => setTimeout(resolve, 0))
-      console.log("Loading set to true")
       try {
         if (long) {
           // TODO: Fullscreen catchup with asynchronous break
           // Split into chunks, await new Promise(resolve => setTimeout(resolve, 0))
-          console.log("Bailed on long offline progression because it's not implemented yet")
-          delta = 1800000
+          console.warn("Reduced offline progression to 1 hour because long catchup is yet to be implemented")
+          delta = 3600000
           delta = handleProgress(delta)
           dispatch(saveGame())
         } else {
@@ -221,6 +220,7 @@ export default function Monster({ children }: PropsWithChildren) {
       let delta: number
       if (lastSaveCatchUp) {
         delta = Date.now() - lastSaveCatchUp
+        dispatch(clearCatchUpTime())
       } else {
         delta = currentTime - lastFrameTime.current
       }
@@ -235,6 +235,7 @@ export default function Monster({ children }: PropsWithChildren) {
         delta = handleProgress(delta)
         lastFrameTime.current = currentTime - (delta % TICK_TIME)
         frameRef.current = requestAnimationFrame(gameLoop)
+        if (loading) dispatch(setLoading(false))
         return
       }
 

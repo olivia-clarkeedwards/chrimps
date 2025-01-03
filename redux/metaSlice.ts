@@ -3,7 +3,7 @@ import { RootState } from "./store"
 
 const initialState = {
   lastPlayed: Date.now(),
-  lastSaveCatchUp: 0 as number | undefined,
+  lastSaveCatchUp: null as number | null,
   loading: false,
 }
 
@@ -16,8 +16,8 @@ export const metaSlice = createSlice({
       state.lastPlayed = now
       state.lastSaveCatchUp = now
     },
-    catchUpComplete: (state) => {
-      state.lastSaveCatchUp = undefined
+    clearCatchUpTime: (state) => {
+      state.lastSaveCatchUp = null
     },
     setLoading: (state, action) => {
       state.loading = action.payload
@@ -25,7 +25,7 @@ export const metaSlice = createSlice({
   },
 })
 
-export const { saveGame, catchUpComplete, setLoading } = metaSlice.actions
+export const { saveGame, clearCatchUpTime, setLoading } = metaSlice.actions
 
 export const selectLastSaveCatchUp = (state: RootState) => state.meta.lastSaveCatchUp
 export const selectLoading = (state: RootState) => state.meta.loading
