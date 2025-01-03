@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "tsx ./express-entry.ts",
     "build": "vite build",
-    "start": "cross-env NODE_ENV=production tsx ./express-entry.ts",
+    "start": "NODE_ENV=production tsx ./express-entry.ts",
     "preview": "cross-env NODE_ENV=production tsx ./express-entry.ts",
     "lint": "eslint .",
     "sqlite:migrate": "tsx ./database/sqlite/schema/all.ts"
@@ -14,7 +14,6 @@
     "@universal-middleware/core": "^0.2.14",
     "@universal-middleware/express": "^0.2.10",
     "@vitejs/plugin-react": "^4.3.4",
-    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "lz-string": "^1.5.0",
@@ -35,6 +34,7 @@
     "@typescript-eslint/parser": "^8.19.0",
     "autoprefixer": "^10.4.20",
     "clsx": "^2.1.1",
+    "cross-env": "^7.0.3",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
