@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "tsx ./express-entry.ts",
-    "build": "vite build",
+    "build": "vite build --base=/public/",
     "start": "cross-env NODE_ENV=production tsx ./express-entry.ts",
     "preview": "cross-env NODE_ENV=production tsx ./express-entry.ts",
     "lint": "eslint .",
