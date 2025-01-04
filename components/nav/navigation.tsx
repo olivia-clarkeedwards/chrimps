@@ -15,7 +15,7 @@ export default function Navigation() {
         <NavigationLinkButton text="Achievements" onClick={() => setViewAchievements(true)} />
       </div>
       <div className="flex flex-wrap gap-3 items-center">
-        <NavigationLinkButton text="Options" onClick={() => setViewOptions(true)} />
+        {/* <NavigationLinkButton text="Options" onClick={() => setViewOptions(true)} /> */}
       </div>
       <ReactModal
         isOpen={viewAchievements}
