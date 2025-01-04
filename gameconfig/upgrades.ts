@@ -45,5 +45,5 @@ export const playerCalc: PlayerCalc = {
   clickDamage: (clickLevel, clickMultiUpgradeCount, pDamage, achievementModifier) =>
     clickLevel * Math.pow(2, clickMultiUpgradeCount) * pDamage * achievementModifier,
   dotDamage: (dotLevel, dotMultiUpgradeCount, pDamage, achievementModifier) =>
-    dotLevel * Math.pow(2, dotMultiUpgradeCount) * pDamage * achievementModifier,
+    dotLevel * 2 * Math.pow(2, dotMultiUpgradeCount) * pDamage * achievementModifier,
 }
