@@ -3,10 +3,5 @@ import { defineConfig } from "vite"
 import vike from "vike/plugin"
 
 export default defineConfig({
-  plugins: [
-    vike(),
-    // {prerender: false,
-    // disableAutoFullBuild: true,}
-    react(),
-  ],
+  plugins: [vike({ prerender: true }), react()],
 })

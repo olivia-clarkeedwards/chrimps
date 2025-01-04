@@ -8,10 +8,6 @@ export default {
   image: logoURL,
   favicon: logoURL,
   ssr: false,
-  prerender: false,
   passToClient: ["user"],
   extends: vikeReact,
-  stream: false,
-  clientRouting: true,
-  hydrationCanBeAborted: true,
 } satisfies Config
