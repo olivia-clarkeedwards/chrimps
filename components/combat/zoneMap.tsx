@@ -18,7 +18,6 @@ export default function ZoneMap() {
   const isFarmZone = zoneInView === farmZoneNumber
   const zoneLength = isFarmZone ? farmZoneLength : currentZoneLength
   const stages = Array.from({ length: zoneLength }, (cur, acc) => acc + 1)
-  console.log(stages)
 
   const currentStage = isFarmZone && farmZoneMonsters ? farmStageNumber : stageNumber
   const monsters = isFarmZone && farmZoneMonsters ? farmZoneMonsters : zoneMonsters
