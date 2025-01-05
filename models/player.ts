@@ -30,5 +30,5 @@ export interface PlayerState {
   plasmaSpent: number
   startDate: number
   pDamageUpgradeCount: number
-  pHealthUpgradeCount: number
+  // pHealthUpgradeCount: number
 }

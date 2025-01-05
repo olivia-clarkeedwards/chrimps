@@ -32,7 +32,7 @@ const debugState: PlayerState = {
 
   startDate: performance.timeOrigin,
   pDamageUpgradeCount: 300,
-  pHealthUpgradeCount: 300,
+  // pHealthUpgradeCount: 300,
   plasmaSpent: 50000,
 }
 
@@ -61,7 +61,7 @@ const initialState: PlayerState = {
   startDate: performance.timeOrigin,
   plasma: 0,
   pDamageUpgradeCount: 0,
-  pHealthUpgradeCount: 0,
+  // pHealthUpgradeCount: 0,
   plasmaSpent: 0,
 }
 
@@ -104,7 +104,7 @@ export const playerSlice = createSlice({
       state.pDamageUpgradeCount++
     },
     incrementPHealthUpgradeCount: (state) => {
-      state.pHealthUpgradeCount++
+      // state.pHealthUpgradeCount++
     },
     prestigeRespec: (state) => {
       state.plasma += state.plasmaReserved
@@ -112,7 +112,7 @@ export const playerSlice = createSlice({
       state.plasmaReserved = 0
       state.plasmaSpent = 0
       state.pDamageUpgradeCount = 0
-      state.pHealthUpgradeCount = 0
+      // state.pHealthUpgradeCount = 0
     },
     increaseAchievementModifier(state, action: PayloadAction<number>) {
       // Integer conversion to avoid floating-point imprecision
@@ -154,7 +154,7 @@ export const playerSlice = createSlice({
       state.tabInView = "upgrade"
 
       state.pDamageUpgradeCount += action.payload.damage.purchaseCount
-      state.pHealthUpgradeCount += action.payload.health.purchaseCount
+      // state.pHealthUpgradeCount += action.payload.health.purchaseCount
     })
     // builder.addCase("stats/zoneTenCompleted", (state) => {})
   },
@@ -191,7 +191,7 @@ export const selectPrestigeState = createSelector([(state: RootState) => state.p
   plasma: player.plasma,
   plasmaSpent: player.plasmaSpent,
   pDamageUpgradeCount: player.pDamageUpgradeCount,
-  pHealthUpgradeCount: player.pHealthUpgradeCount,
+  // pHealthUpgradeCount: player.pHealthUpgradeCount,
 }))
 
 export const selectInitState = createSelector(
