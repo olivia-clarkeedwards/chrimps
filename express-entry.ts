@@ -19,6 +19,8 @@ export default (await startServer()) as unknown
 async function startServer() {
   const app = express()
 
+  // TODO: Add https://github.com/vikejs/vike-node
+
   if (process.env.NODE_ENV === "production") {
     app.use(express.static(`${root}/dist/client`))
   } else {
