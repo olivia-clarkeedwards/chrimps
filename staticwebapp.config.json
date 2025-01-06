@@ -1,0 +1,11 @@
+{
+  "routes": [
+    {
+      "route": "/*.{jpg,jpeg,png,gif,svg,webp}",
+      "headers": {
+        "cache-control": "public, max-age=14400, immutable",
+        "x-test-header": "test-value"
+      }
+    }
+  ]
+}
