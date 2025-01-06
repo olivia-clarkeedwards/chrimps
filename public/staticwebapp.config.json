@@ -1,0 +1,16 @@
+{
+  "routes": [
+    {
+      "route": "/assets/icons/*.{jpg,jpeg,png,gif,svg,webp}",
+      "headers": {
+        "cache-control": "public, max-age=14400, immutable"
+      }
+    },
+    {
+      "route": "/assets/monsters/*.{jpg,jpeg,png,gif,svg,webp}",
+      "headers": {
+        "cache-control": "public, max-age=14400, immutable"
+      }
+    }
+  ]
+}
