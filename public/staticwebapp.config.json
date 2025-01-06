@@ -1,28 +1,10 @@
 {
   "routes": [
     {
-      "route": "/*.{jpg,jpeg,png,gif,svg,webp}",
+      "route": "/*",
       "headers": {
-        "cache-control": "public, max-age=14400, immutable",
-        "x-test-header": "test-value"
-      }
-    },
-    {
-      "route": "/assets/icons/*.{jpg,jpeg,png,gif,svg,webp}",
-      "headers": {
-        "cache-control": "public, max-age=14400, immutable"
-      }
-    },
-    {
-      "route": "/assets/monsters/*.{jpg,jpeg,png,gif,svg,webp}",
-      "headers": {
-        "cache-control": "public, max-age=14400, immutable"
+        "cache-control": "public, max-age=14400"
       }
     }
-  ],
-  "globalHeaders": {
-    "/assets/monsters/*": {
-      "cache-control": "public, max-age=14400, immutable"
-    }
-  }
+  ]
 }
