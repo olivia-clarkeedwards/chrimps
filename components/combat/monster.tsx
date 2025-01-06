@@ -87,12 +87,12 @@ export default function Monster({ children }: PropsWithChildren) {
     [checkAchievements],
   )
 
-  const dealDamageOverTime = useCallback(() => {
+  const dealDamageOverTime = () => {
     if (dotDamage) {
       const damageThisTick = dotDamage / 20
       dispatch(updateDotDamageDealt(damageThisTick))
     }
-  }, [dotDamage])
+  }
 
   const onMonsterDeath = () => {
     const {
