@@ -33,7 +33,16 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
     return costs[upgradeName][upgradeCount]
   },
   prestige: [
-    { id: "damage", title: "Damage", basePrice: 2, additiveInc: 1, modifier: 0.05, unlocked: true, tooltip: "" },
+    {
+      id: "damage",
+      title: "Damage",
+      description: "Increased by",
+      basePrice: 2,
+      additiveInc: 1,
+      modifier: 0.05,
+      unlocked: true,
+      tooltip: "Increase damage by 5%",
+    },
     // { id: "health", title: "Health", basePrice: 2, additiveInc: 1, modifier: 0.05, unlocked: true, tooltip: "" },
   ],
   calcAdditiveCost(atLevel, prestigeUpgrade) {

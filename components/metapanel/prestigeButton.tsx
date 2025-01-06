@@ -40,7 +40,7 @@ export default function PrestigeButton({ config, onClick: onUpdatePurchase, hidd
     setToPurchase(toPurchase + 1)
     setTotalCost(newTotalCost)
   }
-
+  console.log(upgradeCount)
   return (
     <button
       key={config.id}
@@ -54,17 +54,22 @@ export default function PrestigeButton({ config, onClick: onUpdatePurchase, hidd
         "hover:bg-cyan-700/80 hover:shadow-cyan-500/40 disabled:bg-cyan-800/50 disabled:shadow-none disabled:text-gray-300/80 disabled:border-black",
       )}>
       <div className="relative flex flex-col items-center">
-        <span className="text-2xl font-extrabold"> {config.title}</span>
-        <span>
+        <h3 className="text-2xl font-extrabold"> {config.title}</h3>
+        {upgradeCount > 0 && (
+          <p>
+            {config.description}: {Math.round(config.modifier * 100) * upgradeCount}%
+          </p>
+        )}
+        <p>
           Level: {upgradeCount} {toPurchase > 0 && `(+${toPurchase})`}
-        </span>
-        <span className="flex">
+        </p>
+        <p className="flex">
           Price:{" "}
           <span className={clsx("flex", isAffordable ? "text-blue-200" : "text-red-500")}>
             {<span className="self-center -mr-[0.18rem]">{MinPlasmaIcon()}</span>}
             {purchasePrice}
           </span>
-        </span>
+        </p>
       </div>
     </button>
   )

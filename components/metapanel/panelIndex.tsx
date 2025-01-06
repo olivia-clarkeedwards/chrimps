@@ -45,12 +45,12 @@ export default function PanelIndex() {
               key={tab.id}
               onClick={() => dispatch(setTabInView(tab.id))}
               className={clsx(
-                "flex cursor-hand items-center shadow-panel-t-1 w-full px-4 py-1.5 text-lg rounded-t-lg",
+                "flex cursor-hand items-center shadow-panel-t-1 w-full px-4 py-1.5 rounded-t-lg",
                 activeTab === tab.id
                   ? "bg-gradient-to-b from-amber-400 to-orange-500 border-[3px] border-amber-800 text-white"
                   : "bg-gradient-to-b from-amber-600 to-orange-700 border-[3px] border-black/60 hover:from-amber-400/90 hover:to-orange-500/90 text-orange-900",
               )}>
-              {tab.title}
+              <h2 className="text-lg">{tab.title}</h2>
             </button>
           ))}
         </div>
