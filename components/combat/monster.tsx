@@ -7,7 +7,7 @@ import {
   selectDotDamage,
   selectPlayerState,
 } from "../../redux/playerSlice"
-import { selectMonsterAlive, selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
+import { monsterSlice, selectMonsterAlive, selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
 import {
   incrementKillCount,
   updateDotDamageDealt,
@@ -40,13 +40,16 @@ export default function Monster({ children }: PropsWithChildren) {
   const zoneLength = ZONE_CONFIG.length
   const {
     currentZoneNumber: currentZone,
+    stageNumber: currentStageNumber,
+    zoneMonsters,
     isFarming,
     farmZoneMonsters,
     farmZoneNumber,
     zoneInView,
   } = useAppSelector(selectZoneState)
 
-  const { monsterName, monsterPlasmaValue, monsterImage, monsterAlive } = useAppSelector(selectMonsterState)
+  const { monsterName, monsterPlasmaValue, monsterLevel, monsterImage, monsterAlive } =
+    useAppSelector(selectMonsterState)
 
   const tickCount = useRef(0)
   const lastFrameTime = useRef(performance.now())
@@ -157,11 +160,20 @@ export default function Monster({ children }: PropsWithChildren) {
   }
 
   useEffect(() => {
-    // Zone in view changed due to progression; do nothing
-    if (currentZone === zoneInView && !isFarming) return
-
     let nextMonster: undefined | EnemyState
-    // Zone in view changed due to farming toggle or zone selector; spawn monster from another zone
+
+    if (currentZone === zoneInView && !isFarming) {
+      const monsterFromThisZone = monsterLevel >= currentZone * 30 - 29
+      // If zone in view changed due to progression, do nothing; else return currentZone to view
+      if (monsterFromThisZone) {
+        return
+      } else {
+        nextMonster = zoneMonsters[currentStageNumber - 1]
+      }
+    }
+
+    // Zone in view changed due to farming toggle or previous zone selection
+    // Spawn monster from another zone
     if (farmZoneNumber === zoneInView && farmZoneMonsters) {
       nextMonster = farmZoneMonsters[0]
     }
