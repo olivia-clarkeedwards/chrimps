@@ -19,7 +19,6 @@ const debugState: PlayerState = {
   achievementModifier: 0,
 
   plasmaReserved: 0,
-  hasEarnedPlasma: true,
   hasInitClickMulti1: false,
   hasInitClickMulti2: false,
   hasInitClickMulti3: false,
@@ -46,7 +45,6 @@ const initialState: PlayerState = {
 
   plasmaReserved: 0,
   // Prevents animation triggering again on mount
-  hasEarnedPlasma: false,
   hasInitClickMulti1: false,
   hasInitClickMulti2: false,
   hasInitClickMulti3: false,
@@ -89,7 +87,6 @@ export const playerSlice = createSlice({
     },
     increasePlasma(state, action: PayloadAction<number>) {
       state.plasma += action.payload
-      state.hasEarnedPlasma = true
     },
     reservePlasma(state, action: PayloadAction<number>) {
       const diff = action.payload - state.plasmaReserved
@@ -243,8 +240,8 @@ export const selectDotLevelUpCost = (state: RootState) => UPGRADE_CONFIG.dot.lev
 
 export const selectTabInView = (state: RootState) => state.player.tabInView
 export const selectPrestigeTabVisible = createSelector(
-  [(state: RootState) => state.player.hasEarnedPlasma],
-  (hasEarnedPlasma) => hasEarnedPlasma === true,
+  [selectPlasma, selectPlasmaReserved, (state: RootState) => state.player.plasmaSpent],
+  (plasma, plasmaReserved, plasmaSpent) => plasma || plasmaReserved || plasmaSpent > 0,
 )
 
 export const updateClickDamage = (whatChanged: string) => (dispatch: AppDispatch, getState: () => RootState) => {

@@ -23,7 +23,7 @@ export default function CombatIndex() {
   const [hasFadedIn, setHasFadedIn] = useState(false)
 
   useEffect(() => {
-    if (currentZoneNumber > 5) {
+    if (currentZoneNumber > 5 && !hasFadedIn) {
       setHasFadedIn(true)
     } else if (currentZoneNumber > 4 && !shouldMount) {
       setShouldMount(true)
