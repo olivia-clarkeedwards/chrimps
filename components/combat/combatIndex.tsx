@@ -20,9 +20,12 @@ export default function CombatIndex() {
 
   const [shouldMount, setShouldMount] = useState(false)
   const [fadeIn, setFadeIn] = useState(false)
+  const [hasFadedIn, setHasFadedIn] = useState(false)
 
   useEffect(() => {
-    if (currentZoneNumber > 4 && !shouldMount) {
+    if (currentZoneNumber > 5) {
+      setHasFadedIn(true)
+    } else if (currentZoneNumber > 4 && !shouldMount) {
       setShouldMount(true)
       const timeout = setTimeout(() => setFadeIn(true), 350)
       return () => clearTimeout(timeout)
@@ -33,7 +36,12 @@ export default function CombatIndex() {
     <div className={clsx("flex flex-col lg:min-h-[89svh] lg:-ml-5 lg:basis-2/5 text-white overflow-y-auto")}>
       {currentZoneNumber > 4 && (
         <div
-          className={clsx("flex justify-center transition-opacity opacity-0 duration-1000", fadeIn && "opacity-100")}>
+          className={clsx(
+            "flex justify-center opacity-0 duration-1000",
+            shouldMount ? "transition-opacity" : "transition-none",
+            fadeIn && "opacity-100",
+            hasFadedIn && "opacity-100 transition-none",
+          )}>
           <ZoneSelector />
         </div>
       )}
@@ -42,9 +50,9 @@ export default function CombatIndex() {
           "flex flex-col h-full items-center relative overflow-y-auto",
           currentZoneNumber > 4 ? "justify-normal" : "justify-evenly",
         )}>
-        {/* <div className="absolute top-0 left-0 w-7 h-7 z-20 opacity-10 fill-white" onClick={debug}>
+        <div className="absolute top-0 left-0 w-7 h-7 z-20 opacity-10 fill-white" onClick={debug}>
           {CookieEnjoyerIcon()}
-        </div> */}
+        </div>
         {currentZoneNumber > 4 && (
           <div className={clsx("transition-opacity opacity-0 duration-300", fadeIn && "opacity-100")}>
             <FarmToggle />
