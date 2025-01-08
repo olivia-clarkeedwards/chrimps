@@ -4,7 +4,7 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
   click: {
     visibleAtZone: 1,
     elementId: "click-multi",
-    costKey: "clickMultiCosts",
+    displayName: "Click Damage",
     MultiCosts: [100, 400, 1000],
     levelUpCost: (currentLevel) => {
       const base = 10
@@ -16,7 +16,7 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
   dot: {
     visibleAtZone: 3,
     elementId: "dot-multi",
-    costKey: "dotMultiCosts",
+    displayName: "Damage Over Time",
     MultiCosts: [5000, 10000, 25000],
     levelUpCost: (currentLevel) => {
       const base = 500

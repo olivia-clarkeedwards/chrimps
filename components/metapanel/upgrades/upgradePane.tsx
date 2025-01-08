@@ -86,14 +86,14 @@ export default function UpgradePane({ config, damage, multiIcons, onUpgrade, onL
   return (
     <div
       className={clsx(
-        "flex w-full items-start justify-between align-start py-4 px-4 border-amber-950 transition-opacity duration-1000",
+        "flex w-full items-start justify-between align-start py-4 px-4 gap-2 border-amber-950 transition-opacity duration-1000",
         upgradeName === "click" ? "border-y-2" : "border-b-2",
         isVisible && isNotClick && "opacity-100",
         !animationComplete && !isVisible && isNotClick && "opacity-0",
         animationComplete && "opacity-100 transition-none",
       )}>
       <div className="flex flex-col w-40 items-center">
-        <div className="">{`${upgradeName[0].toUpperCase()}${upgradeName.substring(1)} Damage`}</div>
+        <div className="">{config.displayName}</div>
         <div className="self-center">{Math.round(damage)}</div>
         <div className="flex gap-2.5 pt-1">
           {multiIcons.map((icon, i) => (

@@ -17,7 +17,7 @@ export interface UpgradeElement {
 export interface Upgrade {
   visibleAtZone: number
   elementId: UpgradeId
-  costKey: CostKey
+  displayName: string
   MultiCosts: number[]
   levelUpCost: (currentLevel: number) => number
 }
