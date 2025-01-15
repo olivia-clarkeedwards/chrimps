@@ -1,5 +1,5 @@
-import React from "react"
 import clsx from "clsx/lite"
+import coinURL from "/assets/icons/coin.png"
 
 interface LevelUpProps {
   id: string
@@ -17,9 +17,8 @@ export default function LevelUpButton({ id, onClick, currentLevel, levelUpCost, 
           disabled={!isAffordable}
           id={id}
           className={clsx(
-            // This buttons frame has a nice texture when disabled, need to find way to reproduce it when enabled
             // Base
-            "flex flex-col items-center py-2 px-4 min-w-32 text-white font-bold",
+            "flex flex-col items-center py-2 px-4 min-w-32 text-white cursor-hand",
             "border-2 border-amber-300",
             "transition-all duration-75",
             "shadow-[0_0_8px_0px_rgba(251,191,36,0.9),inset_0_0_4px_-1px_rgba(251,191,36,0.8)]",
@@ -38,7 +37,7 @@ export default function LevelUpButton({ id, onClick, currentLevel, levelUpCost, 
           onClick={onClick}>
           <span>Level {currentLevel}</span>
           <span>
-            <img className="w-[1.4rem] inline-block self-center" src="/icons/coin.png" alt="gold coin" /> {levelUpCost}
+            <img className="w-[1.4rem] inline-block self-center" src={`${coinURL}`} alt="gold coin" /> {levelUpCost}
           </span>
         </button>
       </div>{" "}

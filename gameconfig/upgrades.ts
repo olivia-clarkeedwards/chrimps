@@ -4,8 +4,8 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
   click: {
     visibleAtZone: 1,
     elementId: "click-multi",
-    costKey: "clickMultiCosts",
-    costs: [100, 400, 1000],
+    displayName: "Click Damage",
+    MultiCosts: [100, 400, 1000],
     levelUpCost: (currentLevel) => {
       const base = 10
       const growthRate = 1.1
@@ -16,8 +16,8 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
   dot: {
     visibleAtZone: 3,
     elementId: "dot-multi",
-    costKey: "dotMultiCosts",
-    costs: [5000, 10000, 25000],
+    displayName: "Damage Over Time",
+    MultiCosts: [5000, 10000, 25000],
     levelUpCost: (currentLevel) => {
       const base = 500
       const growthRate = 1.1
@@ -27,17 +27,32 @@ export const UPGRADE_CONFIG: UpgradeConfig = {
   },
   calcMultiCost: function (upgradeName, upgradeCount) {
     const costs = {
-      "click-multi": this.click.costs,
-      "dot-multi": this.dot.costs,
+      "click-multi": this.click.MultiCosts,
+      "dot-multi": this.dot.MultiCosts,
     }
     return costs[upgradeName][upgradeCount]
+  },
+  prestige: [
+    {
+      id: "damage",
+      title: "Damage",
+      description: "Increased by",
+      basePrice: 2,
+      additiveInc: 1,
+      modifier: 0.05,
+      unlocked: true,
+      tooltip: "Increase damage by 5%",
+    },
+    // { id: "health", title: "Health", basePrice: 2, additiveInc: 1, modifier: 0.05, unlocked: true, tooltip: "" },
+  ],
+  calcAdditiveCost(atLevel, prestigeUpgrade) {
+    return (((atLevel - 1) * atLevel) / 2) * prestigeUpgrade.additiveInc + prestigeUpgrade.basePrice * atLevel
   },
 }
 
 export const playerCalc: PlayerCalc = {
-  clickDamage: (clickLevel, clickMultiUpgradeCount) => clickLevel * Math.pow(2, clickMultiUpgradeCount),
-  dotDamage: function (dotLevel, dotMultiUpgradeCount) {
-    const damagePerSecond = dotLevel * Math.pow(2, dotMultiUpgradeCount)
-    return damagePerSecond
-  },
+  clickDamage: (clickLevel, clickMultiUpgradeCount, pDamage, achievementModifier) =>
+    clickLevel * Math.pow(2, clickMultiUpgradeCount) * pDamage * achievementModifier,
+  dotDamage: (dotLevel, dotMultiUpgradeCount, pDamage, achievementModifier) =>
+    dotLevel * 2 * Math.pow(2, dotMultiUpgradeCount) * pDamage * achievementModifier,
 }

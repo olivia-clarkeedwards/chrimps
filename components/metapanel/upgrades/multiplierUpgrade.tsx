@@ -1,26 +1,49 @@
-import React, { useEffect, useState } from "react"
 import clsx from "clsx/lite"
+import { useEffect, useState } from "react"
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
+import { initialiseElement } from "../../../redux/playerSlice"
+import { UpgradeIdWithLevel } from "../../../models/upgrades"
+import { initSelectorMap } from "../../../gameconfig/utils"
 
 interface MultiplierProps {
-  id: string
+  id: UpgradeIdWithLevel
   icon: JSX.Element
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void
+  onClick: (e: React.MouseEvent<HTMLDivElement>, hidden: boolean, cost: number, isAffordable: boolean) => void
+  cost: number
   isAffordable: boolean
   isPurchased: boolean
   hidden: boolean
 }
 
-export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAffordable, isPurchased }: MultiplierProps) {
+export default function MultiplierUpgrade({
+  id,
+  icon,
+  onClick: onUpgrade,
+  hidden,
+  cost,
+  isAffordable,
+  isPurchased,
+}: MultiplierProps) {
+  const dispatch = useAppDispatch()
+
   const [shouldMount, setShouldMount] = useState(false)
   const [shimmer, setShimmer] = useState(false)
+  const thisSelector = initSelectorMap[id]
+  const hasInitialised = useAppSelector(thisSelector)
 
   useEffect(() => {
+    if (hasInitialised) return undefined
+
     if (!hidden && !shouldMount) {
       setShouldMount(true)
-      const timeout = setTimeout(() => setShimmer(true), 400)
+      const timeout = setTimeout(() => {
+        setShimmer(true)
+        dispatch(initialiseElement(id))
+      }, 400)
+
       return () => clearTimeout(timeout)
     }
-  }, [hidden])
+  }, [hidden, hasInitialised])
 
   return (
     <div
@@ -36,7 +59,7 @@ export default function MultiplierUpgrade({ id, icon, onClick, hidden, isAfforda
         "before:z-30",
         shimmer && "before:bg-[position:150%_0]",
       )}
-      onClick={onClick}>
+      onClick={(e) => onUpgrade(e, hidden, cost, isAffordable)}>
       <div
         className={clsx(
           // Base

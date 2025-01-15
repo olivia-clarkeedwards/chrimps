@@ -1,113 +1,96 @@
-import React from "react"
-import clsx from "clsx/lite"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import {
   decreaseGold,
-  incrementClickLevel,
-  incrementClickMultiUpgradeCount,
+  selectGCanAfford,
+  selectClickDamage,
+  selectDotDamage,
+  selectClickLevelUpCost,
+  selectDotLevelUpCost,
   selectGold,
-  selectClickLevel,
-  selectClickMultiUpgradeCount,
-  selectDotLevel,
-  selectDotMultiUpgradeCount,
-  incrementDotMultiUpgradeCount,
-  incrementDotLevel,
+  updateDotDamage,
+  updateClickDamage,
 } from "../../../redux/playerSlice"
-import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../svg/clickIcons"
-import { playerCalc, UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
-import { levelUpID, UpgradeId } from "../../../models/upgrades"
+import { ClickMultiIcon1, ClickMultiIcon2, ClickMultiIcon3 } from "../../../assets/svg/clickIcons"
+import { UPGRADE_CONFIG } from "../../../gameconfig/upgrades"
+import { LevelUpID } from "../../../models/upgrades"
 import UpgradePane from "./upgradePane"
-import { selectZoneNumber } from "../../../redux/zoneSlice"
+import Currency from "../currency"
+import { GoldIcon } from "../../../assets/svg/resourceIcons"
 
 export default function UpgradeIndex() {
   const dispatch = useAppDispatch()
 
-  const gold = useAppSelector(selectGold)
-  const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
-  const clickLevel = useAppSelector(selectClickLevel)
-  const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
-  const dotLevel = useAppSelector(selectDotLevel)
-  const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
-  const clickLevelUpCost = UPGRADE_CONFIG.click.levelUpCost(clickLevel)
-  const dotLevelUpCost = UPGRADE_CONFIG.dot.levelUpCost(dotLevel)
-  const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
-  const zone = useAppSelector(selectZoneNumber)
+  const clickDamage = useAppSelector(selectClickDamage)
+  const dotDamage = useAppSelector(selectDotDamage)
+  const clickLevelUpCost = useAppSelector(selectClickLevelUpCost)
+  const dotLevelUpCost = useAppSelector(selectDotLevelUpCost)
+  const goldSelector = selectGold
 
-  const canAffordClickLevelUp = gold >= clickLevelUpCost
-  const canAffordDotLevelUp = gold >= dotLevelUpCost
-  const LevelUpCosts = {
+  const LevelUp = {
     click: {
-      levelUpCost: clickLevelUpCost,
+      cost: clickLevelUpCost,
+      canAfford: useAppSelector(selectGCanAfford(clickLevelUpCost)),
+      action: updateClickDamage("levelup"),
     },
     dot: {
-      levelUpCost: dotLevelUpCost,
+      cost: dotLevelUpCost,
+      canAfford: useAppSelector(selectGCanAfford(dotLevelUpCost)),
+      action: updateDotDamage("levelup"),
     },
   }
 
-  function handleLevelUp(e: React.MouseEvent<HTMLButtonElement>) {
-    const levelUpId = e.currentTarget.id as levelUpID
+  function onLevelup(e: React.MouseEvent<HTMLButtonElement>) {
+    const levelUpId = e.currentTarget.id as LevelUpID
 
-    const cost = LevelUpCosts[levelUpId].levelUpCost
+    const { cost, canAfford, action } = LevelUp[levelUpId]
 
-    switch (levelUpId) {
-      case "click":
-        if (canAffordClickLevelUp) {
-          dispatch(incrementClickLevel())
-          dispatch(decreaseGold(cost))
-        }
-        break
-      case "dot":
-        if (canAffordDotLevelUp) {
-          dispatch(incrementDotLevel())
-          dispatch(decreaseGold(cost))
-        }
-        break
-      default:
-        throw new Error(`Unexpected levelup target ${levelUpId}`)
+    if (canAfford) {
+      dispatch(action)
+      dispatch(decreaseGold(cost))
+    } else {
+      throw new Error(`Unexpected levelup target ${levelUpId}`)
     }
   }
 
-  function handleUpgrade(e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>) {
+  function onUpgrade(
+    e: React.MouseEvent<HTMLImageElement> | React.MouseEvent<HTMLDivElement>,
+    hidden: boolean,
+    cost: number,
+    isAffordable: boolean,
+  ) {
     const [upgradeId, purchasedUpgradeLevel] = e.currentTarget.id.split(".")
-    const upgradeCount = upgradeId === "click-multi" ? clickMultiUpgradeCount : dotMultiUpgradeCount
+    const upgradeActions = {
+      "click-multi": updateClickDamage("multi"),
+      "dot-multi": updateDotDamage("multi"),
+    }
 
-    const cost = UPGRADE_CONFIG.calcMultiCost(upgradeId as UpgradeId, upgradeCount)
-
-    // This logic should soon be made generic
-    switch (upgradeId) {
-      case "click-multi":
-        if (gold >= cost && Number(purchasedUpgradeLevel) > clickMultiUpgradeCount) {
-          dispatch(incrementClickMultiUpgradeCount())
-          dispatch(decreaseGold(cost))
-        }
-        break
-      case "dot-multi":
-        if (gold >= cost && Number(purchasedUpgradeLevel) > dotMultiUpgradeCount) {
-          dispatch(incrementDotMultiUpgradeCount())
-          dispatch(decreaseGold(cost))
-        }
-        break
-      default:
-        throw new Error(`Unexpected upgrade target ${upgradeId}`)
+    if (isAffordable && !hidden) {
+      dispatch(upgradeActions[upgradeId as keyof typeof upgradeActions])
+      dispatch(decreaseGold(cost))
+    } else {
+      throw new Error(`Unexpected upgrade target ${upgradeId}`)
     }
   }
 
   return (
-    <div>
-      <UpgradePane
-        config={UPGRADE_CONFIG.click}
-        damage={clickDamage}
-        multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
-        onUpgrade={handleUpgrade}
-        onLevelUp={handleLevelUp}
-      />
-      <UpgradePane
-        config={UPGRADE_CONFIG.dot}
-        damage={dotDamage}
-        multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
-        onUpgrade={handleUpgrade}
-        onLevelUp={handleLevelUp}
-      />
-    </div>
+    <>
+      <Currency image={GoldIcon()} fontstyle="text-white font-outline-2" currencySelector={goldSelector} />
+      <div>
+        <UpgradePane
+          config={UPGRADE_CONFIG.click}
+          damage={clickDamage}
+          multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
+          onUpgrade={onUpgrade}
+          onLevelUp={onLevelup}
+        />
+        <UpgradePane
+          config={UPGRADE_CONFIG.dot}
+          damage={dotDamage}
+          multiIcons={[ClickMultiIcon1(), ClickMultiIcon2(), ClickMultiIcon3()]}
+          onUpgrade={onUpgrade}
+          onLevelUp={onLevelup}
+        />
+      </div>
+    </>
   )
 }

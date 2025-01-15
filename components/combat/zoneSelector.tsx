@@ -1,15 +1,14 @@
-import React from "react"
-import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import clsx from "clsx/lite"
-import { selectZoneInView, selectZoneNumber, zoneSelection } from "../../redux/zoneSlice"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { selectZoneState, zoneSelection } from "../../redux/zoneSlice"
 
 export default function ZoneSelector() {
   const dispatch = useAppDispatch()
-  const currentZone = useAppSelector(selectZoneNumber)
-  const zoneInView = useAppSelector(selectZoneInView)
+  const { currentZoneNumber, zoneInView } = useAppSelector(selectZoneState)
+
   const selectedZones = Array.from({ length: 5 }, (cur, acc) => acc + 1)
 
-  function handleZoneChange(e: React.MouseEvent<HTMLDivElement>) {
+  function handleZoneChange(e: React.MouseEvent<HTMLButtonElement>) {
     const [elementName, deltaSuffix] = e.currentTarget.id.split(".")
     const zoneDelta = Number(deltaSuffix) - 1
     dispatch(zoneSelection(zoneDelta))
@@ -19,12 +18,12 @@ export default function ZoneSelector() {
   const scaleSteps = ["scale-100", "scale-95", "scale-90", "scale-85", "scale-80"]
 
   return (
-    <div className="flex justify-around flex-row-reverse md:my-2 lg:mt-4 md:mb-10 md:mx-8 lg:mx-12 border-2 rounded-xl border-white bg-black bg-opacity-30 w-full gap-2 py-2 px-4">
+    <div className="flex justify-around flex-row-reverse h-20 md:mx-8 lg:my-2 lg:mx-12 border-2 rounded-xl border-white bg-black bg-opacity-30 w-full gap-2 py-2 px-4">
       {selectedZones.map((zoneIndex) => {
-        const thisZoneNumber = currentZone - zoneIndex + 1
+        const thisZoneNumber = currentZoneNumber - zoneIndex + 1
 
         return (
-          <div
+          <button
             key={`outer.${zoneIndex}`}
             id={`zone-delta.${zoneIndex}`}
             className={clsx(
@@ -36,12 +35,12 @@ export default function ZoneSelector() {
             <div
               key={`inner.${zoneIndex}`}
               className={clsx(
-                "flex justify-center h-full w-full bg-[url('/icons/meadow.jpg')] bg-no-repeat bg-cover text-black text-xl",
+                "flex justify-center h-full w-full bg-meadow bg-no-repeat bg-cover text-black text-xl",
                 opacitySteps[zoneIndex - 1],
               )}>
               {`${thisZoneNumber}`}
             </div>
-          </div>
+          </button>
         )
       })}
     </div>

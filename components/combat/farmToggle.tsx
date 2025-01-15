@@ -1,46 +1,34 @@
-import React, { useEffect, useState } from "react"
 import clsx from "clsx/lite"
-import { FarmToggleIcon } from "../svg/metaIcons"
+import { FarmToggleIcon } from "../../assets/svg/metaIcons"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { selectIsFarming, selectZoneNumber, toggleFarming } from "../../redux/zoneSlice"
+import { selectIsFarming, toggleFarming } from "../../redux/zoneSlice"
 
 export default function FarmToggle() {
   const dispatch = useAppDispatch()
-  const [hasTransitioned, setHasTransitioned] = useState(false)
-
   const isFarming = useAppSelector(selectIsFarming)
-  const currentZone = useAppSelector(selectZoneNumber)
 
   function handleFarmToggle(e: React.MouseEvent<HTMLDivElement>) {
     dispatch(toggleFarming())
   }
 
-  useEffect(() => {
-    if (!hasTransitioned) {
-      if (currentZone > 4) {
-        const timeout = setTimeout(() => {
-          setHasTransitioned(true)
-        }, 1000)
-        return () => clearTimeout(timeout)
-      }
-    }
-  }, [currentZone])
-
   return (
-    // Todo: migrate to tailwind 4.0 and use radial gradients for circular buttons
     <div
       className={clsx(
-        "absolute flex items-center justify-center w-10 h-10 right-2 top-1 bg-gradient-to-tr from-yellow-400/20 to-yellow-400 rounded-full opacity-0",
-        !hasTransitioned ? "transition-opacity duration-1000" : "transition-none",
-        currentZone > 4 && "opacity-100",
+        "absolute flex items-center justify-center right-3 top-1 rounded-full w-11 h-11 z-10 bg-gradient-to-tr",
+        isFarming ? "from-yellow-500/30 via-orange-500/30 to-white/80" : "from-yellow-500 via-orange-500 to-white/80",
       )}>
       <div
         className={clsx(
-          "w-8 h-8 -rotate-45 border border-2 border-[3px] rounded-full",
-          isFarming ? "fill-gray-700 border-gray-700 opacity-60" : "fill-white border-white",
-        )}
-        onClick={handleFarmToggle}>
-        {FarmToggleIcon()}
+          "flex items-center justify-center w-9 h-9 bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-gold via-lightgold to-white/50 rounded-full overflow-hidden",
+        )}>
+        <div
+          className={clsx(
+            "w-[1.8rem] h-[1.8rem]",
+            isFarming ? "fill-gray-700 border-gray-700 opacity-60" : "fill-islam border-gray-100",
+          )}
+          onClick={handleFarmToggle}>
+          {FarmToggleIcon()}
+        </div>
       </div>
     </div>
   )

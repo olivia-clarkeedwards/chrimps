@@ -1,12 +1,11 @@
 // https://vike.dev/Head
 
-import React from "react"
-import logoUrl from "../assets/logo.svg"
-console.log(logoUrl)
 export default function HeadDefault() {
   return (
     <>
-      <link rel="icon" href={logoUrl} />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+      <link href="https://fonts.googleapis.com/css2?family=Sigmar&display=swap" rel="stylesheet" />
     </>
   )
 }

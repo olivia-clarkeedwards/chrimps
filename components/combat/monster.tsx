@@ -1,77 +1,55 @@
-import React, { PropsWithChildren, useCallback, useEffect, useRef } from "react"
+import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import {
   increaseGold,
-  selectClickLevel,
-  selectClickMultiUpgradeCount,
-  selectDotLevel,
-  selectDotMultiUpgradeCount,
+  increasePlasma,
+  selectClickDamage,
+  selectDotDamage,
+  selectPlayerState,
 } from "../../redux/playerSlice"
-import { playerCalc } from "../../gameconfig/upgrades"
+import { monsterSlice, selectMonsterAlive, selectMonsterState, spawnMonster } from "../../redux/monsterSlice"
 import {
-  selectMonsterAlive,
-  selectMonsterGoldValue,
-  selectMonsterImage,
-  selectMonsterName,
-  spawnMonster,
-  takeDamage,
-} from "../../redux/monsterSlice"
-import {
-  increaseTotalClickDamageDealt,
-  increaseTotalDotDamageDealt,
-  incrementClickCount,
-  incrementHighestZone,
-  incrementHighestZoneEver,
   incrementKillCount,
-  incrementZonesCompleted,
-  selectHighestZone,
-  selectHighestZoneEver,
+  updateDotDamageDealt,
+  updateMonsterClicked,
+  updateFarmZonesCompleted,
+  updateZone,
 } from "../../redux/statsSlice"
-import {
-  incrementStageNumber,
-  zoneComplete as zoneComplete,
-  selectFarmZoneMonsters,
-  selectFarmZoneNumber,
-  selectIsFarming,
-  selectStage,
-  selectZoneInView,
-  selectZoneMonsters,
-  selectZoneNumber,
-  refreshFarmZone,
-  selectFarmStage,
-  setZoneInView,
-} from "../../redux/zoneSlice"
+import { selectZoneState, incrementStageNumber, refreshFarmZone, setZoneInView } from "../../redux/zoneSlice"
 import { ZONE_CONFIG } from "../../gameconfig/zone"
 import { store } from "../../redux/store"
 import { EnemyState } from "../../models/monsters"
-import FarmToggle from "./farmToggle"
+import { clearCatchUpTime, saveGame, selectLastSaveCatchUp, selectLoading, setLoading } from "../../redux/metaSlice"
 
 export default function Monster({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
 
-  const clickLevel = useAppSelector(selectClickLevel)
-  const clickMultiUpgradeCount = useAppSelector(selectClickMultiUpgradeCount)
-  const clickDamage = playerCalc.clickDamage(clickLevel, clickMultiUpgradeCount)
-  const dotLevel = useAppSelector(selectDotLevel)
-  const dotMultiUpgradeCount = useAppSelector(selectDotMultiUpgradeCount)
-  const dotDamage = playerCalc.dotDamage(dotLevel, dotMultiUpgradeCount)
+  const { clickLevel } = useAppSelector(selectPlayerState)
+  const clickDamage = useAppSelector(selectClickDamage)
+  const dotDamage = useAppSelector(selectDotDamage)
+  const lastSaveCatchUp = useAppSelector(selectLastSaveCatchUp)
+  const loading = useAppSelector(selectLoading)
+
+  const lastSaveCatchUpRef = useRef(lastSaveCatchUp)
+
+  // Interface between requestAnimationFrame and React to prevent infinite catchup loops
+  useEffect(() => {
+    lastSaveCatchUpRef.current = lastSaveCatchUp
+  }, [lastSaveCatchUp])
 
   const zoneLength = ZONE_CONFIG.length
-  const currentStage = useAppSelector(selectStage)
-  const currentZone = useAppSelector(selectZoneNumber)
-  const farmZoneNumber = useAppSelector(selectFarmZoneNumber)
-  const farmStageNumber = useAppSelector(selectFarmStage)
-  const zoneInView = useAppSelector(selectZoneInView)
-  const isFarming = useAppSelector(selectIsFarming)
-  const highestZoneEver = useAppSelector(selectHighestZoneEver)
-  const highestZone = useAppSelector(selectHighestZone)
-  const monsters = useAppSelector(selectZoneMonsters)
-  const farmZoneMonsters = useAppSelector(selectFarmZoneMonsters)
+  const {
+    currentZoneNumber: currentZone,
+    stageNumber: currentStageNumber,
+    zoneMonsters,
+    isFarming,
+    farmZoneMonsters,
+    farmZoneNumber,
+    zoneInView,
+  } = useAppSelector(selectZoneState)
 
-  const monsterName = useAppSelector(selectMonsterName)
-  const monsterImage = useAppSelector(selectMonsterImage)
-  const monsterValue = useAppSelector(selectMonsterGoldValue)
-  const monsterAlive = useAppSelector(selectMonsterAlive)
+  const { monsterName, monsterPlasmaValue, monsterLevel, monsterImage, monsterAlive } =
+    useAppSelector(selectMonsterState)
 
   const tickCount = useRef(0)
   const lastFrameTime = useRef(performance.now())
@@ -79,76 +57,228 @@ export default function Monster({ children }: PropsWithChildren) {
   const TICK_RATE = 20
   const TICK_TIME = 1000 / TICK_RATE
 
-  const checkAchievements = useCallback(() => {
-    if (clickLevel > 5) {
-      console.log("Achievement unlocked: Click level")
-    }
-  }, [clickLevel])
-  const runTasks = useCallback(() => {
-    // 200ms
-    if (tickCount.current % 4 === 0) {
-    }
+  const checkAchievements = useCallback(() => {}, [clickLevel])
+  const runTasks = useCallback(
+    (catchup?: boolean) => {
+      // 200ms
+      if (tickCount.current % 4 === 0) {
+      }
 
-    // 500ms
-    if (tickCount.current % 10 === 0) {
-    }
+      // 500ms
+      if (tickCount.current % 10 === 0) {
+      }
 
-    // 1 second
-    if (tickCount.current % 20 === 0) {
-      checkAchievements()
-    }
+      // 1 second
+      if (tickCount.current % 20 === 0) {
+        checkAchievements()
+      }
 
-    // 2 seconds
-    if (tickCount.current % 40 === 0) {
-    }
+      // 2 seconds
+      if (tickCount.current % 40 === 0) {
+      }
 
-    // 10 seconds
-    if (tickCount.current % 200 === 0) {
-      // dispatch(updateLastPlayed)
-    }
-  }, [checkAchievements])
+      // 10 seconds
+      if (tickCount.current % 200 === 0) {
+        // dispatch(updateLastPlayed)
+      }
 
-  const dealDamageOverTime = useCallback(() => {
+      // 30 seconds
+      if (!catchup && tickCount.current % 600 === 0) {
+        dispatch(saveGame())
+      }
+    },
+    [checkAchievements],
+  )
+
+  const dealDamageOverTime = () => {
     if (dotDamage) {
       const damageThisTick = dotDamage / 20
-      dispatch(increaseTotalDotDamageDealt(damageThisTick))
-      dispatch(takeDamage(damageThisTick))
+      dispatch(updateDotDamageDealt(damageThisTick))
     }
-  }, [dotDamage])
+  }
+
+  const onMonsterDeath = () => {
+    const {
+      currentZoneNumber: currentZone,
+      zoneMonsters,
+      stageNumber: currentStage,
+      isFarming,
+      farmZoneMonsters,
+      farmStageNumber,
+      zoneInView,
+    } = selectZoneState(store.getState())
+    const { monsterGoldValue, monsterPlasmaValue } = selectMonsterState(store.getState())
+
+    dispatch(incrementKillCount())
+    dispatch(increaseGold(monsterGoldValue))
+    let nextMonster: undefined | EnemyState
+
+    const isProgressing = zoneInView === currentZone
+    const stageNumber = isProgressing ? currentStage : farmStageNumber
+
+    // Zone transition
+    if (stageNumber === zoneLength) {
+      // When highest zone
+      if (isProgressing) {
+        dispatch(updateZone())
+        if (currentZone > 9) dispatch(increasePlasma(monsterPlasmaValue))
+
+        // Highest zone & farming toggled; zone transition in place
+        if (isFarming) {
+          const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
+          if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
+        } else {
+          const newZoneMonsters = selectZoneState(store.getState()).zoneMonsters
+          nextMonster = newZoneMonsters[0]
+        }
+
+        // When farming and farming is toggled, continue; else goto zoneInView useEffect block
+      } else if (zoneInView < currentZone) {
+        dispatch(updateFarmZonesCompleted())
+        if (isFarming && farmZoneMonsters) {
+          dispatch(refreshFarmZone())
+          const newFarmZoneMonsters = selectZoneState(store.getState()).farmZoneMonsters
+          if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
+        } else if (!isFarming) {
+          dispatch(setZoneInView(currentZone))
+        } else throw new Error("Logic error during farm zone transition")
+      } else throw new Error("Logic error during highest zone transition")
+
+      // Stage transition case
+    } else {
+      dispatch(incrementStageNumber())
+      if (zoneInView < currentZone && farmZoneMonsters) {
+        nextMonster = farmZoneMonsters[stageNumber]
+      } else {
+        nextMonster = zoneMonsters[stageNumber]
+      }
+    }
+    // Spawn the next monster when we didn't jump to zoneInView transition
+    if (nextMonster) {
+      dispatch(spawnMonster(nextMonster))
+    }
+  }
+
+  useEffect(() => {
+    let nextMonster: undefined | EnemyState
+
+    if (currentZone === zoneInView && !isFarming) {
+      const monsterFromThisZone = monsterLevel >= currentZone * 30 - 29
+      // If zone in view changed due to progression, do nothing; else return currentZone to view
+      if (monsterFromThisZone) {
+        return
+      } else {
+        nextMonster = zoneMonsters[currentStageNumber - 1]
+      }
+    }
+
+    // Zone in view changed due to farming toggle or previous zone selection
+    // Spawn monster from another zone
+    if (farmZoneNumber === zoneInView && farmZoneMonsters) {
+      nextMonster = farmZoneMonsters[0]
+    }
+
+    if (nextMonster) {
+      dispatch(spawnMonster(nextMonster))
+    } else throw new Error("Monster undefined during zone transition")
+  }, [zoneInView])
+
+  const handleProgress = useCallback(
+    (delta: number): number => {
+      while (delta >= TICK_TIME) {
+        tickCount.current++
+
+        dealDamageOverTime()
+        // More than 30 seconds behind, use catchup flag to prevent save spam
+        if (delta >= 30000) {
+          runTasks(true)
+        } else {
+          runTasks()
+        }
+        const monsterDied = selectMonsterAlive(store.getState()) === false
+        if (monsterDied) onMonsterDeath()
+
+        if (lastSaveCatchUpRef.current && delta <= 100) dispatch(clearCatchUpTime())
+        delta -= TICK_TIME
+      }
+      return delta
+    },
+    [tickCount, dealDamageOverTime, runTasks, store, onMonsterDeath, dispatch],
+  )
+
+  const handleOfflineProgress = useCallback(
+    async (delta: number, long?: boolean): Promise<number> => {
+      dispatch(setLoading(true))
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      try {
+        if (long) {
+          // TODO: Fullscreen catchup with asynchronous break
+          // Split into chunks, await new Promise(resolve => setTimeout(resolve, 0))
+          console.warn("Reduced offline progression to 1 hour because long catchup is yet to be implemented")
+          delta = 3600000
+          delta = handleProgress(delta)
+        } else {
+          // console.log("Processing offline ticks:", delta / TICK_RATE)
+          delta = handleProgress(delta)
+        }
+      } catch (err) {
+        console.error("Offline progress failed:", err)
+      } finally {
+        dispatch(setLoading(false))
+      }
+      return delta
+    },
+
+    [saveGame, handleProgress],
+  )
 
   const gameLoop = useCallback(
     (currentTime: number) => {
-      let delta = currentTime - lastFrameTime.current
-
-      // Todo: if delta > [a large number] then do fullscreen catchup
-
-      while (delta >= TICK_TIME) {
-        tickCount.current++
-        dealDamageOverTime()
-        runTasks()
-        delta -= TICK_TIME
+      let delta: number
+      if (lastSaveCatchUpRef.current) {
+        delta = Date.now() - lastSaveCatchUpRef.current
+        dispatch(clearCatchUpTime())
+      } else {
+        delta = currentTime - lastFrameTime.current
       }
 
-      lastFrameTime.current = currentTime - delta
-      frameRef.current = requestAnimationFrame(gameLoop)
+      const handleCatchUp = async () => {
+        delta = delta > 3600000 ? await handleOfflineProgress(delta, true) : await handleOfflineProgress(delta)
+        lastFrameTime.current = currentTime - (delta % TICK_TIME)
+        frameRef.current = requestAnimationFrame(gameLoop)
+      }
+
+      if (delta <= 600000) {
+        delta = handleProgress(delta)
+        lastFrameTime.current = currentTime - (delta % TICK_TIME)
+        frameRef.current = requestAnimationFrame(gameLoop)
+        if (loading) dispatch(setLoading(false))
+        return
+      }
+
+      handleCatchUp()
     },
-    [dealDamageOverTime, runTasks],
+    [onMonsterDeath, handleOfflineProgress, handleProgress],
   )
 
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        if (frameRef.current) cancelAnimationFrame(frameRef.current)
+        if (frameRef.current) {
+          cancelAnimationFrame(frameRef.current)
+          frameRef.current = undefined
+        }
       } else {
-        // The setTimeout seems to prevent extra loops between document hidden and document visible
         setTimeout(() => {
-          frameRef.current = requestAnimationFrame(gameLoop)
+          if (!frameRef.current) {
+            frameRef.current = requestAnimationFrame(gameLoop)
+          }
         }, 0)
       }
     }
     document.addEventListener("visibilitychange", handleVisibilityChange)
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
-  }, [dealDamageOverTime, runTasks])
+  }, [gameLoop])
 
   useEffect(() => {
     frameRef.current = requestAnimationFrame(gameLoop)
@@ -158,97 +288,29 @@ export default function Monster({ children }: PropsWithChildren) {
   }, [gameLoop])
 
   function handleClick() {
-    dispatch(incrementClickCount())
-    dispatch(increaseTotalClickDamageDealt(clickDamage))
-    dispatch(takeDamage(clickDamage))
+    dispatch(updateMonsterClicked(clickDamage))
     // Goto !monsterAlive useEffect if monster died
   }
 
   useEffect(() => {
-    if (!monsterAlive) {
-      dispatch(incrementKillCount())
-      dispatch(increaseGold(monsterValue))
-      let nextMonster: undefined | EnemyState
-
-      const isProgressing = zoneInView === currentZone
-      const stageNumber = isProgressing ? currentStage : farmStageNumber
-
-      // Zone transition
-      if (stageNumber === zoneLength) {
-        // When highest zone
-        if (isProgressing) {
-          dispatch(zoneComplete())
-          dispatch(incrementZonesCompleted())
-          dispatch(incrementHighestZone())
-          currentZone > highestZoneEver && dispatch(incrementHighestZoneEver())
-
-          // Highest zone & farming toggled; zone transition in place
-          if (isFarming) {
-            const newFarmZoneMonsters = selectFarmZoneMonsters(store.getState())
-            if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
-          }
-
-          // If farming or not farming when not highest zone
-        } else if (zoneInView < currentZone && isFarming && farmZoneMonsters) {
-          dispatch(refreshFarmZone())
-          const newFarmZoneMonsters = selectFarmZoneMonsters(store.getState())
-          if (newFarmZoneMonsters) nextMonster = newFarmZoneMonsters[0]
-        } else if (zoneInView < currentZone && !isFarming) {
-          dispatch(setZoneInView(currentZone))
-        } else {
-          throw "Logic error during highest zone transition"
-        }
-
-        // Stage transition
-      } else {
-        dispatch(incrementStageNumber())
-        if (zoneInView < currentZone && farmZoneMonsters) {
-          nextMonster = farmZoneMonsters[stageNumber]
-        } else {
-          nextMonster = monsters[stageNumber]
-        }
-      }
-      if (nextMonster) dispatch(spawnMonster(nextMonster))
-
-      // Finally, spawn the next monster
-    }
-  }, [monsterAlive])
-
-  useEffect(() => {
-    // On zoneInView change, transition to or from farming
-    let nextMonster: undefined | EnemyState
-    if (farmZoneNumber === zoneInView && farmZoneMonsters) {
-      nextMonster = farmZoneMonsters[0]
-    } else if (currentZone === zoneInView) {
-      nextMonster = monsters[0]
-    }
-    if (nextMonster) {
-      dispatch(spawnMonster(nextMonster))
-    } else {
-      throw "Monster undefined during zone transition"
-    }
-  }, [zoneInView])
+    if (!monsterAlive) onMonsterDeath()
+  }, [monsterAlive, onMonsterDeath])
 
   return (
     <>
-      <div className="absolute bottom-[16%] text-white">
-        Debug: monsterValue: {monsterValue} Stage: {currentStage} zoneinview: {zoneInView} clickDamage: {clickDamage}{" "}
-        dotDamage: {dotDamage} zone: {currentZone} farmzone: {farmZoneNumber} farmstage: {farmStageNumber}
-      </div>
-      <div className="basis-2/12 flex flex-col w-full items-center">
-        <div className="relative flex w-full justify-center">
-          <div className="">{monsterName}</div>
-          <FarmToggle />
+      <div className="flex flex-col w-full items-center">
+        <div className="relative flex w-full justify-center text-2xl">
+          <div className="text-center">{monsterName}</div>
         </div>
-        <div className="text-left inline-block min-w-[100px] pl-[2.5rem]">{children}</div>
+        <div className="">{children}</div>
       </div>
-      <div className="flex items-end h-[32rem] flex-auto" onClick={handleClick}>
+      <button className="flex flex-grow items-end h-[27rem] max-h-[34rem] hover:cursor-dagger" onClick={handleClick}>
         <img
-          className="max-h-full h-full w-full object-contain pointer-events-none"
+          className="max-h-full h-full w-full object-cover lg:object-contain pointer-events-none"
           src={monsterImage}
           alt={monsterName}
         />
-      </div>
+      </button>
     </>
   )
 }

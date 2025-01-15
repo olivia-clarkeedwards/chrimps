@@ -1,11 +1,11 @@
 import "dotenv/config"
 import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
-import { authjsHandler, authjsSessionMiddleware } from "./server/authjs-handler"
+// import { authjsHandler, authjsSessionMiddleware } from "./server/authjs-handler"
 
 import { vikeHandler } from "./server/vike-handler"
 import { createHandler, createMiddleware } from "@universal-middleware/express"
-import { dbMiddleware } from "./server/db-middleware"
+// import { dbMiddleware } from "./server/db-middleware"
 import express from "express"
 
 const __filename = fileURLToPath(import.meta.url)
@@ -19,6 +19,8 @@ export default (await startServer()) as unknown
 async function startServer() {
   const app = express()
 
+  // TODO: Add https://github.com/vikejs/vike-node
+
   if (process.env.NODE_ENV === "production") {
     app.use(express.static(`${root}/dist/client`))
   } else {
@@ -30,20 +32,28 @@ async function startServer() {
       await vite.createServer({
         root,
         server: { middlewareMode: true, hmr: { port: hmrPort } },
+        // server: {
+        //   middlewareMode: true,
+        //   hmr: {
+        //     port: hmrPort,
+        //     host: "192.168.1.67",
+        //     clientPort: hmrPort,
+        //   },
+        // },
       })
     ).middlewares
     app.use(viteDevMiddleware)
   }
 
-  app.use(createMiddleware(dbMiddleware)())
+  // app.use(createMiddleware(dbMiddleware)())
 
-  app.use(createMiddleware(authjsSessionMiddleware)())
+  // app.use(createMiddleware(authjsSessionMiddleware)())
 
   /**
    * Auth.js route
    * @link {@see https://authjs.dev/getting-started/installation}
    **/
-  app.all("/api/auth/*", createHandler(authjsHandler)())
+  // app.all("/api/auth/*", createHandler(authjsHandler)())
 
   /**
    * Vike route
@@ -55,6 +65,10 @@ async function startServer() {
   app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`)
   })
+
+  // app.listen(port, "0.0.0.0", () => {
+  //   console.log(`Server listening on local ip & http://localhost:${port}`)
+  // })
 
   return app
 }

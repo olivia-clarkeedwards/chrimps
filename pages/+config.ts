@@ -1,16 +1,12 @@
 import vikeReact from "vike-react/config"
 import type { Config } from "vike/types"
-
-// Default config (can be overridden by pages)
-// https://vike.dev/config
+import logoURL from "../assets/icons/logo.svg"
 
 export default {
-  // https://vike.dev/Layout
-
-  // https://vike.dev/head-tags
-  title: "Chrimps",
+  title: "Slime Ascendant",
   description: "The Incremental Adventure",
-
+  image: logoURL,
+  favicon: logoURL,
   ssr: false,
   passToClient: ["user"],
   extends: vikeReact,

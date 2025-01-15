@@ -1,6 +1,11 @@
-import e from "express"
 import { BaseEnemy, Enemy, MonsterType, BaseMonsterConfig, EnemyState } from "../models/monsters"
 import { ZONE_CONFIG } from "./zone"
+import slimeURL from "../assets/monsters/slime.webp"
+import wormURL from "../assets/monsters/ph-worm.webp"
+import cacodemonURL from "../assets/monsters/ph-cacodemon.webp"
+import yetiURL from "../assets/monsters/ph-yeti.webp"
+import toothURL from "../assets/monsters/ph-boss-tooth.webp"
+import treasureGoblinURL from "../assets/monsters/ph-treasure-monster.webp"
 
 const MONSTER_CONFIG: BaseMonsterConfig = {
   health: {
@@ -12,27 +17,33 @@ const MONSTER_CONFIG: BaseMonsterConfig = {
     healthDivisor: 4,
     healthMultiBonus: 1.5,
   },
+  boss: {
+    extraLevels: 20,
+    plasmaExpoGrowth: 1.2,
+    plasmaLinGrowth: 1.3,
+    plasmaValue: function (zoneNumber) {
+      return Math.round(Math.pow(this.plasmaExpoGrowth, zoneNumber - 1 * this.plasmaLinGrowth))
+    },
+  },
   regularSpawnChance: 0.97,
   // attack etc.
 }
 
 const MONSTER_VARIATIONS: MonsterType[] = [
-  { name: "Slime", kind: "regular", healthMulti: 1, imagePath: "/monsters/ph-slime.png" },
-  { name: "Worm", kind: "regular", healthMulti: 1.05, imagePath: "/monsters/ph-worm.png" },
-  { name: "Cacodemon", kind: "regular", healthMulti: 1.1, imagePath: "/monsters/ph-cacodemon.png" },
-  { name: "Yeti", kind: "regular", healthMulti: 1.2, imagePath: "/monsters/ph-yeti.png" },
+  { name: "Slime", kind: "regular", healthMulti: 1, imagePath: `${slimeURL}` },
+  { name: "Worm", kind: "regular", healthMulti: 1.05, imagePath: `${wormURL}` },
+  { name: "Cacodemon", kind: "regular", healthMulti: 1.1, imagePath: `${cacodemonURL}` },
+  { name: "Yeti", kind: "regular", healthMulti: 1.2, imagePath: `${yetiURL}` },
 ]
 
-const BOSS_VARIATIONS: MonsterType[] = [
-  { name: "Tooth", kind: "boss", healthMulti: 2, imagePath: "/monsters/ph-boss-tooth.png" },
-]
+const BOSS_VARIATIONS: MonsterType[] = [{ name: "Tooth", kind: "boss", healthMulti: 2, imagePath: `${toothURL}` }]
 const RARE_VARIATIONS: MonsterType[] = [
   {
     name: "Treasure Goblin",
     kind: "rare",
     healthMulti: 0.5,
     goldMulti: 20,
-    imagePath: "/monsters/ph-treasure-monster.webp",
+    imagePath: `${treasureGoblinURL}`,
   },
 ]
 class BaseMonster implements BaseEnemy {
@@ -45,7 +56,7 @@ class BaseMonster implements BaseEnemy {
 
   constructor(zoneNumber: number, stageNumber: number, isBoss: boolean) {
     this.level = (zoneNumber - 1) * ZONE_CONFIG.length + stageNumber
-    if (isBoss) this.level += 20
+    if (isBoss) this.level += MONSTER_CONFIG.boss.extraLevels
   }
 }
 
@@ -53,8 +64,10 @@ class Monster extends BaseMonster implements Enemy {
   name
   kind
   health
+  maxHealth
   image
   goldValue
+  plasma?: number
 
   constructor(config: MonsterType, zoneNumber: number, stageNumber: number, isBoss: boolean) {
     super(zoneNumber, stageNumber, isBoss)
@@ -62,10 +75,12 @@ class Monster extends BaseMonster implements Enemy {
     this.kind = config.kind
     const healthMulti = config.healthMulti
     this.health = Math.floor(this.baseHealth * healthMulti)
+    this.maxHealth = this.health
     this.image = config.imagePath
     const goldMulti = (config.goldMulti ??= 1)
     const { healthDivisor, healthMultiBonus } = MONSTER_CONFIG.gold
     this.goldValue = Math.floor((this.baseHealth / healthDivisor) * (healthMulti * healthMultiBonus) * goldMulti)
+    if (isBoss) this.plasma = MONSTER_CONFIG.boss.plasmaValue(zoneNumber)
   }
 }
 
@@ -75,6 +90,7 @@ export function getRandomMonster(zoneNumber = 1, stageNumber = 1, isBoss = false
     randomMonster = BOSS_VARIATIONS[Math.floor(Math.random() * BOSS_VARIATIONS.length)]
   } else {
     const randomValue = Math.random()
+    // Special monster bonus to be implemented via an upgrade system; currently does nothing
     const regularSpawnChance = MONSTER_CONFIG.regularSpawnChance * Math.pow(0.99, specialMonsterBonus)
     randomMonster =
       regularSpawnChance > randomValue
@@ -99,8 +115,10 @@ function serializableMonster(monster: Monster): EnemyState {
     kind: monster.kind,
     level: monster.level,
     health: monster.health,
+    maxHealth: monster.maxHealth,
     goldValue: monster.goldValue,
     image: monster.image,
+    plasma: monster?.plasma,
   }
   return serializable
 }
